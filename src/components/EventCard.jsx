@@ -13,12 +13,15 @@ export default function EventCard({ event }) {
     minute: '2-digit',
   })
 
+  const daysUntil = Math.ceil((event.scheduledFor - Date.now()) / (1000 * 60 * 60 * 24))
+  const countdown = daysUntil <= 0 ? 'Today!' : daysUntil === 1 ? 'Tomorrow' : `${daysUntil} days away`
+
   return (
-    <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-5 flex flex-col gap-3 hover:border-orange-500/50 transition-colors">
+    <div className="bg-[#1a1a1a] border border-[#2a2a2a] border-l-4 border-l-orange-500 rounded-xl p-5 flex flex-col gap-3 hover:border-orange-500/40 hover:shadow-[0_0_24px_rgba(249,115,22,0.12)] hover:scale-[1.02] transition-all duration-200">
       <div className="flex items-start justify-between gap-2">
         <h3 className="text-white font-semibold text-lg leading-tight">{event.name}</h3>
-        <span className="shrink-0 text-xs bg-orange-500/10 text-orange-400 border border-orange-500/20 rounded-full px-2 py-0.5">
-          Upcoming
+        <span className="shrink-0 text-xs bg-orange-500/10 text-orange-400 border border-orange-500/20 rounded-full px-2 py-0.5 whitespace-nowrap">
+          {countdown}
         </span>
       </div>
 
