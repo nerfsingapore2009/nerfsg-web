@@ -8,6 +8,7 @@ import GameModes from './pages/GameModes'
 import Guides from './pages/Guides'
 import FAQ from './pages/FAQ'
 import Contact from './pages/Contact'
+import Review2025 from './pages/Review2025'
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
             <Route path="/guides" element={<Guides />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/2025-review" element={<Review2025 />} />
           </Routes>
         </main>
         <footer className="border-t border-[#2a2a2a] text-center py-6 text-sm text-gray-600">

@@ -10,6 +10,7 @@ const NAV_LINKS = [
   { to: '/guides', label: 'Guides' },
   { to: '/faq', label: 'FAQ' },
   { to: '/contact', label: 'Contact Us' },
+  { to: '/2025-review', label: '2025 Review' },
 ]
 
 export default function Navbar() {
