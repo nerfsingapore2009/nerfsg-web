@@ -1,5 +1,8 @@
+import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
+import { ReticleCursor, HitMarkerLayer, CornerBrackets, MissionTicker, ToastStack } from './components/Hud'
+import { signInAnon } from './firebase/config'
 import Home from './pages/Home'
 import Events from './pages/Events'
 import HvZ from './pages/HvZ'
@@ -10,11 +13,39 @@ import FAQ from './pages/FAQ'
 import Contact from './pages/Contact'
 import Review2025 from './pages/Review2025'
 
+const TICKER_ITEMS = [
+  { tag: '[INTEL]',   text: 'New HvZ ruleset v2.1 published' },
+  { tag: '[GEAR]',    text: '120 fps cap enforced · half-darts only at indoor venues' },
+  { tag: '[SCRIM]',   text: 'Tuesday range night · tune your blasters' },
+  { tag: '[NETWORK]', text: '1,247 on Telegram · 4.8k on Facebook' },
+  { tag: '[SAFETY]',  text: 'Eye-pro required · ANSI-rated only' },
+  { tag: '[GEAR]',    text: 'Loaners available at every open game for first-timers' },
+]
+
 export default function App() {
+  useEffect(() => { signInAnon() }, [])
+
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-[#0f0f0f] text-gray-200">
+      <CornerBrackets />
+      <ReticleCursor />
+      <HitMarkerLayer />
+      <ToastStack />
+
+      <div className="min-h-screen bg-ink text-gray-200">
+        <MissionTicker items={TICKER_ITEMS} />
         <Navbar />
+
+        {/* fixed side gutter coords */}
+        <div className="gutter l">
+          <span>NERFSG // 01°22′ N · 103°48′ E</span>
+          <span>CHANNEL FOAM-1 // LIVE</span>
+        </div>
+        <div className="gutter r">
+          <span>EST. 2009 // SINGAPORE</span>
+          <span>GMT+8 // STAY SHARP</span>
+        </div>
+
         <main>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -28,9 +59,6 @@ export default function App() {
             <Route path="/2025-review" element={<Review2025 />} />
           </Routes>
         </main>
-        <footer className="border-t border-[#2a2a2a] text-center py-6 text-sm text-gray-600">
-          © {new Date().getFullYear()} NerfSG. All rights reserved.
-        </footer>
       </div>
     </BrowserRouter>
   )

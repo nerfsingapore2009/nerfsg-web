@@ -1,5 +1,6 @@
 import { initializeApp, getApps, getApp } from 'firebase/app'
 import { getFirestore } from 'firebase/firestore'
+import { getAuth, signInAnonymously as _signInAnon } from 'firebase/auth'
 import { getAnalytics, isSupported } from 'firebase/analytics'
 
 const firebaseConfig = {
@@ -14,5 +15,7 @@ const firebaseConfig = {
 
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp()
 export const db = getFirestore(app)
+export const auth = getAuth(app)
+export const signInAnon = () => _signInAnon(auth).catch(() => {})
 
 isSupported().then(yes => yes && getAnalytics(app))
