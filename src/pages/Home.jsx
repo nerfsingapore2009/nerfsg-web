@@ -327,7 +327,7 @@ function AppShowcase() {
 /* ── WHAT TO BRING ────────────────────────────────────────────────── */
 const ESSENTIALS = [
   { code: '01', name: 'Eye protection', req: 'Required',
-    note: 'ANSI-rated goggles or ballistic eye-pro. Sunglasses don\'t count. We sell spares on-site for $5.' },
+    note: 'ANSI-rated goggles or ballistic eye-pro. Sunglasses don\'t count.' },
   { code: '02', name: 'A blaster',      req: 'BYO',
     note: 'Stock or modded? Both are welcomed, need loaners? Inform game host early.' },
   { code: '03', name: 'Foam darts',     req: '~300',
@@ -511,70 +511,6 @@ function GameModesSection() {
   )
 }
 
-/* ── ROSTER MARQUEE ───────────────────────────────────────────────── */
-function Roster({ data }) {
-  const { loading, stats } = data
-
-  const handles = useMemo(() => {
-    if (!stats) return []
-    const recent = [...(stats.upcoming || []).slice(0, 8), ...(stats.past || []).slice(0, 12)]
-    const seen = new Map()
-    for (const ev of recent) {
-      const parts = extractParticipants(ev)
-      for (const p of parts) {
-        if (!seen.has(p.id)) {
-          seen.set(p.id, { ...p, lastGame: ev.name || 'Game' })
-        } else if (!seen.get(p.id).avatarUrl && p.avatarUrl) {
-          seen.get(p.id).avatarUrl = p.avatarUrl
-        }
-      }
-    }
-    return [...seen.values()].slice(0, 24)
-  }, [stats])
-
-  const items = handles.length > 0 ? [...handles, ...handles] : []
-
-  return (
-    <section className="border-b border-border bg-surface py-12 lg:py-14">
-      <div className="max-w-6xl mx-auto px-5 lg:px-8 mb-6 flex items-end justify-between">
-        <div>
-          <p className="section-label">Community</p>
-          <h2 className="font-display text-3xl lg:text-4xl text-ink mt-2 uppercase tracking-tight">Recent players.</h2>
-        </div>
-        <div className="text-xs font-semibold text-muted tracking-widest uppercase hidden sm:block">
-          {loading ? 'Loading…' : `${handles.length} players · last 20 games`}
-        </div>
-      </div>
-
-      {loading || handles.length === 0 ? (
-        <div className="max-w-6xl mx-auto px-5 lg:px-8 text-sm text-muted">
-          {loading ? 'Loading player data…' : 'No RSVP data yet'}
-        </div>
-      ) : (
-        <div className="relative overflow-hidden">
-          <div className="marquee-track flex gap-3 w-[200%]" style={{ animationDuration: '80s' }}>
-            {items.map((h, i) => (
-              <div key={`${h.id}-${i}`} className="roster-chip shrink-0">
-                <AvatarChip name={h.name} id={h.id} idx={i} size="lg" src={h.avatarUrl} />
-                <div className="min-w-0 flex-1">
-                  <div className="font-semibold text-sm text-ink truncate">
-                    {h.name || 'Anonymous'}
-                  </div>
-                  <div className="text-xs text-muted truncate">
-                    {h.lastGame}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-          {/* Fade edges */}
-          <div className="absolute inset-y-0 left-0 w-12 pointer-events-none bg-gradient-to-r from-surface to-transparent"></div>
-          <div className="absolute inset-y-0 right-0 w-12 pointer-events-none bg-gradient-to-l from-surface to-transparent"></div>
-        </div>
-      )}
-    </section>
-  )
-}
 
 /* ── COMMUNITY / SOCIALS ──────────────────────────────────────────── */
 const SOCIALS = [
@@ -672,7 +608,6 @@ export default function Home() {
       <WhatToBring />
       <CommunityStats data={data} />
       <GameModesSection />
-      <Roster data={data} />
       <PastGames data={data} />
       <WatchAndConnect />
       <SiteFooter />

@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
 import { extractParticipants } from '../hooks/useGamedays';
-import AvatarChip from './AvatarChip';
 import { Brk } from './Hud';
 
 const MONTHS_FULL = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -309,36 +308,9 @@ function GameDetailModal({ game, onClose }) {
             </div>
           )}
 
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <div className="font-mono text-[10px] text-zinc-500 tracking-[.18em]">CONFIRMED · {yesIds.size}</div>
-              {game.maxSlots && <div className="font-mono text-[10px] text-zinc-500 tracking-[.18em]">{yesIds.size}/{game.maxSlots} SLOTS</div>}
-            </div>
-            {yesIds.size === 0 ? (
-              <div className="font-mono text-[11px] text-zinc-600 tracking-[.16em]">// none yet</div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-                {[...yesIds].map((uid, i) => {
-                  const name = nameFor(uid);
-                  const pmt  = payments[uid];
-                  return (
-                    <div key={uid} className="flex items-center gap-2 bg-ink border border-line rounded px-2 py-1.5">
-                      <AvatarChip name={name} id={uid} idx={i} src={pmt?.avatarUrl || null} />
-                      <div className="flex-1 min-w-0">
-                        <div className="font-display text-sm text-white truncate uppercase tracking-tight">
-                          {name || `OP-${uid.slice(0,5).toUpperCase()}`}
-                        </div>
-                        {pmt && (
-                          <div className="font-mono text-[9.5px] text-zombie tracking-[.14em]">
-                            PAID · {(pmt.method || '').toUpperCase()}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+          <div className="flex items-center justify-between">
+            <div className="font-mono text-[10px] text-zinc-500 tracking-[.18em]">CONFIRMED · {yesIds.size}</div>
+            {game.maxSlots && <div className="font-mono text-[10px] text-zinc-500 tracking-[.18em]">{yesIds.size}/{game.maxSlots} SLOTS</div>}
           </div>
 
           {maybeIds.size > 0 && (
