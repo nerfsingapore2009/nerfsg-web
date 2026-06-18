@@ -435,14 +435,14 @@ function AppShowcase() {
 const ESSENTIALS = [
   { code: '01', name: 'Eye protection', req: 'Required',
     note: 'ANSI-rated goggles or ballistic eye-pro. Sunglasses don\'t count.' },
-  { code: '02', name: 'A blaster',      req: 'BYO',
-    note: 'Stock or modded? Both are welcomed, need loaners? Inform game host early.' },
-  { code: '03', name: 'Foam darts',     req: '~300',
-    note: 'Dart sweep to be done at the end of event, pick everything up then sort after.' },
-  { code: '04', name: 'FPS limit',      req: '120 FPS',
-    note: 'Check events details for the fps limits.' },
-  { code: '05', name: 'Covered shoes',  req: 'Required',
+  { code: '02', name: 'Covered shoes',  req: 'Required',
     note: 'You will sprint, slide, and dive. Sandals get you sat out for safety.' },
+  { code: '03', name: 'A blaster',      req: 'Must have',
+    note: 'Stock or modded? Both are welcomed, need loaners? Inform game host early.' },
+  { code: '04', name: 'Foam darts',     req: 'Else how you shoot?',
+    note: 'Dart sweep to be done at the end of event, pick everything up then sort after.' },
+  { code: '05', name: 'FPS limit',      req: 'CHRONO CHECK',
+    note: 'Check events details for the fps limits.' },
   { code: '06', name: 'Hydration',      req: 'Bring it',
     note: 'Bring your own water!' },
 ]
@@ -694,9 +694,7 @@ function SiteFooter() {
     <footer className="border-t border-border bg-surface">
       <div className="max-w-6xl mx-auto px-5 lg:px-8 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <span className="font-display font-black text-xl text-ink tracking-tight">
-            <span className="text-red">NERF</span>SG
-          </span>
+          <img src="/nerfsingapore.webp" alt="NERF Singapore" className="h-12 w-[108px] object-cover object-center" width="240" height="160" />
           <span className="text-xs text-muted">Est. 2009 · Singapore</span>
         </div>
         <p className="text-xs text-muted">

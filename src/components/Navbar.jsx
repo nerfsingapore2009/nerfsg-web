@@ -42,9 +42,9 @@ export default function Navbar() {
       <div className="max-w-6xl mx-auto px-5 lg:px-8 py-3 flex items-center gap-6">
 
         {/* Logo */}
-        <NavLink to="/" aria-label="NerfSG home" className="flex items-center gap-2 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red/40 rounded-md">
-          <span className={`font-display font-black text-xl tracking-tight ${transparent ? 'text-white' : 'text-ink'}`}>
-            <span className="text-red">NERF</span>SG
+        <NavLink to="/" aria-label="NERF Singapore — home" className="flex items-center shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red/40 rounded-lg">
+          <span className={`inline-flex items-center rounded-lg transition-all duration-300 ${transparent ? 'bg-white px-2.5 py-1 shadow-md' : ''}`}>
+            <img src="/nerfsingapore.webp" alt="NERF Singapore" className="h-9 w-[80px] object-cover object-center block" width="240" height="160" />
           </span>
         </NavLink>
 
