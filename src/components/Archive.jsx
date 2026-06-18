@@ -249,11 +249,9 @@ function GameDetailModal({ game, onClose }) {
 
   const yesIds   = new Set();
   const maybeIds = new Set();
-  const noIds    = new Set();
   Object.entries(rsvps).forEach(([uid, status]) => {
     if (status === 'yes') yesIds.add(uid);
     else if (status === 'maybe') maybeIds.add(uid);
-    else if (status === 'no') noIds.add(uid);
   });
   (game.attendees || []).forEach(a => yesIds.add(a.id));
   Object.keys(payments).forEach(uid => yesIds.add(uid));
@@ -343,32 +341,16 @@ function GameDetailModal({ game, onClose }) {
             )}
           </div>
 
-          {(maybeIds.size > 0 || noIds.size > 0) && (
-            <div className="grid sm:grid-cols-2 gap-3">
-              {maybeIds.size > 0 && (
-                <div>
-                  <div className="font-mono text-[10px] text-zinc-500 tracking-[.18em] mb-2">MAYBE · {maybeIds.size}</div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {[...maybeIds].map(uid => (
-                      <span key={uid} className="font-mono text-[10px] text-zinc-300 bg-ink border border-line rounded px-2 py-1">
-                        {nameFor(uid) || `OP-${uid.slice(0,5).toUpperCase()}`}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {noIds.size > 0 && (
-                <div>
-                  <div className="font-mono text-[10px] text-zinc-500 tracking-[.18em] mb-2">DECLINED · {noIds.size}</div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {[...noIds].map(uid => (
-                      <span key={uid} className="font-mono text-[10px] text-zinc-500 bg-ink border border-line rounded px-2 py-1 line-through">
-                        {nameFor(uid) || `OP-${uid.slice(0,5).toUpperCase()}`}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
+          {maybeIds.size > 0 && (
+            <div>
+              <div className="font-mono text-[10px] text-zinc-500 tracking-[.18em] mb-2">MAYBE · {maybeIds.size}</div>
+              <div className="flex flex-wrap gap-1.5">
+                {[...maybeIds].map(uid => (
+                  <span key={uid} className="font-mono text-[10px] text-zinc-300 bg-ink border border-line rounded px-2 py-1">
+                    {nameFor(uid) || `OP-${uid.slice(0,5).toUpperCase()}`}
+                  </span>
+                ))}
+              </div>
             </div>
           )}
 

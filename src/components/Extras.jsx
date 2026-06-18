@@ -72,13 +72,21 @@ export function TrendsRow({ all, year }) {
 }
 
 /* ── Year-over-year block ───────────────────────────────────────────── */
+
+// Historical game counts from Google Calendar ICS export (events not in Firebase)
+const HISTORICAL_GAME_COUNTS = { 2021: 31, 2022: 60, 2023: 41, 2024: 50, 2025: 21 }
+
 function computeYearStats(all, year) {
   const start = new Date(year, 0, 1).getTime();
   const end   = new Date(year + 1, 0, 1).getTime();
   const inYear = all.filter(g => { const ts = g.scheduledFor || g.createdAt; return ts && ts >= start && ts < end; });
   let rsvps = 0; const ops = new Set();
   for (const g of inYear) { extractParticipants(g).forEach(p => { rsvps++; ops.add(p.id); }); }
-  return { year, games: inYear.length, rsvps, ops: ops.size };
+  const firebaseGames = inYear.length;
+  // Fall back to ICS-derived historical data for years where Firebase has no records
+  const games = firebaseGames > 0 ? firebaseGames : (HISTORICAL_GAME_COUNTS[year] || 0);
+  const historical = firebaseGames === 0 && HISTORICAL_GAME_COUNTS[year] > 0;
+  return { year, games, rsvps: historical ? null : rsvps, ops: historical ? null : ops.size, historical };
 }
 
 export function YoYBlock({ all }) {
@@ -108,8 +116,8 @@ export function YoYBlock({ all }) {
                 <div className={`h-full ${isCur ? 'bg-foam' : 'bg-zinc-600'}`} style={{ width: `${(s.games/maxGames)*100}%` }}></div>
               </div>
               <div className="grid grid-cols-2 gap-2 mt-3">
-                <div><div className="font-mono text-[9.5px] text-zinc-500 tracking-[.16em]">OPS</div><div className="font-mono text-sm text-white tabular-nums">{s.ops}</div></div>
-                <div><div className="font-mono text-[9.5px] text-zinc-500 tracking-[.16em]">RSVPS</div><div className="font-mono text-sm text-white tabular-nums">{s.rsvps}</div></div>
+                <div><div className="font-mono text-[9.5px] text-zinc-500 tracking-[.16em]">OPS</div><div className="font-mono text-sm text-white tabular-nums">{s.historical ? '—' : s.ops}</div></div>
+                <div><div className="font-mono text-[9.5px] text-zinc-500 tracking-[.16em]">RSVPS</div><div className="font-mono text-sm text-white tabular-nums">{s.historical ? '—' : s.rsvps}</div></div>
               </div>
             </div>
           );

@@ -25,14 +25,14 @@ export default function AvatarChip({ name, id, idx = 0, size = 'sm', src = null 
   if (src && !failed) {
     return (
       <img src={src} alt={name || 'Operator'} title={name || `Operator ${(id||'').slice(0,6)}`}
-        className={`${dims} rounded-full ring-2 ring-ink object-cover`}
+        className={`${dims} rounded-full ring-2 ring-white object-cover`}
         style={{ border: `1px solid ${color}66` }}
         onError={() => setFailed(true)} />
     );
   }
   return (
     <div title={name || `Operator ${(id||'').slice(0,6)}`}
-      className={`${dims} rounded-full ring-2 ring-ink flex items-center justify-center font-mono font-bold tabular-nums tracking-tight uppercase`}
+      className={`${dims} rounded-full ring-2 ring-white flex items-center justify-center font-mono font-bold tabular-nums tracking-tight uppercase`}
       style={{ background: `${color}22`, color, border: `1px solid ${color}66` }}>
       {text}
     </div>

@@ -126,7 +126,9 @@ function NextGameCard({ event, loading, error, queue = [] }) {
                   <div className="flex items-center gap-2">
                     <div className="flex -space-x-2">
                       {participants.slice(0, 6).map((p, i) => (
-                        <AvatarChip key={p.id} name={p.name} id={p.id} idx={i} src={p.avatarUrl} />
+                        <div key={p.id} className="relative" style={{ zIndex: 6 - i }}>
+                          <AvatarChip name={p.name} id={p.id} idx={i} src={p.avatarUrl} />
+                        </div>
                       ))}
                     </div>
                     {participants.length > 6 && (
@@ -209,7 +211,7 @@ function Hero({ data }) {
             {[
               { lbl: `Games in ${stats?.year || new Date().getFullYear()}`, val: yearGames.toLocaleString() },
               { lbl: 'Players this year', val: yearPlayers.toLocaleString() },
-              { lbl: 'Games all-time',    val: totalAll.toLocaleString() },
+              { lbl: 'Games all-time',    val: '600+' },
             ].map(s => (
               <div key={s.lbl} className="stat-chip">
                 <div className="font-display font-black text-2xl lg:text-3xl text-ink tabular leading-none">
@@ -327,15 +329,15 @@ const ESSENTIALS = [
   { code: '01', name: 'Eye protection', req: 'Required',
     note: 'ANSI-rated goggles or ballistic eye-pro. Sunglasses don\'t count. We sell spares on-site for $5.' },
   { code: '02', name: 'A blaster',      req: 'BYO',
-    note: 'Stock or modded — both welcome. New? You can borrow loaners at any open game. Chrono done before play.' },
+    note: 'Stock or modded? Both are welcomed, need loaners? Inform game host early.' },
   { code: '03', name: 'Foam darts',     req: '~300',
-    note: 'Half-darts only at indoor venues. Full-length OK outdoors. Lost darts are part of the deal.' },
+    note: 'Dart sweep to be done at the end of event, pick everything up then sort after.' },
   { code: '04', name: 'FPS limit',      req: '120 FPS',
-    note: 'Standard cap. HvZ outdoor goes up to 150 with PVP rules. Chrono check at the door.' },
-  { code: '05', name: 'Closed shoes',   req: 'Required',
+    note: 'Check events details for the fps limits.' },
+  { code: '05', name: 'Covered shoes',  req: 'Required',
     note: 'You will sprint, slide, and dive. Sandals get you sat out for safety.' },
   { code: '06', name: 'Hydration',      req: 'Bring it',
-    note: 'Singapore humidity is no joke. Refills available at most venues.' },
+    note: 'Bring your own water!' },
 ]
 
 function WhatToBring() {
