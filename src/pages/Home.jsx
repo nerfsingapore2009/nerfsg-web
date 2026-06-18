@@ -190,14 +190,14 @@ function Hero({ data }) {
     <section className="hero-cinematic text-white">
       {heroPhoto && (
         <img src={heroPhoto} alt="" aria-hidden="true" className="hero-photo"
-          fetchpriority="high" decoding="async" />
+          fetchPriority="high" decoding="async" />
       )}
       <div className="hero-scrim" />
       <div className="grain" />
 
       <div className="relative max-w-6xl mx-auto px-5 lg:px-8 min-h-[100dvh]
                       flex flex-col justify-center pt-28 pb-20 lg:pt-32 lg:pb-24">
-        <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
 
           {/* Headline + CTAs + stats */}
           <div className="reveal flex flex-col gap-8 lg:col-span-7">
@@ -226,13 +226,13 @@ function Hero({ data }) {
             </div>
 
             {/* Stat strip */}
-            <div className="flex flex-wrap gap-x-10 gap-y-4 border-t border-white/15 pt-6">
+            <div className="grid grid-cols-3 gap-3 sm:gap-6 border-t border-white/15 pt-6 max-w-md">
               {statStrip.map(s => (
                 <div key={s.lbl}>
                   <div className="font-display font-black text-3xl lg:text-4xl tabular leading-none">
                     {loading ? '—' : s.val}
                   </div>
-                  <div className="text-xs text-white/60 mt-1.5 tracking-wide">{s.lbl}</div>
+                  <div className="text-[11px] sm:text-xs text-white/60 mt-1.5 tracking-wide">{s.lbl}</div>
                 </div>
               ))}
             </div>
@@ -396,7 +396,7 @@ function AppCarousel() {
 function AppShowcase() {
   return (
     <section className="border-b border-border bg-surface">
-      <div className="max-w-6xl mx-auto px-5 lg:px-8 py-16 lg:py-20 grid lg:grid-cols-2 gap-12 items-center">
+      <div className="max-w-6xl mx-auto px-5 lg:px-8 py-16 lg:py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         {/* Real app screenshots in a device frame */}
         <div className="flex justify-center order-2 lg:order-1" data-reveal>
           <AppCarousel />
@@ -459,7 +459,7 @@ function WhatToBring() {
           </div>
           <div className="text-xs font-semibold text-muted tracking-widest uppercase">Safety · Gear · Logistics</div>
         </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {ESSENTIALS.map(e => {
             const isRequired = e.req === 'Required'
             return (
@@ -568,7 +568,7 @@ function GameModesSection({ data }) {
           <div className="text-xs font-semibold text-muted tracking-widest uppercase">6 formats</div>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {MODES.map((m, i) => {
             const isFlipped = flipped === m.id
             const photo = modePhotos.length ? modePhotos[i % modePhotos.length] : null
@@ -641,7 +641,7 @@ const SOCIALS = [
 function WatchAndConnect() {
   return (
     <section className="border-b border-border bg-white">
-      <div className="max-w-6xl mx-auto px-5 lg:px-8 py-16 lg:py-20 grid lg:grid-cols-12 gap-10">
+      <div className="max-w-6xl mx-auto px-5 lg:px-8 py-16 lg:py-20 grid grid-cols-1 lg:grid-cols-12 gap-10">
         {/* YouTube embed */}
         <div className="lg:col-span-7" data-reveal>
           <p className="section-label">Watch</p>
@@ -676,7 +676,7 @@ function WatchAndConnect() {
                 className="social-link card-hover"
               >
                 <div className="font-display text-base text-ink uppercase tracking-tight font-bold w-20 shrink-0">{c.name}</div>
-                <div className="text-sm text-muted truncate flex-1">{c.handle}</div>
+                <div className="text-sm text-muted truncate flex-1 min-w-0">{c.handle}</div>
                 <div className="text-sm font-semibold text-ink tabular shrink-0">{c.members}</div>
                 <span className="text-red text-sm shrink-0">→</span>
               </a>
