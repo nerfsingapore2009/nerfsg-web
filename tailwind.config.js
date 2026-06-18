@@ -14,6 +14,7 @@ export default {
         surface: '#f8fafc',
         // Text
         ink:     '#0f172a',
+        ink2:    '#0a0f1d',
         muted:   '#64748b',
         // Borders
         border:  '#e2e8f0',

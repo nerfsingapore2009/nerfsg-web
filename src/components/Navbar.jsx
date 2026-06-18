@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { NavLink, useLocation } from 'react-router-dom'
 
 const NAV_LINKS = [
   { to: '/events',     label: 'Events' },
@@ -11,21 +11,39 @@ const NAV_LINKS = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const { pathname } = useLocation()
+  const isHome = pathname === '/'
+
+  // Transparent only while sitting over the home hero (top, menu closed).
+  const transparent = isHome && !scrolled && !open
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   const linkClass = ({ isActive }) =>
     `px-3 py-1.5 rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red/40 ${
       isActive
-        ? 'text-red font-semibold'
-        : 'text-muted hover:text-ink'
+        ? (transparent ? 'text-white font-semibold' : 'text-red font-semibold')
+        : (transparent ? 'text-white/80 hover:text-white' : 'text-muted hover:text-ink')
     }`
 
   return (
-    <nav aria-label="Main navigation" className="border-b border-border bg-white/90 backdrop-blur-md sticky top-0 z-40">
+    <nav
+      aria-label="Main navigation"
+      className={`${isHome ? 'fixed' : 'sticky'} top-0 inset-x-0 z-40 transition-colors duration-300 ${
+        transparent ? 'bg-transparent' : 'bg-white/90 backdrop-blur-md border-b border-border'
+      }`}
+    >
       <div className="max-w-6xl mx-auto px-5 lg:px-8 py-3 flex items-center gap-6">
 
         {/* Logo */}
         <NavLink to="/" aria-label="NerfSG home" className="flex items-center gap-2 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red/40 rounded-md">
-          <span className="font-display font-black text-xl tracking-tight text-ink">
+          <span className={`font-display font-black text-xl tracking-tight ${transparent ? 'text-white' : 'text-ink'}`}>
             <span className="text-red">NERF</span>SG
           </span>
         </NavLink>
@@ -57,7 +75,9 @@ export default function Navbar() {
           aria-expanded={open}
           aria-controls="mobile-menu"
           aria-label={open ? 'Close menu' : 'Open menu'}
-          className="lg:hidden text-muted hover:text-ink p-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red/40"
+          className={`lg:hidden p-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red/40 ${
+            transparent ? 'text-white hover:text-white/80' : 'text-muted hover:text-ink'
+          }`}
         >
           {open ? (
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">

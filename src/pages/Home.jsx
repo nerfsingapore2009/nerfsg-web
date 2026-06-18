@@ -1,6 +1,8 @@
 import { useMemo, useState, useEffect } from 'react'
 import { useAllGamedays, deriveStats, extractParticipants } from '../hooks/useGamedays'
 import { useCountUp, useCountdown } from '../components/Hud'
+import { useReveal } from '../hooks/useReveal'
+import { getFieldGallery, getHeroPhoto, getAppScreens } from '../lib/media'
 import AvatarChip from '../components/AvatarChip'
 import { TrendsRow, YoYBlock, HeatmapCalendar } from '../components/Extras'
 import PastGames from '../components/Archive'
@@ -169,64 +171,127 @@ function NextGameCard({ event, loading, error, queue = [] }) {
 
 /* ── HERO ─────────────────────────────────────────────────────────── */
 function Hero({ data }) {
-  const { loading, error, stats } = data
+  const { loading, error, stats, all = [] } = data
   const upcoming  = stats?.upcoming || []
   const nextEvent = upcoming[0] || null
   const queue     = upcoming.slice(1, 4)
+  const heroPhoto = useMemo(() => getHeroPhoto(all), [all])
 
   const yearGames   = useCountUp(stats?.yearGames || 0, 1400)
   const yearPlayers = useCountUp(stats?.yearOperators || 0, 1600)
-  const totalAll    = useCountUp(stats?.totalAllTime || 0, 1200)
+
+  const statStrip = [
+    { lbl: `Games in ${stats?.year || new Date().getFullYear()}`, val: yearGames.toLocaleString() },
+    { lbl: 'Players this year', val: yearPlayers.toLocaleString() },
+    { lbl: 'Games all-time',    val: '600+' },
+  ]
 
   return (
-    <section className="border-b border-border bg-white">
-      <div className="max-w-6xl mx-auto px-5 lg:px-8 pt-12 pb-14 lg:pt-16 lg:pb-20 grid lg:grid-cols-2 gap-10 items-start">
+    <section className="hero-cinematic text-white">
+      {heroPhoto && (
+        <img src={heroPhoto} alt="" aria-hidden="true" className="hero-photo"
+          fetchpriority="high" decoding="async" />
+      )}
+      <div className="hero-scrim" />
+      <div className="grain" />
 
-        {/* Text + next game card */}
-        <div className="reveal flex flex-col gap-8">
-          <div>
-            <p className="section-label">Singapore's Nerf community · Est. 2009</p>
-            <h1 className="font-display font-black text-ink leading-[.92] tracking-tight mt-3 uppercase">
-              <span className="block text-[clamp(52px,7vw,100px)]">Play.</span>
-              <span className="block text-[clamp(52px,7vw,100px)] text-red">Shoot.</span>
-              <span className="block text-[clamp(52px,7vw,100px)]">Have fun.</span>
-            </h1>
-            <p className="text-muted text-base lg:text-lg mt-5 max-w-lg">
-              Weekly foam dart games in Singapore — open to all skill levels.
-              Bring a blaster or borrow one from us, grab some darts, and come hang out.
-            </p>
-            <div className="flex flex-wrap gap-3 mt-7">
-              <a href="https://nerfsg.app" target="_blank" rel="noopener noreferrer" className="btn-red">
-                Join the next game
-              </a>
-              <a href="https://www.facebook.com/groups/nerfsingapore/" target="_blank" rel="noopener noreferrer"
-                className="btn-ghost">
-                Facebook group
-              </a>
+      <div className="relative max-w-6xl mx-auto px-5 lg:px-8 min-h-[100dvh]
+                      flex flex-col justify-center pt-28 pb-20 lg:pt-32 lg:pb-24">
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+
+          {/* Headline + CTAs + stats */}
+          <div className="reveal flex flex-col gap-8 lg:col-span-7">
+            <div>
+              <p className="section-label">Singapore's Nerf community · Est. 2009</p>
+              <h1 className="font-display font-black leading-[.88] tracking-tight mt-3 uppercase
+                             [text-shadow:0_2px_30px_rgba(0,0,0,.35)]">
+                <span className="block text-[clamp(56px,8vw,118px)]">Play.</span>
+                <span className="block text-[clamp(56px,8vw,118px)] text-red">Shoot.</span>
+                <span className="block text-[clamp(56px,8vw,118px)]">Have fun.</span>
+              </h1>
+              <p className="text-white/80 text-base lg:text-lg mt-5 max-w-lg">
+                Weekly foam dart games in Singapore — open to all skill levels.
+                Bring a blaster or borrow one from us, grab some darts, and come hang out.
+              </p>
+              <div className="flex flex-wrap gap-3 mt-8">
+                <a href="https://nerfsg.app" target="_blank" rel="noopener noreferrer" className="btn-red">
+                  Join the next game
+                </a>
+                <a href="https://www.facebook.com/groups/nerfsingapore/" target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-lg font-semibold text-sm
+                             text-white border border-white/30 hover:bg-white/10 transition-colors">
+                  Facebook group
+                </a>
+              </div>
+            </div>
+
+            {/* Stat strip */}
+            <div className="flex flex-wrap gap-x-10 gap-y-4 border-t border-white/15 pt-6">
+              {statStrip.map(s => (
+                <div key={s.lbl}>
+                  <div className="font-display font-black text-3xl lg:text-4xl tabular leading-none">
+                    {loading ? '—' : s.val}
+                  </div>
+                  <div className="text-xs text-white/60 mt-1.5 tracking-wide">{s.lbl}</div>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Stat mini-strip */}
-          <div className="grid grid-cols-3 gap-3">
-            {[
-              { lbl: `Games in ${stats?.year || new Date().getFullYear()}`, val: yearGames.toLocaleString() },
-              { lbl: 'Players this year', val: yearPlayers.toLocaleString() },
-              { lbl: 'Games all-time',    val: '600+' },
-            ].map(s => (
-              <div key={s.lbl} className="stat-chip">
-                <div className="font-display font-black text-2xl lg:text-3xl text-ink tabular leading-none">
-                  {loading ? '—' : s.val}
-                </div>
-                <div className="text-xs text-muted mt-1">{s.lbl}</div>
-              </div>
-            ))}
+          {/* Live next-game card, floated as glass over the photo */}
+          <div className="reveal reveal-d2 lg:col-span-5 w-full lg:justify-self-end max-w-md">
+            <NextGameCard event={nextEvent} loading={loading} error={error} queue={queue} />
           </div>
         </div>
 
-        {/* Next game card */}
-        <div className="reveal reveal-d2">
-          <NextGameCard event={nextEvent} loading={loading} error={error} queue={queue} />
+        {/* Scroll cue */}
+        <div className="hidden lg:flex absolute bottom-7 left-1/2 -translate-x-1/2 flex-col items-center gap-2
+                        text-white/50 reveal reveal-d3" aria-hidden="true">
+          <span className="text-[10px] font-semibold tracking-[.22em] uppercase">Scroll</span>
+          <svg width="16" height="22" viewBox="0 0 16 22" fill="none">
+            <rect x="1" y="1" width="14" height="20" rx="7" stroke="currentColor" strokeWidth="1.4" />
+            <circle cx="8" cy="7" r="1.6" fill="currentColor">
+              <animate attributeName="cy" values="7;13;7" dur="1.8s" repeatCount="indefinite" />
+            </circle>
+          </svg>
         </div>
+      </div>
+    </section>
+  )
+}
+
+/* ── FIELD GALLERY ───────────────────────────────────────────────── */
+function FieldGallery({ data }) {
+  const { all = [] } = data
+  const photos = useMemo(() => getFieldGallery(all, 10), [all])
+  // Honest empty state: only show when we have real photos to show.
+  if (photos.length < 3) return null
+  const loop = [...photos, ...photos] // duplicated for a seamless marquee
+
+  return (
+    <section className="bg-ink2 text-white overflow-hidden border-b border-white/10">
+      <div className="max-w-6xl mx-auto px-5 lg:px-8 pt-16 lg:pt-20 pb-8" data-reveal>
+        <p className="section-label">On the field</p>
+        <h2 className="font-display text-4xl lg:text-5xl uppercase tracking-tight mt-2">Foam, in motion.</h2>
+        <p className="text-white/60 mt-2 max-w-xl">
+          Real shots from recent games — captured by the community's photographers.
+        </p>
+      </div>
+
+      <div className="relative pb-16 lg:pb-20">
+        <div className="marquee-track flex gap-4 w-max px-5 lg:px-8">
+          {loop.map((p, i) => (
+            <figure key={i}
+              className="relative w-[280px] sm:w-[360px] aspect-[4/3] rounded-xl overflow-hidden
+                         border border-white/10 shrink-0 shadow-lg">
+              <img src={p.src} alt={p.name || 'NerfSG game action'} loading="lazy" decoding="async"
+                className="w-full h-full object-cover" />
+              {p.credit && <figcaption className="credit-badge">📷 {p.credit}</figcaption>}
+            </figure>
+          ))}
+        </div>
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-ink2 to-transparent"></div>
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-ink2 to-transparent"></div>
       </div>
     </section>
   )
@@ -265,38 +330,80 @@ const APP_FEATURES = [
   },
 ]
 
+/* Polished mock screen — fallback shown only when no real screenshots exist */
+function FauxAppScreen() {
+  return (
+    <div className="w-full h-full bg-white flex flex-col items-center justify-center gap-2 px-5">
+      <div className="font-display font-black text-3xl text-ink tracking-tight">
+        <span className="text-red">NERF</span>SG
+      </div>
+      <div className="text-xs text-muted">Hub</div>
+      <div className="mt-6 w-full space-y-2">
+        {['Next game: Sat 14 Jun', 'Leaderboard', 'Past games'].map(label => (
+          <div key={label} className="w-full bg-surface rounded-lg px-3 py-2.5 text-xs text-ink font-medium border border-border">
+            {label}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/* Real screenshots in a device frame, auto-advancing carousel */
+function AppCarousel() {
+  const screens = useMemo(() => getAppScreens(), [])
+  const [idx, setIdx] = useState(0)
+  const hasShots = screens.length > 0
+
+  useEffect(() => {
+    if (screens.length < 2) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const t = setInterval(() => setIdx(i => (i + 1) % screens.length), 3200)
+    return () => clearInterval(t)
+  }, [screens.length])
+
+  return (
+    <div className="device-frame">
+      <div className="device-notch" />
+      <div className="device-screen">
+        {hasShots ? (
+          <>
+            <div className="carousel-track" style={{ transform: `translateX(-${idx * 100}%)` }}>
+              {screens.map((src, i) => (
+                <div key={i} className="carousel-slide">
+                  <img src={src} alt={`NerfSG Hub app screen ${i + 1}`} loading="lazy" decoding="async" />
+                </div>
+              ))}
+            </div>
+            {screens.length > 1 && (
+              <div className="carousel-dots">
+                {screens.map((_, i) => (
+                  <button key={i} onClick={() => setIdx(i)}
+                    aria-label={`Show app screen ${i + 1}`}
+                    className={`carousel-dot ${i === idx ? 'active' : ''}`} />
+                ))}
+              </div>
+            )}
+          </>
+        ) : (
+          <FauxAppScreen />
+        )}
+      </div>
+    </div>
+  )
+}
+
 function AppShowcase() {
   return (
     <section className="border-b border-border bg-surface">
       <div className="max-w-6xl mx-auto px-5 lg:px-8 py-16 lg:py-20 grid lg:grid-cols-2 gap-12 items-center">
-        {/* Phone mockup */}
-        <div className="flex justify-center order-2 lg:order-1">
-          <div className="relative w-52 h-[420px]">
-            <div className="w-full h-full bg-ink rounded-[2.5rem] shadow-md border-4 border-ink overflow-hidden flex flex-col">
-              {/* Notch bar */}
-              <div className="h-7 bg-ink flex items-center justify-center shrink-0">
-                <div className="w-16 h-1 bg-white/20 rounded-full"></div>
-              </div>
-              {/* Screen */}
-              <div className="flex-1 bg-white flex flex-col items-center justify-center gap-2 px-4">
-                <div className="font-display font-black text-3xl text-ink tracking-tight">
-                  <span className="text-red">NERF</span>SG
-                </div>
-                <div className="text-xs text-muted">Hub</div>
-                <div className="mt-6 w-full space-y-2">
-                  {['Next game: Sat 14 Jun', 'Leaderboard', 'Past games'].map(label => (
-                    <div key={label} className="w-full bg-surface rounded-lg px-3 py-2.5 text-xs text-ink font-medium border border-border">
-                      {label}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
+        {/* Real app screenshots in a device frame */}
+        <div className="flex justify-center order-2 lg:order-1" data-reveal>
+          <AppCarousel />
         </div>
 
         {/* Text side */}
-        <div className="order-1 lg:order-2">
+        <div className="order-1 lg:order-2" data-reveal style={{ '--reveal-delay': '0.1s' }}>
           <p className="section-label">NerfSG Hub app</p>
           <h2 className="font-display font-black text-4xl lg:text-5xl text-ink uppercase tracking-tight mt-2 leading-[.92]">
             Your games,<br /><span className="text-red">on your phone.</span>
@@ -343,7 +450,7 @@ const ESSENTIALS = [
 function WhatToBring() {
   return (
     <section className="border-b border-border bg-white">
-      <div className="max-w-6xl mx-auto px-5 lg:px-8 py-16 lg:py-20">
+      <div className="max-w-6xl mx-auto px-5 lg:px-8 py-16 lg:py-20" data-reveal>
         <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-8 gap-3">
           <div>
             <p className="section-label">Before you show up</p>
@@ -384,7 +491,7 @@ function CommunityStats({ data }) {
 
   return (
     <section className="border-b border-border bg-surface">
-      <div className="max-w-6xl mx-auto px-5 lg:px-8 py-16 lg:py-20">
+      <div className="max-w-6xl mx-auto px-5 lg:px-8 py-16 lg:py-20" data-reveal>
         <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-8 gap-3">
           <div>
             <p className="section-label">Live from the community</p>
@@ -445,11 +552,13 @@ const MODES = [
     desc: 'Humans run blasters and stun timers. Zombies tag bare-handed to convert. Survive — or build the swarm.' },
 ]
 
-function GameModesSection() {
+function GameModesSection({ data }) {
+  const { all = [] } = data
   const [flipped, setFlipped] = useState(null)
+  const modePhotos = useMemo(() => getFieldGallery(all, MODES.length), [all])
   return (
     <section className="border-b border-border bg-white">
-      <div className="max-w-6xl mx-auto px-5 lg:px-8 py-16 lg:py-20">
+      <div className="max-w-6xl mx-auto px-5 lg:px-8 py-16 lg:py-20" data-reveal>
         <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-8 gap-3">
           <div>
             <p className="section-label">How we play</p>
@@ -460,8 +569,9 @@ function GameModesSection() {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {MODES.map(m => {
+          {MODES.map((m, i) => {
             const isFlipped = flipped === m.id
+            const photo = modePhotos.length ? modePhotos[i % modePhotos.length] : null
             return (
               <button
                 key={m.id}
@@ -474,8 +584,16 @@ function GameModesSection() {
                   <div className="flip-face card card-hover rounded-xl overflow-hidden flex flex-col">
                     {/* Top area */}
                     <div className="relative h-36 photo-placeholder rounded-none">
-                      <span className="font-display font-black text-5xl text-border2 select-none">{m.code}</span>
-                      <div className="absolute top-3 right-3 text-xs font-semibold text-muted bg-white border border-border rounded-full px-2 py-1">
+                      {photo && (
+                        <>
+                          <img src={photo.src} alt="" aria-hidden="true" className="mode-photo" loading="lazy" decoding="async" />
+                          <div className="mode-photo-scrim" />
+                        </>
+                      )}
+                      <span className={`relative z-10 font-display font-black text-5xl select-none ${
+                        photo ? 'text-white/90 [text-shadow:0_2px_12px_rgba(0,0,0,.55)]' : 'text-border2'
+                      }`}>{m.code}</span>
+                      <div className="absolute top-3 right-3 z-10 text-xs font-semibold text-muted bg-white border border-border rounded-full px-2 py-1">
                         {m.time}
                       </div>
                     </div>
@@ -525,11 +643,12 @@ function WatchAndConnect() {
     <section className="border-b border-border bg-white">
       <div className="max-w-6xl mx-auto px-5 lg:px-8 py-16 lg:py-20 grid lg:grid-cols-12 gap-10">
         {/* YouTube embed */}
-        <div className="lg:col-span-7">
+        <div className="lg:col-span-7" data-reveal>
           <p className="section-label">Watch</p>
           <h2 className="font-display text-4xl lg:text-5xl text-ink mt-2 uppercase tracking-tight">See how it looks.</h2>
           <p className="text-muted mt-2">Highlights and gameplay from recent games.</p>
-          <div className="mt-6 aspect-video rounded-xl overflow-hidden border border-border bg-surface">
+          <div className="mt-6 aspect-video rounded-2xl overflow-hidden border border-border bg-ink2
+                          shadow-2xl ring-1 ring-black/5">
             <iframe
               src="https://www.youtube.com/embed/videoseries?list=PLZubcuDLCLdmFUJJuhe0Gy-g3Nf5jdWsj"
               className="w-full h-full"
@@ -542,7 +661,7 @@ function WatchAndConnect() {
         </div>
 
         {/* Social links */}
-        <div className="lg:col-span-5">
+        <div className="lg:col-span-5" data-reveal style={{ '--reveal-delay': '0.12s' }}>
           <p className="section-label">Connect</p>
           <h2 className="font-display text-4xl lg:text-5xl text-ink mt-2 uppercase tracking-tight">Join the community.</h2>
           <p className="text-muted mt-2">Event updates, game invites, and community chat.</p>
@@ -601,13 +720,17 @@ export default function Home() {
   const stats = useMemo(() => deriveStats(all), [all, tickMin])
   const data  = { loading, error, stats, all }
 
+  // Re-scan for scroll-reveal targets once async game data has resolved.
+  useReveal(loading)
+
   return (
     <>
       <Hero data={data} />
+      <FieldGallery data={data} />
       <AppShowcase />
       <WhatToBring />
       <CommunityStats data={data} />
-      <GameModesSection />
+      <GameModesSection data={data} />
       <PastGames data={data} />
       <WatchAndConnect />
       <SiteFooter />
