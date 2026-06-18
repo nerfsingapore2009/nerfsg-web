@@ -7,17 +7,29 @@ export default {
   theme: {
     extend: {
       colors: {
-        ink:      '#0a0a0b',
-        panel:    '#121214',
-        panel2:   '#17171a',
-        line:     '#26262c',
-        line2:    '#2f2f37',
-        foam:     '#ed1c24',
-        foam2:    '#ff4754',
-        foamglow: 'rgba(237,28,36,.35)',
-        recon:    '#3ca4ff',
-        zombie:   '#94e472',
-        danger:   '#ff3d57',
+        // Brand
+        red:     '#e03131',
+        red2:    '#c92a2a',
+        // Surfaces
+        surface: '#f8fafc',
+        // Text
+        ink:     '#0f172a',
+        muted:   '#64748b',
+        // Borders
+        border:  '#e2e8f0',
+        border2: '#cbd5e1',
+        // Legacy aliases (keeps other pages from breaking)
+        foam:    '#e03131',
+        foam2:   '#c92a2a',
+        panel:   '#f8fafc',
+        panel2:  '#f1f5f9',
+        line:    '#e2e8f0',
+        line2:   '#cbd5e1',
+        zombie:  '#16a34a',
+        danger:  '#dc2626',
+        recon:   '#2563eb',
+        // keep old ink alias for any references
+        'ink-dark': '#0a0a0b',
       },
       fontFamily: {
         display: ['"Saira Condensed"', 'Impact', 'system-ui', 'sans-serif'],
@@ -25,8 +37,9 @@ export default {
         mono:    ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
       },
       boxShadow: {
-        foam:  '0 0 0 1px rgba(237,28,36,.4), 0 0 24px rgba(237,28,36,.25)',
-        inset: 'inset 0 1px 0 rgba(255,255,255,.04)',
+        card: '0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04)',
+        md:   '0 4px 12px rgba(0,0,0,.08)',
+        ring: '0 0 0 3px rgba(224,49,49,.2)',
       },
     },
   },
