@@ -65,11 +65,8 @@ function FAQItem({ item, isOpen, onToggle }) {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
-      <div
-        className="overflow-hidden transition-[max-height] duration-200 ease-out"
-        style={{ maxHeight: isOpen ? '400px' : '0px' }}
-      >
-        <div className="px-5 py-4 bg-surface border-t border-border">
+      {isOpen && (
+        <div className="faq-answer px-5 py-4 bg-surface border-t border-border">
           {item.cta ? (
             <p className="text-muted text-sm">
               Head over to our{' '}
@@ -82,7 +79,7 @@ function FAQItem({ item, isOpen, onToggle }) {
             <p className="text-muted text-sm leading-relaxed">{item.a}</p>
           )}
         </div>
-      </div>
+      )}
     </div>
   )
 }
