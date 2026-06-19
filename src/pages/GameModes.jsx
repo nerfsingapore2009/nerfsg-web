@@ -44,57 +44,64 @@ const GAME_MODES = [
 
 function StatPill({ label, value }) {
   return (
-    <div className="flex flex-col items-center bg-[#0f0f0f] rounded-lg px-3 py-2 min-w-[80px]">
-      <span className="text-orange-500 font-semibold text-sm">{value}</span>
-      <span className="text-gray-600 text-xs mt-0.5">{label}</span>
+    <div className="flex flex-col items-center bg-surface border border-border rounded-lg px-3 py-2 min-w-[80px]">
+      <span className="text-red font-semibold text-sm">{value}</span>
+      <span className="text-muted text-xs mt-0.5">{label}</span>
     </div>
   )
 }
 
 export default function GameModes() {
   return (
-    <div className="min-h-screen px-4 py-12 max-w-4xl mx-auto">
-      <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">Game Modes</h1>
-      <p className="text-gray-400 mb-8">How we play at NerfSG events.</p>
-
-      {/* General Rules Banner */}
-      <div className="bg-orange-500/10 border border-orange-500/30 rounded-xl p-5 mb-10">
-        <div className="flex items-center gap-2 mb-3">
-          <svg className="w-5 h-5 text-orange-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <h2 className="text-white font-semibold">General Rules</h2>
+    <div className="min-h-screen">
+      <div className="bg-surface border-b border-border">
+        <div className="max-w-4xl mx-auto px-5 lg:px-8 py-10">
+          <p className="section-label">How We Play</p>
+          <h1 className="text-3xl md:text-4xl font-bold text-ink mt-1">Game Modes</h1>
+          <p className="text-muted mt-2">The formats we run at NerfSG events.</p>
         </div>
-        <ul className="flex flex-col gap-2">
-          {GENERAL_RULES.map((rule, i) => (
-            <li key={i} className="flex items-start gap-2 text-sm text-gray-300">
-              <span className="text-orange-500 mt-0.5 shrink-0">›</span>
-              {rule}
-            </li>
-          ))}
-        </ul>
       </div>
 
-      {/* Game Mode Cards */}
-      <div className="flex flex-col gap-4">
-        {GAME_MODES.map((mode) => (
-          <div
-            key={mode.title}
-            className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-5 hover:border-orange-500/40 transition-colors"
-          >
-            <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
-              <div>
-                <h3 className="text-white font-bold text-lg">{mode.title}</h3>
-                <p className="text-orange-400 text-sm mt-0.5">{mode.win}</p>
-              </div>
-              <div className="flex gap-2 flex-wrap">
-                <StatPill label="Time" value={mode.time} />
-                <StatPill label="Lives" value={mode.lives} />
-              </div>
-            </div>
-            <p className="text-gray-400 text-sm leading-relaxed">{mode.description}</p>
+      <div className="max-w-4xl mx-auto px-5 lg:px-8 py-10">
+        {/* General Rules Banner */}
+        <div className="bg-red/[.04] border border-red/20 rounded-xl p-5 mb-8">
+          <div className="flex items-center gap-2 mb-3">
+            <svg className="w-5 h-5 text-red shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <h2 className="text-ink font-semibold">General Rules</h2>
           </div>
-        ))}
+          <ul className="flex flex-col gap-2">
+            {GENERAL_RULES.map((rule, i) => (
+              <li key={i} className="flex items-start gap-2 text-sm text-muted">
+                <span className="text-red mt-0.5 shrink-0 font-bold">›</span>
+                {rule}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Game Mode Cards */}
+        <div className="flex flex-col gap-4">
+          {GAME_MODES.map((mode) => (
+            <div
+              key={mode.title}
+              className="card card-hover p-5"
+            >
+              <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
+                <div>
+                  <h3 className="text-ink font-bold text-lg">{mode.title}</h3>
+                  <p className="text-red text-sm mt-0.5 font-medium">{mode.win}</p>
+                </div>
+                <div className="flex gap-2 flex-wrap">
+                  <StatPill label="Time" value={mode.time} />
+                  <StatPill label="Lives" value={mode.lives} />
+                </div>
+              </div>
+              <p className="text-muted text-sm leading-relaxed">{mode.description}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )

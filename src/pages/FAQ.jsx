@@ -47,14 +47,14 @@ const FAQS = [
 
 function FAQItem({ item, isOpen, onToggle }) {
   return (
-    <div className="border border-[#2a2a2a] rounded-xl overflow-hidden">
+    <div className="border border-border rounded-xl overflow-hidden">
       <button
         onClick={onToggle}
-        className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left bg-[#1a1a1a] hover:bg-[#222] transition-colors"
+        className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left bg-white hover:bg-surface transition-colors"
       >
-        <span className="text-white font-medium text-sm md:text-base">{item.q}</span>
+        <span className="text-ink font-medium text-sm md:text-base">{item.q}</span>
         <svg
-          className={`w-4 h-4 text-orange-500 shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+          className={`w-4 h-4 text-red shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -63,17 +63,17 @@ function FAQItem({ item, isOpen, onToggle }) {
         </svg>
       </button>
       {isOpen && (
-        <div className="px-5 py-4 bg-[#141414] border-t border-[#2a2a2a]">
+        <div className="px-5 py-4 bg-surface border-t border-border">
           {item.cta ? (
-            <p className="text-gray-400 text-sm">
+            <p className="text-muted text-sm">
               Head over to our{' '}
-              <Link to="/contact" className="text-orange-400 hover:text-orange-300 underline underline-offset-2">
+              <Link to="/contact" className="text-red hover:text-red2 underline underline-offset-2">
                 Contact Us
               </Link>{' '}
               page and we'll get back to you.
             </p>
           ) : (
-            <p className="text-gray-400 text-sm leading-relaxed">{item.a}</p>
+            <p className="text-muted text-sm leading-relaxed">{item.a}</p>
           )}
         </div>
       )}
@@ -87,19 +87,26 @@ export default function FAQ() {
   const toggle = (i) => setOpenIndex(openIndex === i ? null : i)
 
   return (
-    <div className="min-h-screen px-4 py-12 max-w-3xl mx-auto">
-      <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">FAQ</h1>
-      <p className="text-gray-400 mb-8">Frequently asked questions about NerfSG events.</p>
+    <div className="min-h-screen">
+      <div className="bg-surface border-b border-border">
+        <div className="max-w-3xl mx-auto px-5 lg:px-8 py-10">
+          <p className="section-label">Help</p>
+          <h1 className="text-3xl md:text-4xl font-bold text-ink mt-1">FAQ</h1>
+          <p className="text-muted mt-2">Frequently asked questions about NerfSG events.</p>
+        </div>
+      </div>
 
-      <div className="flex flex-col gap-2">
-        {FAQS.map((item, i) => (
-          <FAQItem
-            key={i}
-            item={item}
-            isOpen={openIndex === i}
-            onToggle={() => toggle(i)}
-          />
-        ))}
+      <div className="max-w-3xl mx-auto px-5 lg:px-8 py-10">
+        <div className="flex flex-col gap-2">
+          {FAQS.map((item, i) => (
+            <FAQItem
+              key={i}
+              item={item}
+              isOpen={openIndex === i}
+              onToggle={() => toggle(i)}
+            />
+          ))}
+        </div>
       </div>
     </div>
   )

@@ -1,6 +1,6 @@
 const SECTIONS = [
   {
-    title: '🆕 New to the Hobby? Read This First',
+    title: 'New to the Hobby? Read This First',
     highlight: true,
     links: [
       { label: "NerfSG New Nerfer Starter Pack", url: "https://docs.google.com/document/d/1uiWgPrIlFa5wxCu4LyhY-UL3wND3ibVxxqbsuu9FWAc/edit", desc: "Everything a beginner needs to know — gear, rules, etiquette." },
@@ -73,7 +73,7 @@ const SECTIONS = [
 
 function ExternalIcon() {
   return (
-    <svg className="w-3.5 h-3.5 shrink-0 text-gray-600 group-hover:text-orange-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <svg className="w-3.5 h-3.5 shrink-0 text-muted group-hover:text-red transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
     </svg>
   )
@@ -81,43 +81,50 @@ function ExternalIcon() {
 
 export default function Guides() {
   return (
-    <div className="min-h-screen px-4 py-12 max-w-4xl mx-auto">
-      <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">Guides</h1>
-      <p className="text-gray-400 mb-10">Resources for new and experienced Nerfers alike.</p>
+    <div className="min-h-screen">
+      <div className="bg-surface border-b border-border">
+        <div className="max-w-4xl mx-auto px-5 lg:px-8 py-10">
+          <p className="section-label">Resources</p>
+          <h1 className="text-3xl md:text-4xl font-bold text-ink mt-1">Guides</h1>
+          <p className="text-muted mt-2">Resources for new and experienced Nerfers alike.</p>
+        </div>
+      </div>
 
-      <div className="flex flex-col gap-8">
-        {SECTIONS.map((section) => (
-          <div key={section.title}>
-            <h2 className={`text-lg font-bold mb-3 ${section.highlight ? 'text-orange-400' : 'text-white'}`}>
-              {section.title}
-            </h2>
-            <div className={`rounded-xl border overflow-hidden divide-y ${
-              section.highlight
-                ? 'border-orange-500/30 divide-orange-500/10 bg-orange-500/5'
-                : 'border-[#2a2a2a] divide-[#2a2a2a] bg-[#1a1a1a]'
-            }`}>
-              {section.links.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center justify-between gap-4 px-5 py-4 hover:bg-white/5 transition-colors"
-                >
-                  <div className="min-w-0">
-                    <p className="text-white font-medium text-sm group-hover:text-orange-400 transition-colors truncate">
-                      {link.label}
-                    </p>
-                    {link.desc && (
-                      <p className="text-gray-500 text-xs mt-0.5">{link.desc}</p>
-                    )}
-                  </div>
-                  <ExternalIcon />
-                </a>
-              ))}
+      <div className="max-w-4xl mx-auto px-5 lg:px-8 py-10">
+        <div className="flex flex-col gap-8">
+          {SECTIONS.map((section) => (
+            <div key={section.title}>
+              <h2 className={`text-base font-bold mb-3 ${section.highlight ? 'text-red' : 'text-ink'}`}>
+                {section.highlight && <span className="mr-2">🆕</span>}{section.title}
+              </h2>
+              <div className={`rounded-xl border overflow-hidden divide-y ${
+                section.highlight
+                  ? 'border-red/20 divide-red/10 bg-red/[.03]'
+                  : 'border-border divide-border bg-white'
+              }`}>
+                {section.links.map((link) => (
+                  <a
+                    key={link.label}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center justify-between gap-4 px-5 py-4 hover:bg-surface transition-colors"
+                  >
+                    <div className="min-w-0">
+                      <p className="text-ink font-medium text-sm group-hover:text-red transition-colors truncate">
+                        {link.label}
+                      </p>
+                      {link.desc && (
+                        <p className="text-muted text-xs mt-0.5">{link.desc}</p>
+                      )}
+                    </div>
+                    <ExternalIcon />
+                  </a>
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   )
