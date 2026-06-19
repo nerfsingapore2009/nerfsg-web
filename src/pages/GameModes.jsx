@@ -20,18 +20,18 @@ const GAME_MODES = [
     description: 'Bring the flag from the middle back to your starting point to win immediately.',
   },
   {
-    title: 'Domination',
+    title: 'Death clicks',
     win: 'Team with fewest clicks wins',
     time: '3 min',
     lives: 'Unlimited respawn',
     description: 'A counter is placed at each starting point. Click it when shot to respawn. The team with the least clicks at the end wins.',
   },
   {
-    title: 'King of the Hill',
-    win: 'Team holding timer longest wins',
+    title: 'Flux',
+    win: 'Team captured most zones wins',
     time: '5 min',
     lives: 'Unlimited respawn',
-    description: 'A chess clock sits in the middle. Press your side to start your timer. Hold the hill longest to win.',
+    description: 'Objectives placed in middle of field, stack your assigned coloured cones to capture zone. Team with most captured zone at the end wins',
   },
   {
     title: 'Clicker Domination',
