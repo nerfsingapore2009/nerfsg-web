@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+﻿import { useState, useEffect, useMemo } from 'react';
 import { extractParticipants } from '../hooks/useGamedays';
 
 const MONTHS_FULL = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -66,7 +66,7 @@ export default function PastGames({ data }) {
     return (
       <section className="border-b border-border bg-surface">
         <div className="max-w-6xl mx-auto px-5 lg:px-8 py-16">
-          <div className="animate-pulse h-32 bg-border rounded-xl"></div>
+          <div className="animate-pulse h-32 bg-border"></div>
         </div>
       </section>
     );
@@ -95,11 +95,11 @@ export default function PastGames({ data }) {
             </svg>
             <input type="text" value={search} onChange={e => setSearch(e.target.value)}
               placeholder="Search name, venue, host…"
-              className="w-full bg-surface border border-border rounded-lg pl-9 pr-3 py-2 text-sm text-ink placeholder:text-muted focus:border-red/50 focus:outline-none focus:ring-2 focus:ring-red/15"/>
+              className="w-full bg-surface border border-border pl-9 pr-3 py-2 text-sm text-ink placeholder:text-muted focus:border-red/50 focus:outline-none focus:ring-2 focus:ring-red/15"/>
           </div>
 
           <select value={monthFilter} onChange={e => setMonthFilter(e.target.value)}
-            className="bg-surface border border-border rounded-lg px-3 py-2 text-sm text-ink focus:border-red/50 focus:outline-none">
+            className="bg-surface border border-border px-3 py-2 text-sm text-ink focus:border-red/50 focus:outline-none">
             <option value="all">All months</option>
             {monthsAvailable.map(k => {
               const [y, m] = k.split('-');
@@ -108,12 +108,12 @@ export default function PastGames({ data }) {
           </select>
 
           <select value={hostFilter} onChange={e => setHostFilter(e.target.value)}
-            className="bg-surface border border-border rounded-lg px-3 py-2 text-sm text-ink focus:border-red/50 focus:outline-none">
+            className="bg-surface border border-border px-3 py-2 text-sm text-ink focus:border-red/50 focus:outline-none">
             <option value="all">All hosts</option>
             {hostsAvailable.map(h => <option key={h} value={h}>{h}</option>)}
           </select>
 
-          <div className="flex bg-surface border border-border rounded-lg overflow-hidden">
+          <div className="flex bg-surface border border-border overflow-hidden">
             <button onClick={() => setView('wall')}
               className={`px-3 py-2 text-xs font-semibold tracking-wide uppercase transition-colors ${view === 'wall' ? 'bg-red text-white' : 'text-muted hover:text-ink'}`}>
               Wall
@@ -171,7 +171,7 @@ function PastGamesTable({ items, onOpen }) {
           return (
             <li key={g.id} onClick={() => onOpen(g.id)}
               className="grid grid-cols-[1fr_auto] md:grid-cols-[44px_120px_1fr_140px_120px_80px_60px] gap-3 px-4 py-3 hover:bg-surface transition-colors items-center cursor-pointer">
-              <div className="hidden md:block w-9 h-9 rounded-md overflow-hidden border border-border bg-surface shrink-0">
+              <div className="hidden md:block w-9 h-9 overflow-hidden border border-border bg-surface shrink-0">
                 {g.groupPhoto
                   ? <img src={g.groupPhoto} loading="lazy" decoding="async" className="w-full h-full object-cover" alt=""/>
                   : <div className="photo-placeholder w-full h-full"></div>}
@@ -208,10 +208,10 @@ function PastGamesWall({ items, onOpen }) {
               {g.groupPhoto
                 ? <img src={g.groupPhoto} loading="lazy" decoding="async" className="w-full h-full object-cover" alt={g.name || ''}/>
                 : <div className="photo-placeholder w-full h-full"></div>}
-              <div className="absolute top-2 left-2 bg-ink/80 text-white px-2 py-1 rounded-md text-[10px] font-semibold tracking-wide uppercase pointer-events-none">
+              <div className="absolute top-2 left-2 bg-ink/80 text-white px-2 py-1 text-[10px] font-semibold tracking-wide uppercase pointer-events-none">
                 {dateStr}
               </div>
-              <div className="absolute top-2 right-2 bg-ink/80 text-white px-2 py-1 rounded-md text-[10px] font-semibold tracking-wide tabular pointer-events-none">
+              <div className="absolute top-2 right-2 bg-ink/80 text-white px-2 py-1 text-[10px] font-semibold tracking-wide tabular pointer-events-none">
                 {parts.length} ops
               </div>
             </div>
@@ -267,7 +267,7 @@ function GameDetailModal({ game, onClose }) {
     <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 lg:p-8" onClick={onClose}>
       <div className="absolute inset-0 bg-ink/80 backdrop-blur-sm"></div>
 
-      <div className="relative bg-white border border-border rounded-2xl max-w-3xl w-full max-h-[88vh] overflow-hidden flex flex-col shadow-2xl"
+      <div className="relative bg-white border border-border max-w-3xl w-full max-h-[88vh] overflow-hidden flex flex-col shadow-2xl"
         onClick={e => e.stopPropagation()}>
 
         {/* header */}
@@ -300,7 +300,7 @@ function GameDetailModal({ game, onClose }) {
           {(game.note || game.fieldNotes) && (
             <div>
               <div className="text-xs font-semibold text-muted tracking-widest uppercase mb-2">Host notes</div>
-              <div className="bg-surface border border-border rounded-lg p-3 text-sm text-ink leading-relaxed whitespace-pre-wrap">
+              <div className="bg-surface border border-border p-3 text-sm text-ink leading-relaxed whitespace-pre-wrap">
                 {game.note || game.fieldNotes}
               </div>
             </div>
@@ -352,7 +352,7 @@ function GameDetailModal({ game, onClose }) {
 
           <div>
             <div className="text-xs font-semibold text-muted tracking-widest uppercase mb-2">Photo</div>
-            <div className="aspect-[16/9] bg-surface border border-border rounded-lg overflow-hidden">
+            <div className="aspect-[16/9] bg-surface border border-border overflow-hidden">
               {game.groupPhoto
                 ? <img src={game.groupPhoto} className="w-full h-full object-cover" alt={game.name || 'Game photo'} loading="lazy" decoding="async"/>
                 : <div className="photo-placeholder w-full h-full flex items-center justify-center">

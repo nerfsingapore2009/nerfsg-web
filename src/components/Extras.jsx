@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+﻿import { useMemo, useState } from 'react';
 import { extractParticipants } from '../hooks/useGamedays';
 
 const MONTH_LABELS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -109,7 +109,7 @@ export function YoYBlock({ all }) {
         {stats.map(s => {
           const isCur = s.year === thisYear;
           return (
-            <div key={s.year} className={`p-3 rounded-lg border ${isCur ? 'border-red/40 bg-red/[.04]' : 'border-border bg-surface'}`}>
+            <div key={s.year} className={`p-3 border ${isCur ? 'border-red/40 bg-red/[.04]' : 'border-border bg-surface'}`}>
               <div className={`font-display font-black text-3xl tracking-tight ${isCur ? 'text-red' : 'text-ink'}`}>{s.year}</div>
               <div className="text-[10px] font-semibold text-muted tracking-widest uppercase mt-2">Games</div>
               <div className="font-display text-2xl text-ink tabular">{s.games}</div>
@@ -183,7 +183,7 @@ export function HeatmapCalendar({ all }) {
           Less
           <div className="flex gap-1">
             {[0,.2,.4,.7,1].map((a, i) => (
-              <span key={i} className="w-3 h-3 rounded-sm" style={{ background: a === 0 ? '#eef2f7' : `rgba(224,49,49,${0.15 + a * 0.7})`, border: '1px solid #e2e8f0' }}></span>
+              <span key={i} className="w-3 h-3" style={{ background: a === 0 ? '#eef2f7' : `rgba(224,49,49,${0.15 + a * 0.7})`, border: '1px solid #e2e8f0' }}></span>
             ))}
           </div>
           More
@@ -210,7 +210,7 @@ export function HeatmapCalendar({ all }) {
               const bg = a === 0 ? '#eef2f7' : `rgba(224,49,49,${0.15 + a * 0.7})`;
               return (
                 <div key={i} onMouseEnter={() => setHover({ ...c })} onMouseLeave={() => setHover(null)}
-                  className="w-3 h-3 rounded-sm transition-colors cursor-default"
+                  className="w-3 h-3 transition-colors cursor-default"
                   style={{ background: bg, border: '1px solid #e2e8f0' }}></div>
               );
             })}

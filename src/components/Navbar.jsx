@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 
 const NAV_LINKS = [
@@ -26,7 +26,7 @@ export default function Navbar() {
   }, [])
 
   const linkClass = ({ isActive }) =>
-    `px-3 py-1.5 rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red/40 ${
+    `px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red/40 ${
       isActive
         ? (transparent ? 'text-white font-semibold' : 'text-red font-semibold')
         : (transparent ? 'text-white/80 hover:text-white' : 'text-muted hover:text-ink')
@@ -42,7 +42,7 @@ export default function Navbar() {
       <div className="max-w-6xl mx-auto px-5 lg:px-8 py-3 flex items-center gap-6">
 
         {/* Logo */}
-        <NavLink to="/" aria-label="NERF Singapore — home" className="flex items-center shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red/40 rounded-lg">
+        <NavLink to="/" aria-label="NERF Singapore — home" className="flex items-center shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red/40">
           <img src="/nerfsingapore.webp" alt="NERF Singapore" className="h-9 w-[80px] object-cover object-center block" width="240" height="160" />
         </NavLink>
 
@@ -73,7 +73,7 @@ export default function Navbar() {
           aria-expanded={open}
           aria-controls="mobile-menu"
           aria-label={open ? 'Close menu' : 'Open menu'}
-          className={`lg:hidden p-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red/40 ${
+          className={`lg:hidden p-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red/40 ${
             transparent ? 'text-white hover:text-white/80' : 'text-muted hover:text-ink'
           }`}
         >
@@ -98,7 +98,7 @@ export default function Navbar() {
               to={to}
               onClick={() => setOpen(false)}
               className={({ isActive }) =>
-                `px-3 py-2.5 rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red/40 ${
+                `px-3 py-2.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red/40 ${
                   isActive ? 'text-red bg-red/5 font-semibold' : 'text-muted hover:text-ink hover:bg-surface'
                 }`
               }

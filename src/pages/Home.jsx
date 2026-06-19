@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react'
+﻿import { useMemo, useState, useEffect } from 'react'
 import { useAllGamedays, deriveStats, extractParticipants } from '../hooks/useGamedays'
 import { useCountUp, useCountdown } from '../components/Hud'
 import { useReveal } from '../hooks/useReveal'
@@ -73,7 +73,7 @@ function NextGameCard({ event, loading, error, queue = [] }) {
           return (
             <>
               {event.groupPhoto && (
-                <div className="mb-4 -mt-1 rounded-lg overflow-hidden border border-border aspect-[16/8]">
+                <div className="mb-4 -mt-1 overflow-hidden border border-border aspect-[16/8]">
                   <img src={event.groupPhoto} alt={event.name || 'Game photo'} className="w-full h-full object-cover" loading="lazy" decoding="async" />
                 </div>
               )}
@@ -218,7 +218,7 @@ function Hero({ data }) {
                   Join the next game
                 </a>
                 <a href="https://www.facebook.com/groups/nerfsingapore/" target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-lg font-semibold text-sm
+                  className="inline-flex items-center gap-1.5 px-5 py-2.5 font-semibold text-sm
                              text-white border border-white/30 hover:bg-white/10 transition-colors">
                   Facebook group
                 </a>
@@ -282,7 +282,7 @@ function FieldGallery({ data }) {
         <div className="marquee-track flex gap-4 w-max px-5 lg:px-8">
           {loop.map((p, i) => (
             <figure key={i}
-              className="relative w-[280px] sm:w-[360px] aspect-[4/3] rounded-xl overflow-hidden
+              className="relative w-[280px] sm:w-[360px] aspect-[4/3] overflow-hidden
                          border border-white/10 shrink-0 shadow-lg">
               <img src={p.src} alt={p.name || 'NerfSG game action'} loading="lazy" decoding="async"
                 className="w-full h-full object-cover" />
@@ -340,7 +340,7 @@ function FauxAppScreen() {
       <div className="text-xs text-muted">Hub</div>
       <div className="mt-6 w-full space-y-2">
         {['Next game: Sat 14 Jun', 'Leaderboard', 'Past games'].map(label => (
-          <div key={label} className="w-full bg-surface rounded-lg px-3 py-2.5 text-xs text-ink font-medium border border-border">
+          <div key={label} className="w-full bg-surface px-3 py-2.5 text-xs text-ink font-medium border border-border">
             {label}
           </div>
         ))}
@@ -574,12 +574,12 @@ function GameModesSection({ data }) {
               <button
                 key={m.id}
                 onClick={() => setFlipped(isFlipped ? null : m.id)}
-                className="flip-card h-[300px] text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red/40 rounded-xl"
+                className="flip-card h-[300px] text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red/40"
                 aria-label={isFlipped ? `${m.name} — click to flip back` : `${m.name} — click to see rules`}
               >
                 <div className="flip-inner" style={{ transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }}>
                   {/* Front */}
-                  <div className="flip-face card card-hover rounded-xl overflow-hidden flex flex-col">
+                  <div className="flip-face card card-hover overflow-hidden flex flex-col">
                     {/* Top area */}
                     <div className="relative h-36 photo-placeholder rounded-none">
                       {photo && (
@@ -605,7 +605,7 @@ function GameModesSection({ data }) {
                     </div>
                   </div>
                   {/* Back */}
-                  <div className="flip-back flip-face bg-red text-white rounded-xl p-5 flex flex-col">
+                  <div className="flip-back flip-face bg-red text-white p-5 flex flex-col">
                     <div className="flex items-start justify-between">
                       <span className="text-xs font-semibold tracking-widest uppercase text-white/70">{m.code}</span>
                       <span className="text-xs font-semibold text-white/70">← flip back</span>
@@ -644,7 +644,7 @@ function WatchAndConnect() {
         <div className="lg:col-span-7" data-reveal>
           <h2 className="font-display text-4xl lg:text-5xl text-ink uppercase tracking-tight">See how it looks.</h2>
           <p className="text-muted mt-2">Highlights and gameplay from recent games.</p>
-          <div className="mt-6 aspect-video rounded-2xl overflow-hidden border border-border bg-ink2
+          <div className="mt-6 aspect-video overflow-hidden border border-border bg-ink2
                           shadow-2xl ring-1 ring-black/5">
             <iframe
               src="https://www.youtube.com/embed/videoseries?list=PLZubcuDLCLdmFUJJuhe0Gy-g3Nf5jdWsj"
