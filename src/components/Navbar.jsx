@@ -43,9 +43,7 @@ export default function Navbar() {
 
         {/* Logo */}
         <NavLink to="/" aria-label="NERF Singapore — home" className="flex items-center shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red/40 rounded-lg">
-          <span className={`inline-flex items-center rounded-lg transition-all duration-300 ${transparent ? 'bg-white px-2.5 py-1 shadow-md' : ''}`}>
-            <img src="/nerfsingapore.webp" alt="NERF Singapore" className="h-9 w-[80px] object-cover object-center block" width="240" height="160" />
-          </span>
+          <img src="/nerfsingapore.webp" alt="NERF Singapore" className="h-9 w-[80px] object-cover object-center block" width="240" height="160" />
         </NavLink>
 
         {/* Desktop links */}
