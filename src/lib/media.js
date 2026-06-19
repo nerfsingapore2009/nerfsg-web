@@ -75,9 +75,8 @@ export function getFieldGallery(all = [], max = 10) {
   return out.slice(0, max)
 }
 
-/** Single wide photo for the hero backdrop, or null (caller uses gradient base). */
+/** Single wide photo for the hero backdrop — app event photos only, or null. */
 export function getHeroPhoto(all = []) {
-  if (bundledGallery[0]) return bundledGallery[0].src
   const fs = firestorePhotos(all)
   if (fs[0]) return fs[0].src
   return DEV ? 'https://picsum.photos/seed/nerfsg-hero/1920/1080' : null
