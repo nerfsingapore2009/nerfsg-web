@@ -1,4 +1,4 @@
-/**
+﻿/**
  * media.js — central image source for the homepage.
  *
  * Photos are sourced, in priority order:
@@ -31,14 +31,21 @@ function creditFromName(path) {
   return m ? '@' + m[1] : null
 }
 
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]]
+  }
+  return arr
+}
+
 function sortedEntries(modules) {
   return Object.entries(modules).sort(([a], [b]) => a.localeCompare(b))
 }
 
-const bundledGallery = sortedEntries(galleryModules).map(([path, src]) => ({
-  src,
-  credit: creditFromName(path),
-}))
+const bundledGallery = shuffle(
+  sortedEntries(galleryModules).map(([path, src]) => ({ src, credit: creditFromName(path) }))
+)
 
 const bundledScreens = sortedEntries(appModules).map(([, src]) => src)
 
@@ -62,7 +69,7 @@ const devPortrait = n =>
  * Field action gallery — bundled first, then live Firestore photos.
  * Returns [] in production when nothing is available (caller hides section).
  */
-export function getFieldGallery(all = [], max = 10) {
+export function getFieldGallery(all = [], max = 50) {
   const out = [...bundledGallery]
   if (out.length < max) {
     const seen = new Set(out.map(p => p.src))

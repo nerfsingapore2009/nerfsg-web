@@ -630,10 +630,10 @@ function GameModesSection({ data }) {
 
 /* ── COMMUNITY / SOCIALS ──────────────────────────────────────────── */
 const SOCIALS = [
-  { name: 'Telegram',  handle: 't.me/nerfsg',                          members: '1.2k', href: 'https://t.me/nerfsg' },
+  { name: 'Telegram',  handle: 't.me/nerfsg',                          members: '1.2k', href: 'https://t.me/+MbMLovtcLyVmYzhl' },
   { name: 'Facebook',  handle: 'facebook.com/groups/nerfsingapore',    members: '4.8k', href: 'https://www.facebook.com/groups/nerfsingapore/' },
-  { name: 'TikTok',    handle: '@nerfsg',                              members: '920',  href: 'https://www.tiktok.com/@nerfsg' },
-  { name: 'YouTube',   handle: '@nerfsg',                              members: '1.5k', href: 'https://www.youtube.com/@nerfsg' },
+  { name: 'TikTok',    handle: '@nerfsingapore',                       members: '920',  href: 'https://www.tiktok.com/@nerfsingapore' },
+  { name: 'YouTube',   handle: '@project_argus_films',                 members: '1.5k', href: 'https://www.youtube.com/@project_argus_films/videos' },
 ]
 
 function WatchAndConnect() {
@@ -647,7 +647,7 @@ function WatchAndConnect() {
           <div className="mt-6 aspect-video overflow-hidden border border-border bg-ink2
                           shadow-2xl ring-1 ring-black/5">
             <iframe
-              src="https://www.youtube.com/embed/videoseries?list=PLZubcuDLCLdmFUJJuhe0Gy-g3Nf5jdWsj"
+              src="https://www.youtube.com/embed?list=UUtZBMjqSgVEICxwIuOWL3dw&listType=playlist"
               className="w-full h-full"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
