@@ -1,10 +1,12 @@
+import { usePageTitle } from '../lib/usePageTitle'
+
 export default function HvZ() {
+  usePageTitle('Humans vs Zombies')
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen page-enter">
       <div className="bg-surface border-b border-border">
         <div className="max-w-3xl mx-auto px-5 lg:px-8 py-10">
-          <p className="section-label">Game Mode</p>
-          <h1 className="text-3xl md:text-4xl font-bold text-ink mt-1">Humans vs Zombies</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-ink">Humans vs Zombies</h1>
           <p className="text-muted mt-2">The ultimate survival game mode.</p>
         </div>
       </div>

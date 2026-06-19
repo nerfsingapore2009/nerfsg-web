@@ -1,3 +1,6 @@
+import { usePageTitle } from '../lib/usePageTitle'
+import { useReveal } from '../hooks/useReveal'
+
 const SECTIONS = [
   {
     title: 'New to the Hobby? Read This First',
@@ -79,51 +82,66 @@ function ExternalIcon() {
   )
 }
 
-export default function Guides() {
+const BEGINNER_SECTIONS = SECTIONS.slice(0, 2)
+const ADVANCED_SECTIONS = SECTIONS.slice(2)
+
+function SectionGroup({ sections, baseDelay = 0 }) {
   return (
-    <div className="min-h-screen">
+    <div className="flex flex-col gap-8">
+      {sections.map((section, i) => (
+        <div key={section.title} data-reveal style={{ '--reveal-delay': `${baseDelay + i * 0.07}s` }}>
+          <h2 className={`text-base font-bold mb-3 ${section.highlight ? 'text-red' : 'text-ink'}`}>
+            {section.highlight && <span className="mr-2">🆕</span>}{section.title}
+          </h2>
+          <div className={`border overflow-hidden divide-y ${
+            section.highlight
+              ? 'border-red/20 divide-red/10 bg-red/[.03]'
+              : 'border-border divide-border bg-white'
+          }`}>
+            {section.links.map((link) => (
+              <a
+                key={link.label}
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center justify-between gap-4 px-5 py-4 hover:bg-surface transition-colors"
+              >
+                <div className="min-w-0">
+                  <p className="text-ink font-medium text-sm group-hover:text-red transition-colors truncate">
+                    {link.label}
+                  </p>
+                  {link.desc && (
+                    <p className="text-muted text-xs mt-0.5">{link.desc}</p>
+                  )}
+                </div>
+                <ExternalIcon />
+              </a>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+export default function Guides() {
+  usePageTitle('Guides')
+  useReveal()
+  return (
+    <div className="min-h-screen page-enter">
       <div className="bg-surface border-b border-border">
         <div className="max-w-4xl mx-auto px-5 lg:px-8 py-10">
-          <p className="section-label">Resources</p>
-          <h1 className="text-3xl md:text-4xl font-bold text-ink mt-1">Guides</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-ink">Guides</h1>
           <p className="text-muted mt-2">Resources for new and experienced Nerfers alike.</p>
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-5 lg:px-8 py-10">
-        <div className="flex flex-col gap-8">
-          {SECTIONS.map((section) => (
-            <div key={section.title}>
-              <h2 className={`text-base font-bold mb-3 ${section.highlight ? 'text-red' : 'text-ink'}`}>
-                {section.highlight && <span className="mr-2">🆕</span>}{section.title}
-              </h2>
-              <div className={`border overflow-hidden divide-y ${
-                section.highlight
-                  ? 'border-red/20 divide-red/10 bg-red/[.03]'
-                  : 'border-border divide-border bg-white'
-              }`}>
-                {section.links.map((link) => (
-                  <a
-                    key={link.label}
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group flex items-center justify-between gap-4 px-5 py-4 hover:bg-surface transition-colors"
-                  >
-                    <div className="min-w-0">
-                      <p className="text-ink font-medium text-sm group-hover:text-red transition-colors truncate">
-                        {link.label}
-                      </p>
-                      {link.desc && (
-                        <p className="text-muted text-xs mt-0.5">{link.desc}</p>
-                      )}
-                    </div>
-                    <ExternalIcon />
-                  </a>
-                ))}
-              </div>
-            </div>
-          ))}
+      <div className="max-w-4xl mx-auto px-5 lg:px-8 py-10 flex flex-col gap-12">
+        <SectionGroup sections={BEGINNER_SECTIONS} />
+
+        <div className="border-t border-border pt-10" data-reveal>
+          <h2 className="text-lg font-bold text-ink mb-6">Modding &amp; Builds</h2>
+          <SectionGroup sections={ADVANCED_SECTIONS} baseDelay={0} />
         </div>
       </div>
     </div>

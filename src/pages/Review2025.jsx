@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { usePageTitle } from '../lib/usePageTitle'
 
 const MapPin = ({ size = 24, className }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -148,6 +149,7 @@ function StatCard({ label, value, sub, Icon }) {
 }
 
 export default function Review2025() {
+  usePageTitle('2025 Year in Review')
   const [activeTab, setActiveTab] = useState('overview')
 
   function TabButton({ id, label, Icon }) {
@@ -181,10 +183,10 @@ export default function Review2025() {
             Mission Report // 2025
           </div>
           <h1 className="text-6xl md:text-8xl font-black uppercase italic tracking-tighter mb-4 leading-none">
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">Year In</span>
+            <span className="block text-white">Year In</span>
             <span className="block text-red-600" style={{ WebkitTextStroke: '1px rgba(255,255,255,0.8)', textShadow: '0 0 20px rgba(220,38,38,0.5)' }}>Foam</span>
           </h1>
-          <p className="text-xl md:text-2xl text-gray-400 font-light tracking-widest uppercase border-l-4 border-red-600 pl-4">
+          <p className="text-xl md:text-2xl text-gray-400 font-light tracking-widest uppercase">
             Nerf Singapore • Annual Debrief
           </p>
         </div>
@@ -248,7 +250,7 @@ export default function Review2025() {
         {/* ZONES TAB */}
         {activeTab === 'locations' && (
           <div className="space-y-8">
-            <div className="bg-gradient-to-r from-red-900/20 to-transparent border-l-4 border-red-600 p-8 rounded-r-xl">
+            <div className="bg-red-900/15 border border-red-900/30 p-8">
               <h3 className="text-red-500 font-bold uppercase tracking-[0.2em] text-xs mb-3">Dominant Terrain</h3>
               <p className="text-xl md:text-2xl text-white font-light leading-relaxed">
                 <span className="font-black text-red-500">Hong Lim Park</span> remained our primary operating base, hosting nearly{' '}
@@ -350,7 +352,7 @@ export default function Review2025() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {FOAM_INVADERS.days.map((day, idx) => (
-                <div key={idx} className={`relative overflow-hidden bg-gray-900 rounded-xl border-t-4 ${day.borderColor} flex flex-col group hover:-translate-y-2 transition-transform duration-300 shadow-2xl`}>
+                <div key={idx} className={`relative overflow-hidden bg-gray-900 rounded-xl flex flex-col group hover:-translate-y-2 transition-transform duration-300 shadow-2xl`}>
                   <img src={day.image} alt={day.title} className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:scale-110 transition-transform duration-700 grayscale group-hover:grayscale-0" />
                   <div className="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/90 to-transparent" />
                   <div className="relative z-10 flex flex-col h-full p-8">

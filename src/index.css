@@ -376,10 +376,11 @@ button, a {
   width: 22px; height: 22px; padding: 0; border: none; background: none; cursor: pointer;
 }
 .carousel-dot::before {
-  content: ''; display: block; width: 6px; height: 6px; border-radius: 999px;
-  background: rgba(15,23,42,0.28); transition: width 0.3s ease, background 0.3s ease;
+  content: ''; display: block; width: 18px; height: 6px; border-radius: 999px;
+  background: rgba(15,23,42,0.28); transition: transform 0.3s ease, background 0.3s ease;
+  transform: scaleX(0.333); transform-origin: center;
 }
-.carousel-dot.active::before { width: 18px; background: var(--red); }
+.carousel-dot.active::before { transform: scaleX(1); background: var(--red); }
 @media (prefers-reduced-motion: reduce) { .carousel-track { transition: none; } }
 
 /* ── Game-mode photo tile ────────────────────────────────────────── */
@@ -387,4 +388,29 @@ button, a {
 .mode-photo-scrim {
   position: absolute; inset: 0;
   background: linear-gradient(180deg, rgba(6,8,15,0) 30%, rgba(6,8,15,0.55) 100%);
+}
+
+/* ── Page-enter fade ─────────────────────────────────────────────── */
+@keyframes pageEnter {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page-enter {
+  animation: pageEnter 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-enter { animation: none; }
+}
+
+/* ── Card stagger entrance ───────────────────────────────────────── */
+@keyframes cardEnter {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.card-enter {
+  animation: cardEnter 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: clamp(0ms, calc(var(--i, 0) * 50ms), 250ms);
+}
+@media (prefers-reduced-motion: reduce) {
+  .card-enter { animation: none; }
 }

@@ -1,3 +1,5 @@
+import { usePageTitle } from '../lib/usePageTitle'
+
 const GENERAL_RULES = [
   'Blaster hits do not count — getting shot anywhere else on the body or gear counts (depends on host)',
   'Respawns require player to go back to the starting point after they get shot',
@@ -52,12 +54,12 @@ function StatPill({ label, value }) {
 }
 
 export default function GameModes() {
+  usePageTitle('Game Modes')
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen page-enter">
       <div className="bg-surface border-b border-border">
         <div className="max-w-4xl mx-auto px-5 lg:px-8 py-10">
-          <p className="section-label">How We Play</p>
-          <h1 className="text-3xl md:text-4xl font-bold text-ink mt-1">Game Modes</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-ink">Game Modes</h1>
           <p className="text-muted mt-2">The formats we run at NerfSG events.</p>
         </div>
       </div>

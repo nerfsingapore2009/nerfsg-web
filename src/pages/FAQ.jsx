@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { usePageTitle } from '../lib/usePageTitle'
 
 const FAQS = [
   {
@@ -50,6 +51,7 @@ function FAQItem({ item, isOpen, onToggle }) {
     <div className="border border-border overflow-hidden">
       <button
         onClick={onToggle}
+        aria-expanded={isOpen}
         className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left bg-white hover:bg-surface transition-colors"
       >
         <span className="text-ink font-medium text-sm md:text-base">{item.q}</span>
@@ -58,11 +60,15 @@ function FAQItem({ item, isOpen, onToggle }) {
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
+          aria-hidden="true"
         >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
-      {isOpen && (
+      <div
+        className="overflow-hidden transition-[max-height] duration-200 ease-out"
+        style={{ maxHeight: isOpen ? '400px' : '0px' }}
+      >
         <div className="px-5 py-4 bg-surface border-t border-border">
           {item.cta ? (
             <p className="text-muted text-sm">
@@ -76,22 +82,22 @@ function FAQItem({ item, isOpen, onToggle }) {
             <p className="text-muted text-sm leading-relaxed">{item.a}</p>
           )}
         </div>
-      )}
+      </div>
     </div>
   )
 }
 
 export default function FAQ() {
+  usePageTitle('FAQ')
   const [openIndex, setOpenIndex] = useState(null)
 
   const toggle = (i) => setOpenIndex(openIndex === i ? null : i)
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen page-enter">
       <div className="bg-surface border-b border-border">
         <div className="max-w-3xl mx-auto px-5 lg:px-8 py-10">
-          <p className="section-label">Help</p>
-          <h1 className="text-3xl md:text-4xl font-bold text-ink mt-1">FAQ</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-ink">FAQ</h1>
           <p className="text-muted mt-2">Frequently asked questions about NerfSG events.</p>
         </div>
       </div>
