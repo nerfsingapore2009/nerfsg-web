@@ -97,7 +97,7 @@ export default function Guides() {
               <h2 className={`text-base font-bold mb-3 ${section.highlight ? 'text-red' : 'text-ink'}`}>
                 {section.highlight && <span className="mr-2">🆕</span>}{section.title}
               </h2>
-              <div className={`rounded-xl border overflow-hidden divide-y ${
+              <div className={`border overflow-hidden divide-y ${
                 section.highlight
                   ? 'border-red/20 divide-red/10 bg-red/[.03]'
                   : 'border-border divide-border bg-white'

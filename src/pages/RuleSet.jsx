@@ -43,7 +43,7 @@ export default function RuleSet() {
             </ul>
           </div>
 
-          <div className="bg-red/[.04] border border-red/20 rounded-xl p-6 text-center">
+          <div className="bg-red/[.04] border border-red/20 p-6 text-center">
             <h2 className="text-ink font-bold text-lg mb-2">Full Ruleset Document</h2>
             <p className="text-muted text-sm mb-5">
               The complete ruleset is maintained as a living document. Read it before your first game.

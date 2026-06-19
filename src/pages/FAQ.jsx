@@ -47,7 +47,7 @@ const FAQS = [
 
 function FAQItem({ item, isOpen, onToggle }) {
   return (
-    <div className="border border-border rounded-xl overflow-hidden">
+    <div className="border border-border overflow-hidden">
       <button
         onClick={onToggle}
         className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left bg-white hover:bg-surface transition-colors"

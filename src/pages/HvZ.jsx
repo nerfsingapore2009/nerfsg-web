@@ -36,7 +36,7 @@ export default function HvZ() {
                 { role: 'Zombies', colour: 'text-red bg-red/[.04] border-red/15', desc: 'Tag humans with your hand to convert them. No blasters — just teamwork and persistence.' },
                 { role: 'Conversion', colour: 'text-orange-600 bg-orange-50 border-orange-100', desc: 'A tagged human immediately becomes a zombie and must switch to the zombie team.' },
               ].map(({ role, colour, desc }) => (
-                <div key={role} className={`flex items-start gap-4 p-4 rounded-xl border ${colour}`}>
+                <div key={role} className={`flex items-start gap-4 p-4 border ${colour}`}>
                   <span className="font-bold shrink-0 w-24 text-sm mt-0.5">{role}</span>
                   <span className="text-muted text-sm leading-relaxed">{desc}</span>
                 </div>
@@ -45,7 +45,7 @@ export default function HvZ() {
           </div>
 
           {/* Rules CTA */}
-          <div className="bg-red/[.04] border border-red/20 rounded-xl p-6 text-center">
+          <div className="bg-red/[.04] border border-red/20 p-6 text-center">
             <h2 className="text-ink font-bold text-lg mb-2">Full HvZ Rules</h2>
             <p className="text-muted text-sm mb-5">
               Read the complete ruleset before playing — it covers tagging rules, stun timers, special roles, and more.
