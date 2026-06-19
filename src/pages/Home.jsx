@@ -1,4 +1,4 @@
-﻿import { useMemo, useState, useEffect } from 'react'
+﻿import { useMemo, useState, useEffect, useRef } from 'react'
 import { useAllGamedays, deriveStats, extractParticipants } from '../hooks/useGamedays'
 import { useCountUp, useCountdown } from '../components/Hud'
 import { useReveal } from '../hooks/useReveal'
@@ -169,13 +169,87 @@ function NextGameCard({ event, loading, error, queue = [] }) {
   )
 }
 
+/* ── HERO FLOATING GALLERY ────────────────────────────────────────── */
+const GALLERY_SLOTS = [
+  // [side, topVh, hPx from edge, rotateDeg, photoOffset]
+  { side: 'l', topVh: 10, hPx: 16, deg: -6, p: 0 },
+  { side: 'l', topVh: 38, hPx: 32, deg:  4, p: 1 },
+  { side: 'l', topVh: 64, hPx:  8, deg: -3, p: 2 },
+  { side: 'r', topVh: 14, hPx: 18, deg:  7, p: 3 },
+  { side: 'r', topVh: 42, hPx: 34, deg: -4, p: 4 },
+  { side: 'r', topVh: 67, hPx: 10, deg:  3, p: 5 },
+]
+
+function HeroFloatingGallery({ photos, sectionRef }) {
+  const [step, setStep] = useState(0)
+  const wrapRef = useRef(null)
+
+  useEffect(() => {
+    if (!photos.length) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const onScroll = () => {
+      const sy = window.scrollY
+      setStep(Math.floor(sy / 220))
+
+      if (wrapRef.current) {
+        const heroH = sectionRef.current?.offsetHeight ?? window.innerHeight
+        const fadeStart = heroH * 0.72
+        const fade = sy < fadeStart ? 1
+                   : sy > heroH    ? 0
+                   : 1 - (sy - fadeStart) / (heroH - fadeStart)
+        wrapRef.current.style.opacity = String(Math.max(0, fade))
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [photos.length, sectionRef])
+
+  if (!photos.length) return null
+
+  return (
+    <div ref={wrapRef} className="hidden 2xl:block" aria-hidden="true" style={{ pointerEvents: 'none' }}>
+      {GALLERY_SLOTS.map((s, i) => {
+        const photo = photos[(step + s.p) % photos.length]
+        if (!photo) return null
+        return (
+          <div
+            key={i}
+            style={{
+              position: 'fixed',
+              top: `${s.topVh}vh`,
+              [s.side === 'l' ? 'left' : 'right']: `${s.hPx}px`,
+              transform: `rotate(${s.deg}deg)`,
+              zIndex: 10,
+            }}
+          >
+            <div className="w-[140px] h-[186px] overflow-hidden rounded-xl shadow-2xl ring-1 ring-white/25">
+              <img
+                key={photo.src}
+                src={photo.src}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                className="w-full h-full object-cover hero-photo-in"
+              />
+            </div>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
 /* ── HERO ─────────────────────────────────────────────────────────── */
 function Hero({ data }) {
   const { loading, error, stats, all = [] } = data
-  const upcoming  = stats?.upcoming || []
-  const nextEvent = upcoming[0] || null
-  const queue     = upcoming.slice(1, 4)
-  const heroPhoto = useMemo(() => getHeroPhoto(all), [all])
+  const upcoming       = stats?.upcoming || []
+  const nextEvent      = upcoming[0] || null
+  const queue          = upcoming.slice(1, 4)
+  const heroPhoto      = useMemo(() => getHeroPhoto(all), [all])
+  const carouselPhotos = useMemo(() => getFieldGallery(all, 18), [all])
+  const sectionRef     = useRef(null)
 
   const yearGames   = useCountUp(stats?.yearGames || 0, 1400)
   const yearPlayers = useCountUp(stats?.yearOperators || 0, 1600)
@@ -187,13 +261,14 @@ function Hero({ data }) {
   ]
 
   return (
-    <section className="hero-cinematic text-white">
+    <section ref={sectionRef} className="hero-cinematic text-white">
       {heroPhoto && (
         <img src={heroPhoto} alt="" aria-hidden="true" className="hero-photo"
           fetchPriority="high" decoding="async" />
       )}
       <div className="hero-scrim" />
       <div className="grain" />
+      <HeroFloatingGallery photos={carouselPhotos} sectionRef={sectionRef} />
 
       <div className="relative max-w-6xl mx-auto px-5 lg:px-8 min-h-[100dvh]
                       flex flex-col justify-center pt-28 pb-20 lg:pt-32 lg:pb-24">
