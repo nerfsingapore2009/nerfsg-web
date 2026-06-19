@@ -205,9 +205,9 @@ function Hero({ data }) {
               <p className="section-label">Singapore's Nerf community · Est. 2009</p>
               <h1 className="font-display font-black leading-[.88] tracking-tight mt-3 uppercase
                              [text-shadow:0_2px_30px_rgba(0,0,0,.35)]">
-                <span className="block text-[clamp(56px,8vw,118px)]">Play.</span>
-                <span className="block text-[clamp(56px,8vw,118px)] text-red">Shoot.</span>
-                <span className="block text-[clamp(56px,8vw,118px)]">Have fun.</span>
+                <span className="block text-[clamp(48px,7vw,96px)]">Play.</span>
+                <span className="block text-[clamp(48px,7vw,96px)] text-red">Shoot.</span>
+                <span className="block text-[clamp(48px,7vw,96px)]">Have fun.</span>
               </h1>
               <p className="text-white/80 text-base lg:text-lg mt-5 max-w-lg">
                 Weekly foam dart games in Singapore — open to all skill levels.
@@ -453,8 +453,7 @@ function WhatToBring() {
       <div className="max-w-6xl mx-auto px-5 lg:px-8 py-16 lg:py-20" data-reveal>
         <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-8 gap-3">
           <div>
-            <p className="section-label">Before you show up</p>
-            <h2 className="font-display text-4xl lg:text-5xl text-ink mt-2 uppercase tracking-tight">What to bring.</h2>
+            <h2 className="font-display text-4xl lg:text-5xl text-ink uppercase tracking-tight">What to bring.</h2>
             <p className="text-muted mt-2 max-w-xl">Six things to sort before your first game. Hosts will chrono blasters at the door.</p>
           </div>
           <div className="text-xs font-semibold text-muted tracking-widest uppercase">Safety · Gear · Logistics</div>
@@ -561,8 +560,7 @@ function GameModesSection({ data }) {
       <div className="max-w-6xl mx-auto px-5 lg:px-8 py-16 lg:py-20" data-reveal>
         <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-8 gap-3">
           <div>
-            <p className="section-label">How we play</p>
-            <h2 className="font-display text-4xl lg:text-5xl text-ink mt-2 uppercase tracking-tight">Game modes.</h2>
+            <h2 className="font-display text-4xl lg:text-5xl text-ink uppercase tracking-tight">Game modes.</h2>
             <p className="text-muted mt-2 max-w-xl">Tap a card to flip and read the rules.</p>
           </div>
           <div className="text-xs font-semibold text-muted tracking-widest uppercase">6 formats</div>
@@ -644,8 +642,7 @@ function WatchAndConnect() {
       <div className="max-w-6xl mx-auto px-5 lg:px-8 py-16 lg:py-20 grid grid-cols-1 lg:grid-cols-12 gap-10">
         {/* YouTube embed */}
         <div className="lg:col-span-7" data-reveal>
-          <p className="section-label">Watch</p>
-          <h2 className="font-display text-4xl lg:text-5xl text-ink mt-2 uppercase tracking-tight">See how it looks.</h2>
+          <h2 className="font-display text-4xl lg:text-5xl text-ink uppercase tracking-tight">See how it looks.</h2>
           <p className="text-muted mt-2">Highlights and gameplay from recent games.</p>
           <div className="mt-6 aspect-video rounded-2xl overflow-hidden border border-border bg-ink2
                           shadow-2xl ring-1 ring-black/5">

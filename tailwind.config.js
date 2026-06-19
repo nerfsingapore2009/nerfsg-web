@@ -34,7 +34,7 @@ export default {
       },
       fontFamily: {
         display: ['"Saira Condensed"', 'Impact', 'system-ui', 'sans-serif'],
-        sans:    ['Inter', 'system-ui', 'sans-serif'],
+        sans:    ['Barlow', 'system-ui', 'sans-serif'],
         mono:    ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
       },
       boxShadow: {
