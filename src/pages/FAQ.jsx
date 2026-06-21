@@ -9,15 +9,15 @@ const FAQS = [
   },
   {
     q: 'What should a new player bring?',
-    a: 'Safety eyewear (NERF-branded goggles or impact-rated glasses — non-impact rated eyewear is NOT allowed), covered footwear, your blaster, plenty of darts, water, and a comfortable sports outfit.',
+    a: 'Safety eyewear (NERF-branded goggles or impact-rated glasses; non-impact rated eyewear is NOT allowed), covered footwear, your blaster, plenty of darts, water, and a comfortable sports outfit.',
   },
   {
     q: 'Can I wear military uniforms or use milsim blasters?',
-    a: 'No. Milsim gear and mostly-black blasters are not allowed at NerfSG events. Police have checked on us before — brightly coloured blasters and civilian clothing keep everyone safe and welcome.',
+    a: 'No. Milsim gear and mostly-black blasters are not allowed at NerfSG events. Police have checked on us before, so brightly coloured blasters and civilian clothing keep everyone safe and welcome.',
   },
   {
     q: 'What is a dart sweep?',
-    a: 'A short break between games where everyone stops to collect darts off the ground. Since we play in public locations, keeping the area clean is important — everyone pitches in.',
+    a: 'A short break between games where everyone stops to collect darts off the ground. Since we play in public locations, keeping the area clean is important, so everyone pitches in.',
   },
   {
     q: 'When are games held?',
@@ -33,14 +33,14 @@ const FAQS = [
   },
   {
     q: 'What is the best blaster to buy?',
-    a: "There's no single best blaster — it depends on your play style and budget. Come down to a game, try different blasters, and find what works for you.",
+    a: "There's no single best blaster. It depends on your play style and budget. Come down to a game, try different blasters, and find what works for you.",
   },
   {
     q: 'How do I improve or modify my blaster?',
     a: 'Check out our Guides page for tips, or join the NerfSG Facebook group where the community shares builds and modifications.',
   },
   {
-    q: 'I have more questions — who do I contact?',
+    q: 'I have more questions. Who do I contact?',
     a: null,
     cta: true,
   },

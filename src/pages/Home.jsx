@@ -143,7 +143,7 @@ function NextGameCard({ event, loading, error, queue = [] }) {
 
               <a href="https://nerfsg.app" target="_blank" rel="noopener noreferrer"
                 className="btn-red w-full justify-center">
-                RSVP — open in app
+                RSVP via app
               </a>
 
               {queue.length > 0 && (
@@ -211,7 +211,7 @@ function Hero({ data }) {
                 <span className="block text-[clamp(48px,7vw,96px)]">Have fun.</span>
               </h1>
               <p className="text-white/80 text-base lg:text-lg mt-5 max-w-lg">
-                Weekly foam dart games in Singapore — open to all skill levels.
+                Weekly foam dart games in Singapore, open to all skill levels.
                 Bring a blaster or borrow one from us, grab some darts, and come hang out.
               </p>
               <div className="flex flex-wrap gap-3 mt-8">
@@ -275,7 +275,7 @@ function FieldGallery({ data }) {
         <p className="section-label">On the field</p>
         <h2 className="font-display text-4xl lg:text-5xl uppercase tracking-tight mt-2">Foam, in motion.</h2>
         <p className="text-white/60 mt-2 max-w-xl">
-          Real shots from recent games — captured by the community's photographers.
+          Real shots from recent games, captured by the community.
         </p>
       </div>
 

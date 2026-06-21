@@ -1,7 +1,7 @@
 import { usePageTitle } from '../lib/usePageTitle'
 
 const GENERAL_RULES = [
-  'Blaster hits do not count — getting shot anywhere else on the body or gear counts (depends on host)',
+  'Blaster hits do not count. Getting shot anywhere else on the body or gear counts (depends on host)',
   'Respawns require player to go back to the starting point after they get shot',
   'Flags must be returned to the same spot if the holder gets shot',
 ]

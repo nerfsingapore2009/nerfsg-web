@@ -336,7 +336,7 @@ function DarkNextGameCard({ event, loading, error, queue = [] }) {
                 onClick={spawnParticles}
                 className="btn-red"
                 style={{ width: '100%', justifyContent: 'center', display: 'flex', position: 'relative', zIndex: 1 }}>
-                RSVP — open in app
+                RSVP via app
               </a>
 
               {queue.length > 0 && (
@@ -447,7 +447,7 @@ export function HeroCinematic({ data }) {
 
             {/* Sub-copy */}
             <p style={{ color: 'rgba(255,255,255,.58)', fontSize: 16, lineHeight: 1.55, marginTop: 18, maxWidth: '24rem', animation: 'fadeUp .7s cubic-bezier(.22,1,.36,1) 1.15s both' }}>
-              Weekly foam dart games in Singapore — open to all skill levels.
+              Weekly foam dart games in Singapore, open to all skill levels.
               Bring a blaster or borrow one from us.
             </p>
 

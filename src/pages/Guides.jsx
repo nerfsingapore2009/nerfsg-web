@@ -6,7 +6,7 @@ const SECTIONS = [
     title: 'New to the Hobby? Read This First',
     highlight: true,
     links: [
-      { label: "NerfSG New Nerfer Starter Pack", url: "https://docs.google.com/document/d/1uiWgPrIlFa5wxCu4LyhY-UL3wND3ibVxxqbsuu9FWAc/edit", desc: "Everything a beginner needs to know — gear, rules, etiquette." },
+      { label: "NerfSG New Nerfer Starter Pack", url: "https://docs.google.com/document/d/1uiWgPrIlFa5wxCu4LyhY-UL3wND3ibVxxqbsuu9FWAc/edit", desc: "Everything a beginner needs to know: gear, rules, etiquette." },
     ],
   },
   {
@@ -35,7 +35,7 @@ const SECTIONS = [
   {
     title: 'Springers',
     links: [
-      { label: "E404 Thesis — Springer Guide", url: "https://tinyurl.com/y8vowygk", desc: "Comprehensive springer modding reference." },
+      { label: "E404 Thesis: Springer Guide", url: "https://tinyurl.com/y8vowygk", desc: "Comprehensive springer modding reference." },
       { label: "SCAR Database", url: "https://tinyurl.com/y7j38rr9", desc: "Spring and catch reference database." },
       { label: "Longshot Springs Chart", url: "https://docs.google.com/spreadsheets/d/15IKUUPP_DF_vsSbOywN7WesvIq7EE8DASFYt7r4t_G0/edit?usp=sharing", desc: "Google Sheets spring comparison chart." },
       { label: "SCAR Database (Alt)", url: "https://docs.google.com/spreadsheets/d/17RIWsLyIMgDnWpWthvFnOuluI_-uDtFND8da2_5BVe4/edit#gid=0", desc: "Alternative SCAR reference sheet." },
@@ -45,7 +45,7 @@ const SECTIONS = [
   {
     title: 'Flywheel',
     links: [
-      { label: "E404 Thesis — Flywheel Guide", url: "https://tinyurl.com/y7bkztsj", desc: "Comprehensive flywheel modding reference." },
+      { label: "E404 Thesis: Flywheel Guide", url: "https://tinyurl.com/y7bkztsj", desc: "Comprehensive flywheel modding reference." },
       { label: "Wiring Guides", url: "https://docs.google.com/presentation/d/1HziMFTPaK7xaQ1W4Hi1GHOBQGmZDkUQZGVk5I-uBA8Y/edit?usp=sharing", desc: "Slide deck covering wiring diagrams and setups." },
       { label: "Interactive Motor Chart", url: "https://suild.com/tools/motor-chart", desc: "Compare motor specs side by side." },
       { label: "Flywheel Battery Help Video", url: "https://www.youtube.com/watch?v=RLJ-Pu5Kk38", desc: "YouTube guide on choosing and using LiPo batteries." },

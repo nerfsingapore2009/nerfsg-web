@@ -79,7 +79,7 @@ export default function Gallery() {
           </div>
         ) : photos.length === 0 ? (
           <div className="card p-16 text-center">
-            <div className="text-sm text-muted">No group photos yet — they appear here after each game.</div>
+            <div className="text-sm text-muted">No group photos yet. They appear here after each game.</div>
           </div>
         ) : (
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
