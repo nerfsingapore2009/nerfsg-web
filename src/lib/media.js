@@ -25,6 +25,32 @@ const appModules = import.meta.glob('../assets/app/*.{jpg,jpeg,png,webp,avif}', 
   import: 'default',
 })
 
+/**
+ * Per-photo vertical focal point (CSS %).
+ * Key = filename without extension.
+ * Default (unlisted) = '30%' — keeps heads in frame for most action shots.
+ * '50%' = centre, '75%' = lower body/ground, '15%' = very top of frame.
+ */
+const FOCAL_Y = {
+  // Adjust these after reviewing each photo.
+  // Format: 'filename-without-extension': 'percentage'
+  'by-yalamphotos-002': '25%',
+  'by-yalamphotos-003': '30%',
+  'by-yalamphotos-006': '35%',
+  'by-yalamphotos-008': '20%',
+  'by-yalamphotos-011': '30%',
+  'by-yalamphotos-013': '25%',
+  'by-yalamphotos-016': '30%',
+  'by-yalamphotos-023': '20%',
+  'by-yalamphotos-024': '30%',
+  'by-yalamphotos-029': '25%',
+}
+
+function focalYFromPath(path) {
+  const stem = path.split('/').pop().replace(/\.[^.]+$/, '')
+  return FOCAL_Y[stem] || '30%'
+}
+
 function creditFromName(path) {
   const file = path.split('/').pop().replace(/\.[^.]+$/, '')
   const m = file.match(/by[-_]([a-z0-9._]+?)(?:[-_]\d+)?$/i)
@@ -44,7 +70,11 @@ function sortedEntries(modules) {
 }
 
 const bundledGallery = shuffle(
-  sortedEntries(galleryModules).map(([path, src]) => ({ src, credit: creditFromName(path) }))
+  sortedEntries(galleryModules).map(([path, src]) => ({
+    src,
+    credit: creditFromName(path),
+    focalY: focalYFromPath(path),
+  }))
 )
 
 const bundledScreens = sortedEntries(appModules).map(([, src]) => src)

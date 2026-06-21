@@ -286,7 +286,8 @@ function FieldGallery({ data }) {
               className="relative w-[280px] sm:w-[360px] aspect-[4/3] overflow-hidden
                          border border-white/10 shrink-0 shadow-lg">
               <img src={p.src} alt={p.name || 'NerfSG game action'} loading="lazy" decoding="async"
-                className="w-full h-full object-cover" />
+                className="w-full h-full object-cover"
+                style={{ objectPosition: `center ${p.focalY || '30%'}` }} />
               {p.credit && <figcaption className="credit-badge">📷 {p.credit}</figcaption>}
             </figure>
           ))}
@@ -585,8 +586,8 @@ function GameModesSection({ data }) {
                     <div className="relative h-36 photo-placeholder rounded-none">
                       {photo && (
                         <>
-                          <img src={photo.src} alt="" aria-hidden="true" className="mode-photo" loading="lazy" decoding="async" />
-                          <div className="mode-photo-scrim" />
+                          <img src={photo.src} alt="" aria-hidden="true" className="mode-photo" loading="lazy" decoding="async"
+                           style={{ objectPosition: `center ${photo.focalY || '30%'}` }} />
                         </>
                       )}
                       <span className={`relative z-10 font-display font-black text-5xl select-none ${
