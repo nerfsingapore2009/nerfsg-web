@@ -396,8 +396,7 @@ export function HeroCinematic({ data }) {
       {/* ── Film grain ── */}
       <div className="grain" />
 
-      {/* ── Letterbox bars ── */}
-      <div className="hero-lb-top" />
+      {/* ── Letterbox bar ── */}
       <div className="hero-lb-bottom" />
 
 
