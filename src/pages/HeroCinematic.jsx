@@ -277,6 +277,18 @@ function DarkNextGameCard({ event, loading, error, queue = [] }) {
           const isPaid       = event.sessionType === 'paid' || event.entryFee > 0
           return (
             <>
+              {event.groupPhoto && (
+                <div style={{ margin: '-16px -16px 14px', overflow: 'hidden', aspectRatio: '16/7', position: 'relative' }}>
+                  <img
+                    src={event.groupPhoto}
+                    alt={event.name || 'Game banner'}
+                    loading="lazy"
+                    decoding="async"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%', display: 'block' }}
+                  />
+                  <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(6,8,15,0) 40%, rgba(6,8,15,.72) 100%)' }} />
+                </div>
+              )}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8, marginBottom: 14 }}>
                 <div>
                   <h3 className="font-display font-black uppercase tracking-tight" style={{ fontSize: 26, color: '#fff', lineHeight: 1, margin: 0 }}>
