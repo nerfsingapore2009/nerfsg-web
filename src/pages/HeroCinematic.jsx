@@ -236,7 +236,7 @@ function DarkNextGameCard({ event, loading, error, queue = [] }) {
   const fmt      = event ? formatGameday(event) : null
 
   return (
-    <div style={{ background: 'rgba(6,8,15,.86)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,.09)', overflow: 'hidden', animation: 'cardIn .7s cubic-bezier(.22,1,.36,1) 1.2s both' }}>
+    <div className="hero-card-in" style={{ background: 'rgba(6,8,15,.86)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,.09)', overflow: 'hidden' }}>
       {/* strip */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 16px', borderBottom: '1px solid rgba(255,255,255,.06)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -417,7 +417,7 @@ export function HeroCinematic({ data }) {
       <TacticalStrip />
 
       {/* ── Scroll nudge ── */}
-      <div className="absolute left-1/2 hidden lg:flex flex-col items-center gap-1.5 pointer-events-none" style={{ bottom: lbH + 18, transform: 'translateX(-50%)', zIndex: 9, animation: 'fadeUp .6s ease 1.8s both' }} aria-hidden="true">
+      <div className="absolute left-1/2 hidden lg:flex flex-col items-center gap-1.5 pointer-events-none hero-fade-scroll" style={{ bottom: lbH + 18, transform: 'translateX(-50%)', zIndex: 9 }} aria-hidden="true">
         <span className="font-semibold tracking-widest uppercase" style={{ fontSize: 10, color: 'rgba(255,255,255,.2)' }}>Scroll</span>
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ animation: 'nudge 1.8s ease-in-out 2.2s infinite' }}>
           <path d="M7 2v10M3.5 8.5L7 12l3.5-3.5" stroke="rgba(255,255,255,.3)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -432,7 +432,7 @@ export function HeroCinematic({ data }) {
           {/* ── Left: headline ── */}
           <div style={{ minWidth: 0 }}>
             {/* Eyebrow */}
-            <div className="flex items-center gap-2 font-bold uppercase tracking-widest" style={{ fontSize: 11, color: 'rgba(255,255,255,.5)', marginBottom: 16, animation: 'fadeUp .6s cubic-bezier(.22,1,.36,1) .2s both' }}>
+            <div className="flex items-center gap-2 font-bold uppercase tracking-widest hero-fade-eyebrow" style={{ fontSize: 11, color: 'rgba(255,255,255,.5)', marginBottom: 16 }}>
               <div style={{ width: 18, height: 2, background: 'var(--red, #e03131)', flexShrink: 0 }} />
               Singapore's Nerf community · Est. 2009
             </div>
@@ -448,13 +448,13 @@ export function HeroCinematic({ data }) {
             </h1>
 
             {/* Sub-copy */}
-            <p style={{ color: 'rgba(255,255,255,.58)', fontSize: 16, lineHeight: 1.55, marginTop: 18, maxWidth: '24rem', animation: 'fadeUp .7s cubic-bezier(.22,1,.36,1) 1.15s both' }}>
+            <p className="hero-fade-copy" style={{ color: 'rgba(255,255,255,.58)', fontSize: 16, lineHeight: 1.55, marginTop: 18, maxWidth: '24rem' }}>
               Weekly foam dart games in Singapore, open to all skill levels.
               Bring a blaster or borrow one from us.
             </p>
 
             {/* CTAs */}
-            <div className="flex flex-wrap gap-3" style={{ marginTop: 22, animation: 'fadeUp .6s cubic-bezier(.22,1,.36,1) 1.28s both' }}>
+            <div className="flex flex-wrap gap-3 hero-fade-cta" style={{ marginTop: 22 }}>
               <a href="https://nerfsg.app" target="_blank" rel="noopener noreferrer"
                 onClick={spawnParticles}
                 className="btn-red"
@@ -469,7 +469,7 @@ export function HeroCinematic({ data }) {
             </div>
 
             {/* Odometer stat strip */}
-            <div className="flex gap-7" style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid rgba(255,255,255,.1)', animation: 'fadeUp .6s cubic-bezier(.22,1,.36,1) 1.4s both' }}>
+            <div className="flex gap-7 hero-fade-stats" style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid rgba(255,255,255,.1)' }}>
               {statStrip.map(s => (
                 loading
                   ? <div key={s.label} style={{ color: '#fff', minWidth: 60 }}>

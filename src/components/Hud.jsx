@@ -201,9 +201,9 @@ function ToastCard({ toast, onClose }) {
   const accent  = isRsvp ? '#94e472' : '#ed1c24';
   const label   = isRsvp ? 'NEW RSVP' : isGame ? 'NEW GAME' : 'ACTIVITY';
   return (
-    <div className="bg-surface border border-border2 rounded-lg p-3.5 shadow-xl pointer-events-auto"
+    <div className="rounded-lg p-3.5 shadow-xl pointer-events-auto"
       style={{ transform: shown ? 'translateX(0)' : 'translateX(24px)', opacity: shown ? 1 : 0,
-        transition: 'transform .35s cubic-bezier(.22,.7,.28,1), opacity .35s ease', borderLeft: `3px solid ${accent}` }}>
+        transition: 'transform .35s cubic-bezier(.22,.7,.28,1), opacity .35s ease', border: `1px solid ${accent}40`, background: `${accent}0d` }}>
       <div className="flex items-start gap-3">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
