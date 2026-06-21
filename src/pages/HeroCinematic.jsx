@@ -378,7 +378,7 @@ export function HeroCinematic({ data }) {
     <section className="relative text-white overflow-hidden" style={{ height: '100vh', minHeight: 600, background: '#06080f' }}>
 
       {/* ── Video background ── */}
-      <VideoBg src={VIDEO_A} clips={null} />
+      <VideoBg src={VIDEO_B} clips={VIDEO_B_CLIPS} />
 
       {/* ── Scrim ── */}
       <div className="absolute inset-0" style={{ zIndex: 1, background: 'linear-gradient(180deg, rgba(6,8,15,.5) 0%, rgba(6,8,15,.1) 35%, rgba(6,8,15,.82) 100%), linear-gradient(90deg, rgba(6,8,15,.92) 0%, rgba(6,8,15,.55) 45%, rgba(6,8,15,.78) 100%)' }} />
@@ -441,7 +441,7 @@ export function HeroCinematic({ data }) {
             {/* Headline */}
             <h1 className="font-display font-black uppercase leading-[.82] m-0" style={{ letterSpacing: '-.03em', fontSize: 'clamp(56px,7.8vw,100px)' }}>
               <span className="word-in word-in-1" style={{ display: 'block', color: '#fff' }}>Play.</span>
-              <span className="glitch-shoot word-in word-in-2" data-text="Shoot." style={{ animationDelay: '.66s' }}>Shoot.</span>
+              <span className="word-in word-in-2" style={{ display: 'block', color: 'var(--red, #e03131)', animationDelay: '.66s' }}>Shoot.</span>
               <span className="word-in word-in-3" style={{ display: 'block', color: '#fff' }}>Have fun.</span>
             </h1>
 
