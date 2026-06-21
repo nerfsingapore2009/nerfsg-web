@@ -6,6 +6,7 @@ import { getFieldGallery, getHeroPhoto, getAppScreens } from '../lib/media'
 import AvatarChip from '../components/AvatarChip'
 import { TrendsRow, YoYBlock, HeatmapCalendar } from '../components/Extras'
 import PastGames from '../components/Archive'
+import { HeroCinematic } from './HeroCinematic'
 
 /* ── helpers ──────────────────────────────────────────────────────── */
 function formatGameday(ev) {
@@ -720,7 +721,7 @@ export default function Home() {
 
   return (
     <>
-      <Hero data={data} />
+      <HeroCinematic data={data} />
       <FieldGallery data={data} />
       <AppShowcase />
       <WhatToBring />
