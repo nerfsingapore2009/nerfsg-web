@@ -40,9 +40,7 @@ export default function Navbar() {
     <nav
       aria-label="Main navigation"
       className={`${isHome ? 'fixed' : 'sticky'} top-0 inset-x-0 z-40 transition-colors duration-300 ${
-        transparent
-          ? 'bg-white/90 backdrop-blur-md border-b border-border lg:bg-transparent lg:backdrop-blur-none lg:border-transparent'
-          : 'bg-white/90 backdrop-blur-md border-b border-border'
+        transparent ? 'bg-transparent' : 'bg-white/90 backdrop-blur-md border-b border-border'
       }`}
     >
       <div className="max-w-6xl mx-auto px-5 lg:px-8 py-3 flex items-center gap-6">
@@ -81,7 +79,9 @@ export default function Navbar() {
           aria-expanded={open}
           aria-controls="mobile-menu"
           aria-label={open ? 'Close menu' : 'Open menu'}
-          className={`lg:hidden p-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red/40 text-muted hover:text-ink`}
+          className={`lg:hidden p-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red/40 ${
+            transparent ? 'text-white hover:text-white/80' : 'text-muted hover:text-ink'
+          }`}
         >
           {open ? (
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">

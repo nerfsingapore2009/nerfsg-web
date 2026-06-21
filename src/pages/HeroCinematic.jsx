@@ -138,10 +138,8 @@ function VideoBg({ src, clips }) {
         preload="metadata"
         loop={!clips || clips.length === 0}
         style={{
-          position: 'absolute', top: '50%', left: '50%',
-          width: '100vw', height: '56.25vw',
-          minHeight: '100vh', minWidth: '177.78vh',
-          transform: 'translate(-50%,-50%)',
+          position: 'absolute', top: 0, left: 0,
+          width: '100%', height: '100%',
           objectFit: 'cover',
           opacity: opacity * 0.68,
           transition: 'opacity 0.35s ease',
