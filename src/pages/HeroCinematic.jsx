@@ -387,7 +387,7 @@ export function HeroCinematic({ data }) {
   const lbH = 44
 
   return (
-    <section className="relative text-white overflow-hidden" style={{ height: '100vh', minHeight: 600, background: '#06080f' }}>
+    <section className="hero-cinematic-section relative text-white overflow-hidden" style={{ background: '#06080f' }}>
 
       {/* ── Video background ── */}
       <VideoBg src={VIDEO_B} clips={VIDEO_B_CLIPS} />
@@ -403,10 +403,10 @@ export function HeroCinematic({ data }) {
       <div className="hero-lb-bottom" />
 
       {/* ── Nav (inside top bar) ── */}
-      <div className="absolute left-0 right-0 flex items-center px-10 gap-6" style={{ top: 0, height: lbH, zIndex: 30 }}>
+      <div className="absolute left-0 right-0 flex items-center px-5 lg:px-10 gap-6" style={{ top: 0, height: lbH, zIndex: 30 }}>
         <img src="/nerfsingapore.webp" alt="NERF Singapore" className="object-cover object-center" style={{ height: 26, width: 59 }} />
         <div style={{ flex: 1 }} />
-        <a href="https://nerfsg.app" target="_blank" rel="noopener noreferrer" onClick={spawnParticles} className="btn-red" style={{ fontSize: 13, position: 'relative', zIndex: 1 }}>
+        <a href="https://nerfsg.app" target="_blank" rel="noopener noreferrer" onClick={spawnParticles} className="btn-red hidden lg:inline-flex" style={{ fontSize: 13, position: 'relative', zIndex: 1 }}>
           Get the app
         </a>
       </div>
@@ -435,9 +435,9 @@ export function HeroCinematic({ data }) {
       </div>
 
       {/* ── Main content ── */}
-      <div className="absolute inset-0 flex items-center" style={{ zIndex: 5 }}>
-        <div className="w-full max-w-[1240px] mx-auto px-14 grid items-center gap-12"
-          style={{ gridTemplateColumns: '1fr 318px', paddingTop: lbH + 24, paddingBottom: lbH + 80 }}>
+      <div className="hero-content-wrap">
+        <div className="w-full max-w-[1240px] mx-auto px-5 lg:px-14 grid items-start lg:items-center gap-8 lg:gap-12 hero-main-grid"
+          style={{ paddingTop: lbH + 24, paddingBottom: lbH + 80 }}>
 
           {/* ── Left: headline ── */}
           <div style={{ minWidth: 0 }}>
