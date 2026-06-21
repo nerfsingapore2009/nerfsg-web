@@ -565,6 +565,9 @@ button, a {
 .hero-tactical-right {
   display: flex; gap: 16px; letter-spacing: .12em; text-transform: none;
 }
+@media (max-width: 1023px) {
+  .hero-tactical { display: none; }
+}
 
 /* ── Odometer stat strip ──────────────────────────────────────────── */
 .odo-wrap   { display: flex; align-items: baseline; overflow: visible; }
