@@ -463,6 +463,9 @@ button, a {
 }
 .hero-lb-top    { top: 0; }
 .hero-lb-bottom { bottom: 0; }
+@media (max-width: 1023px) {
+  .hero-lb-top, .hero-lb-bottom, .hud-frame { display: none; }
+}
 
 /* ── HUD corner marks ─────────────────────────────────────────────── */
 .hud-frame {

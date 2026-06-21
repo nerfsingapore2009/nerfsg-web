@@ -101,7 +101,7 @@ function EmptyState() {
           Join Telegram
         </a>
         <a
-          href="https://nerf-singapore.web.app"
+          href="https://nerfsg.app"
           target="_blank"
           rel="noopener noreferrer"
           className="btn-ghost justify-center"

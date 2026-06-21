@@ -72,7 +72,7 @@ export default function EventCard({ event }) {
       ) : null}
 
       <a
-        href="https://nerf-singapore.web.app"
+        href="https://nerfsg.app"
         target="_blank"
         rel="noopener noreferrer"
         className="mt-auto btn-red text-center justify-center"
