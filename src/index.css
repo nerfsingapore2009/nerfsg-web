@@ -540,8 +540,8 @@ button, a {
   display: flex; align-items: center;
 }
 @media (max-width: 1023px) {
-  .hero-content-wrap { position: relative; align-items: flex-start; }
-  .hero-content-inner { padding-top: 80px !important; padding-bottom: 48px !important; }
+  .hero-content-wrap { display: block; position: relative; inset: auto; }
+  .hero-content-inner { padding-top: 80px !important; padding-bottom: 64px !important; }
 }
 
 /* ── Hero main grid: single col on mobile, two-col on desktop ───────── */
