@@ -110,24 +110,24 @@ export function CornerBrackets() {
 export function MissionTicker({ items }) {
   const doubled = [...items, ...items];
   return (
-    <div className="relative border-b border-line bg-panel/70 backdrop-blur-sm overflow-hidden">
+    <div className="relative border-b border-border bg-surface/70 backdrop-blur-sm overflow-hidden">
       <div className="flex items-center gap-3 px-3 py-1.5">
-        <span className="font-mono text-[10px] tracking-[.18em] uppercase text-foam shrink-0 flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-foam pulse-dot"></span>
+        <span className="font-mono text-[10px] tracking-[.18em] uppercase text-red shrink-0 flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-red pulse-dot"></span>
           LIVE OPS
         </span>
         <div className="flex-1 overflow-hidden relative">
           <div className="marquee-track flex items-center gap-10 whitespace-nowrap w-[200%]">
             {doubled.map((it, i) => (
               <span key={i} className="font-mono text-[11px] text-zinc-400 flex items-center gap-2 shrink-0">
-                <span className="text-foam/70">{it.tag}</span>
+                <span className="text-red/70">{it.tag}</span>
                 <span>{it.text}</span>
-                <span className="text-line2">·</span>
+                <span className="text-border2">·</span>
               </span>
             ))}
           </div>
-          <div className="absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-panel to-transparent pointer-events-none"></div>
-          <div className="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-panel to-transparent pointer-events-none"></div>
+          <div className="absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-surface to-transparent pointer-events-none"></div>
+          <div className="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-surface to-transparent pointer-events-none"></div>
         </div>
         <span className="font-mono text-[10px] text-zinc-500 hidden md:block shrink-0">
           GMT+8 · {new Date().toLocaleTimeString('en-SG', { hour: '2-digit', minute: '2-digit' })}
@@ -201,7 +201,7 @@ function ToastCard({ toast, onClose }) {
   const accent  = isRsvp ? '#94e472' : '#ed1c24';
   const label   = isRsvp ? 'NEW RSVP' : isGame ? 'NEW GAME' : 'ACTIVITY';
   return (
-    <div className="bg-panel border border-line2 rounded-lg p-3.5 shadow-xl pointer-events-auto"
+    <div className="bg-surface border border-border2 rounded-lg p-3.5 shadow-xl pointer-events-auto"
       style={{ transform: shown ? 'translateX(0)' : 'translateX(24px)', opacity: shown ? 1 : 0,
         transition: 'transform .35s cubic-bezier(.22,.7,.28,1), opacity .35s ease', borderLeft: `3px solid ${accent}` }}>
       <div className="flex items-start gap-3">
@@ -211,8 +211,8 @@ function ToastCard({ toast, onClose }) {
             <span className="font-mono text-[9.5px] tracking-[.2em] uppercase" style={{ color: accent }}>{label}</span>
             <span className="font-mono text-[9.5px] text-zinc-600 ml-auto">just now</span>
           </div>
-          {isRsvp && <div className="text-sm text-zinc-200 leading-snug"><span className="font-bold text-white">{toast.opName || `OP ${(toast.opId||'').slice(0,5).toUpperCase()}`}</span> joined <span className="font-mono text-foam">{toast.gameName}</span></div>}
-          {isGame && <div className="text-sm text-zinc-200 leading-snug"><span className="font-bold text-white">{toast.host || 'A host'}</span> posted a new game <span className="font-mono text-foam">{toast.gameName}</span></div>}
+          {isRsvp && <div className="text-sm text-zinc-200 leading-snug"><span className="font-bold text-white">{toast.opName || `OP ${(toast.opId||'').slice(0,5).toUpperCase()}`}</span> joined <span className="font-mono text-red">{toast.gameName}</span></div>}
+          {isGame && <div className="text-sm text-zinc-200 leading-snug"><span className="font-bold text-white">{toast.host || 'A host'}</span> posted a new game <span className="font-mono text-red">{toast.gameName}</span></div>}
         </div>
         <button data-hit onClick={onClose} className="text-zinc-600 hover:text-zinc-300 font-mono text-base leading-none -mt-1">×</button>
       </div>

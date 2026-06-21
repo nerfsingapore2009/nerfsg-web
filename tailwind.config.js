@@ -19,18 +19,6 @@ export default {
         // Borders
         border:  '#e2e8f0',
         border2: '#cbd5e1',
-        // Legacy aliases (keeps other pages from breaking)
-        foam:    '#e03131',
-        foam2:   '#c92a2a',
-        panel:   '#f8fafc',
-        panel2:  '#f1f5f9',
-        line:    '#e2e8f0',
-        line2:   '#cbd5e1',
-        zombie:  '#16a34a',
-        danger:  '#dc2626',
-        recon:   '#2563eb',
-        // keep old ink alias for any references
-        'ink-dark': '#0a0a0b',
       },
       fontFamily: {
         display: ['"Saira Condensed"', 'Impact', 'system-ui', 'sans-serif'],

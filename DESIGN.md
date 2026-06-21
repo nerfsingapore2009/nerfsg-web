@@ -21,16 +21,14 @@ Committed. One saturated red carries the action energy; ink + white + light surf
 ### Tailwind mapping (tailwind.config.js)
 ```js
 colors: {
-  red:    '#e03131',
-  red2:   '#c92a2a',
-  ink:    '#0f172a',
-  ink2:   '#0a0f1d',
-  muted:  '#64748b',
-  border: '#e2e8f0',
-  border2:'#cbd5e1',
-  surface:'#f8fafc',
-  foam:   '#38bdf8',  // legacy, avoid
-  panel:  '#f8fafc',  // legacy alias for surface
+  red:     '#e03131',
+  red2:    '#c92a2a',
+  ink:     '#0f172a',
+  ink2:    '#0a0f1d',
+  muted:   '#64748b',
+  border:  '#e2e8f0',
+  border2: '#cbd5e1',
+  surface: '#f8fafc',
 }
 ```
 
@@ -46,9 +44,11 @@ The hero uses `--ink2` (#0a0f1d) as the background with a radial gradient. Overl
 ## Typography
 
 ### Families
-- **Body / UI**: Inter, system-ui, sans-serif — the sole family used throughout. No display face loaded separately.
-- **Display**: Inter at weight 800–900 with `tracking-tight` serves as the de-facto display face.
-- No mono stack intentionally (Tailwind's mono utilities exist but no brand use case).
+- **Body / UI**: Barlow, system-ui, sans-serif — default text, nav links, body copy, UI labels.
+- **Display**: Saira Condensed (weights 500–900) — hero headlines, game-mode titles, any large uppercase stacked type. Tailwind key: `font-display`.
+- **Mono**: JetBrains Mono (weights 400–700) — tactical HUD labels, timestamps, IDs, ticker tags. Tailwind key: `font-mono`.
+
+All three loaded from Google Fonts via a single `<link>` in `index.html`.
 
 ### Scale (Tailwind defaults, augmented)
 | Step | Class | Approx size |

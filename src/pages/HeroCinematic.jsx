@@ -25,6 +25,7 @@ function formatGameday(ev) {
 
 /* ── Particle burst ──────────────────────────────────────────── */
 function spawnParticles(e) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
   const rect = e.currentTarget.getBoundingClientRect()
   const cx = rect.left + rect.width / 2
   const cy = rect.top  + rect.height / 2
@@ -127,14 +128,14 @@ function VideoBg({ src, clips }) {
   }, [src, clips])
 
   return (
-    <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+    <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none" aria-hidden="true">
       <video
         ref={ref}
         key={src}
         src={src}
         muted
         playsInline
-        preload="auto"
+        preload="metadata"
         loop={!clips || clips.length === 0}
         style={{
           position: 'absolute', top: '50%', left: '50%',
@@ -173,7 +174,8 @@ function OdoStat({ value, label, delay = 0 }) {
 
   return (
     <div>
-      <div className="odo-wrap font-display font-black tabular-nums leading-none"
+      <span className="sr-only">{value} {label}</span>
+      <div className="odo-wrap font-display font-black tabular-nums leading-none" aria-hidden="true"
         style={{ fontSize: 32, color: '#fff', overflow: 'visible' }}>
         {digits.map((_, i) => (
           <div key={i} className="odo-digit">
@@ -184,7 +186,7 @@ function OdoStat({ value, label, delay = 0 }) {
         ))}
         {suffix && <span style={{ fontSize: 26 }}>{suffix}</span>}
       </div>
-      <div className="text-[11px] mt-1" style={{ color: 'rgba(255,255,255,.38)' }}>{label}</div>
+      <div className="text-[11px] mt-1" aria-hidden="true" style={{ color: 'rgba(255,255,255,.38)' }}>{label}</div>
     </div>
   )
 }
@@ -208,7 +210,7 @@ function TacticalStrip() {
     <div className="hero-tactical">
       <span>SGT +8</span>
       <span className="hero-tactical-right">
-        <span>VIDEO 🎥 AL SHOOTS STUFF</span>
+        <span>VIDEO · AL SHOOTS STUFF</span>
         <span>{time}</span>
         <span>NERFSG · EST 2009</span>
       </span>
@@ -222,7 +224,7 @@ function DarkCbox({ value, label }) {
   return (
     <div style={{ background: 'rgba(255,255,255,.07)', border: '1px solid rgba(255,255,255,.1)', padding: '8px 0', textAlign: 'center', flex: 1 }}>
       <span className="block font-display font-black tabular-nums" style={{ fontSize: '1.55rem', color: '#fff', lineHeight: 1 }}>{v}</span>
-      <span className="block font-semibold uppercase tracking-widest" style={{ fontSize: '0.575rem', color: 'rgba(255,255,255,.35)', marginTop: 2 }}>{label}</span>
+      <span className="block font-semibold uppercase tracking-widest" style={{ fontSize: '0.6875rem', color: 'rgba(255,255,255,.35)', marginTop: 2 }}>{label}</span>
     </div>
   )
 }
@@ -250,7 +252,7 @@ function DarkNextGameCard({ event, loading, error, queue = [] }) {
 
       <div style={{ padding: '16px 16px 20px' }}>
         {loading && (
-          <div className="animate-pulse" style={{ color: '#fff' }}>
+          <div className="animate-pulse" aria-busy="true" aria-label="Loading upcoming game..." style={{ color: '#fff' }}>
             <div style={{ height: 28, background: 'rgba(255,255,255,.08)', borderRadius: 2, width: '66%', marginBottom: 8 }} />
             <div style={{ height: 16, background: 'rgba(255,255,255,.05)', borderRadius: 2, width: '50%', marginBottom: 20 }} />
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 6, marginBottom: 20 }}>
@@ -460,7 +462,7 @@ export function HeroCinematic({ data }) {
                 Join the next game
               </a>
               <a href="https://www.facebook.com/groups/nerfsingapore/" target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center font-semibold"
+                className="inline-flex items-center font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
                 style={{ fontSize: 14, padding: '11px 22px', color: 'rgba(255,255,255,.7)', border: '1px solid rgba(255,255,255,.2)', textDecoration: 'none' }}>
                 Facebook group
               </a>
