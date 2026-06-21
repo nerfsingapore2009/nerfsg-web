@@ -3,6 +3,8 @@ import { NavLink, useLocation } from 'react-router-dom'
 
 const NAV_LINKS = [
   { to: '/events',       label: 'Events' },
+  { to: '/gallery',      label: 'Gallery' },
+  { to: '/leaderboard',  label: 'Leaderboard' },
   { to: '/game-modes',   label: 'Game Modes' },
   { to: '/guides',       label: 'How to Play' },
   { to: '/hvz',          label: 'HvZ' },

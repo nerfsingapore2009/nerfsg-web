@@ -128,102 +128,70 @@ export function YoYBlock({ all }) {
   );
 }
 
-/* ── Heatmap calendar ───────────────────────────────────────────────── */
-function buildHeatmapData(all, year) {
-  const byDay = new Map();
+/* ── Game calendar (month grid) ─────────────────────────────────────── */
+function buildCalendarData(all, year) {
   const now = Date.now();
+  const months = Array.from({ length: 12 }, (_, m) => ({ month: m, games: [] }));
   for (const g of all) {
     const ts = g.scheduledFor || g.createdAt;
     if (!ts || ts > now) continue;
     const d = new Date(ts);
     if (d.getFullYear() !== year) continue;
-    const key = d.toISOString().slice(0, 10);
-    const cur = byDay.get(key) || { games: 0, attendees: 0, names: [] };
-    cur.games++;
-    cur.attendees += extractParticipants(g).length;
-    cur.names.push(g.name || 'Game');
-    byDay.set(key, cur);
+    months[d.getMonth()].games.push({
+      day: d.getDate(),
+      name: g.name || 'Game',
+      attendees: extractParticipants(g).length,
+    });
   }
-  return byDay;
+  return months;
 }
 
 export function HeatmapCalendar({ all }) {
-  const [hover, setHover] = useState(null);
-  const year       = new Date().getFullYear();
-  const byDay      = useMemo(() => buildHeatmapData(all, year), [all, year]);
-  const start      = new Date(year, 0, 1);
-  const startDow   = start.getDay();
-  const daysInYear = Math.floor((new Date(year, 11, 31) - new Date(year, 0, 1)) / 86400000) + 1;
-  const weeks      = Math.ceil((startDow + daysInYear) / 7);
-  const maxAtt     = Math.max(1, ...[...byDay.values()].map(v => v.attendees));
-
-  const monthCols = [];
-  for (let m = 0; m < 12; m++) {
-    const first  = new Date(year, m, 1);
-    const dayIdx = Math.floor((first - new Date(year, 0, 1)) / 86400000) + startDow;
-    monthCols.push({ month: m, col: Math.floor(dayIdx / 7) });
-  }
-
-  const cells = [];
-  for (let w = 0; w < weeks; w++) {
-    for (let d = 0; d < 7; d++) {
-      const idx    = w * 7 + d;
-      const dayIdx = idx - startDow;
-      if (dayIdx < 0 || dayIdx >= daysInYear) { cells.push({ empty: true }); continue; }
-      const date = new Date(year, 0, 1 + dayIdx);
-      const key  = date.toISOString().slice(0, 10);
-      cells.push({ date, key, data: byDay.get(key) });
-    }
-  }
+  const year     = new Date().getFullYear();
+  const curMonth = new Date().getMonth();
+  const months   = useMemo(() => buildCalendarData(all, year), [all, year]);
+  const total    = months.reduce((s, m) => s + m.games.length, 0);
 
   return (
     <div className="mt-6 card p-5">
-      <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-        <div className="text-[11px] font-semibold text-muted tracking-widest uppercase">Activity calendar · {year}</div>
-        <div className="flex items-center gap-2 text-[10px] font-semibold text-muted tracking-wide uppercase">
-          Less
-          <div className="flex gap-1">
-            {[0,.2,.4,.7,1].map((a, i) => (
-              <span key={i} className="w-3 h-3" style={{ background: a === 0 ? '#eef2f7' : `rgba(224,49,49,${0.15 + a * 0.7})`, border: '1px solid #e2e8f0' }}></span>
-            ))}
-          </div>
-          More
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <div className="text-[11px] font-semibold text-muted tracking-widest uppercase">Game calendar · {year}</div>
+          <div className="text-xs text-muted mt-0.5">{total} game{total !== 1 ? 's' : ''} played so far</div>
         </div>
       </div>
-      <div className="relative overflow-x-auto">
-        <div className="relative h-4 mb-1" style={{ paddingLeft: 28 }}>
-          {monthCols.map(({ month, col }) => (
-            <span key={month} className="absolute text-[9.5px] text-muted" style={{ left: col * 14 + 'px', top: 0 }}>
-              {MONTH_LABELS[month]}
-            </span>
-          ))}
-        </div>
-        <div className="flex gap-1.5" style={{ minWidth: weeks * 14 + 28 }}>
-          <div className="flex flex-col gap-1 mr-1 pt-0.5">
-            {['Mon','Wed','Fri'].map(d => (
-              <div key={d} className="text-[9px] text-muted leading-none" style={{ height: '12px', marginTop: '12px' }}>{d}</div>
-            ))}
-          </div>
-          <div className="grid grid-flow-col grid-rows-7 gap-1">
-            {cells.map((c, i) => {
-              if (c.empty) return <div key={i} className="w-3 h-3"></div>;
-              const a  = c.data ? Math.min(1, c.data.attendees / maxAtt) : 0;
-              const bg = a === 0 ? '#eef2f7' : `rgba(224,49,49,${0.15 + a * 0.7})`;
-              return (
-                <div key={i} onMouseEnter={() => setHover({ ...c })} onMouseLeave={() => setHover(null)}
-                  className="w-3 h-3 transition-colors cursor-default"
-                  style={{ background: bg, border: '1px solid #e2e8f0' }}></div>
-              );
-            })}
-          </div>
-        </div>
-        <div className="mt-3 min-h-5 text-[11px] text-muted">
-          {hover ? (
-            hover.data
-              ? <span><span className="text-red font-semibold">{hover.key}</span> — {hover.data.games} game{hover.data.games > 1 ? 's' : ''}, {hover.data.attendees} ops — {hover.data.names.join(', ')}</span>
-              : <span><span className="text-muted">{hover.key}</span> — no games</span>
-          ) : <span className="text-muted">Hover a day for details</span>}
-        </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+        {months.map(({ month, games }) => {
+          const isCur    = month === curMonth;
+          const isFuture = month > curMonth;
+          return (
+            <div key={month}
+              className={`border p-3 transition-opacity ${isCur ? 'border-red/40 bg-red/[.03]' : 'border-border'} ${isFuture ? 'opacity-25' : ''}`}>
+              <div className="flex items-center justify-between mb-2">
+                <span className={`text-[11px] font-bold uppercase tracking-wider ${isCur ? 'text-red' : 'text-ink'}`}>
+                  {MONTH_LABELS[month]}
+                </span>
+                {games.length > 0 && (
+                  <span className="text-[10px] font-semibold tabular text-red">{games.length}</span>
+                )}
+              </div>
+              {games.length === 0 ? (
+                <div className="text-[10px] text-muted/40">—</div>
+              ) : (
+                <ul className="flex flex-col gap-1">
+                  {games.map((g, i) => (
+                    <li key={i} className="flex items-baseline gap-1.5 min-w-0">
+                      <span className="text-[10px] font-bold text-red/70 tabular shrink-0 w-4">
+                        {String(g.day).padStart(2, '0')}
+                      </span>
+                      <span className="text-[10px] text-muted truncate leading-tight">{g.name}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

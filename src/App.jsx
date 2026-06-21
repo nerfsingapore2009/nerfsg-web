@@ -11,6 +11,9 @@ import Guides from './pages/Guides'
 import FAQ from './pages/FAQ'
 import Contact from './pages/Contact'
 import Review2025 from './pages/Review2025'
+import Leaderboard from './pages/Leaderboard'
+import Gallery from './pages/Gallery'
+import NotFound from './pages/NotFound'
 
 export default function App() {
   useEffect(() => { signInAnon() }, [])
@@ -31,6 +34,9 @@ export default function App() {
             <Route path="/faq" element={<FAQ />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/2025-review" element={<Review2025 />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/gallery" element={<Gallery />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
       </div>
