@@ -275,17 +275,13 @@ function DarkNextGameCard({ event, loading, error, queue = [] }) {
           const yesCount     = participants.length
           const maxSlots     = event.maxSlots || null
           const isPaid       = event.sessionType === 'paid' || event.entryFee > 0
+          const bannerImg = event.locationImageUrl || event.groupPhoto || null
           return (
             <>
-              {event.groupPhoto && (
+              {bannerImg && (
                 <div style={{ margin: '-16px -16px 14px', overflow: 'hidden', aspectRatio: '16/7', position: 'relative' }}>
-                  <img
-                    src={event.groupPhoto}
-                    alt={event.name || 'Game banner'}
-                    loading="lazy"
-                    decoding="async"
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%', display: 'block' }}
-                  />
+                  <img src={bannerImg} alt={event.name || 'Game banner'} loading="lazy" decoding="async"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%', display: 'block' }} />
                   <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(6,8,15,0) 40%, rgba(6,8,15,.72) 100%)' }} />
                 </div>
               )}
@@ -402,8 +398,8 @@ export function HeroCinematic({ data }) {
       <div className="hero-lb-top" />
       <div className="hero-lb-bottom" />
 
-      {/* ── Nav (inside top bar) ── */}
-      <div className="absolute left-0 right-0 flex items-center px-5 lg:px-10 gap-6" style={{ top: 0, height: lbH, zIndex: 30 }}>
+      {/* ── Nav (inside top bar) — desktop only; mobile uses the main Navbar ── */}
+      <div className="hidden lg:flex absolute left-0 right-0 items-center px-10 gap-6" style={{ top: 0, height: lbH, zIndex: 30 }}>
         <img src="/nerfsingapore.webp" alt="NERF Singapore" className="object-cover object-center" style={{ height: 26, width: 59 }} />
         <div style={{ flex: 1 }} />
         <a href="https://nerfsg.app" target="_blank" rel="noopener noreferrer" onClick={spawnParticles} className="btn-red hidden lg:inline-flex" style={{ fontSize: 13, position: 'relative', zIndex: 1 }}>

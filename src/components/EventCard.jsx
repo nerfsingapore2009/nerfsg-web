@@ -20,9 +20,22 @@ export default function EventCard({ event }) {
     `${daysUntil} days away`
 
   const isUrgent = daysUntil <= 3
+  const bannerImg = event.locationImageUrl || event.groupPhoto || null
 
   return (
-    <div className="card card-hover p-5 flex flex-col gap-3">
+    <div className="card card-hover flex flex-col gap-3 overflow-hidden">
+      {bannerImg && (
+        <div className="w-full aspect-[16/7] overflow-hidden">
+          <img
+            src={bannerImg}
+            alt={event.name}
+            className="w-full h-full object-cover"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      )}
+      <div className="p-5 flex flex-col gap-3">
       <div className="flex items-start justify-between gap-2">
         <h3 className="text-ink font-semibold text-base leading-snug" style={{ textWrap: 'balance' }}>
           {event.name}
@@ -75,6 +88,7 @@ export default function EventCard({ event }) {
       >
         or get notified on Telegram
       </a>
+      </div>
     </div>
   )
 }
