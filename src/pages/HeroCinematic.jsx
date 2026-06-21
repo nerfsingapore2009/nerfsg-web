@@ -424,7 +424,7 @@ export function HeroCinematic({ data }) {
 
       {/* ── Main content ── */}
       <div className="hero-content-wrap">
-        <div className="w-full max-w-[1240px] mx-auto px-5 lg:px-14 grid items-start lg:items-center gap-8 lg:gap-12 hero-main-grid"
+        <div className="w-full max-w-[1240px] mx-auto px-5 lg:px-14 grid items-start lg:items-center gap-8 lg:gap-12 hero-main-grid hero-content-inner"
           style={{ paddingTop: lbH + 24, paddingBottom: lbH + 80 }}>
 
           {/* ── Left: headline ── */}

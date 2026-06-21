@@ -464,7 +464,7 @@ button, a {
 .hero-lb-top    { top: 0; }
 .hero-lb-bottom { bottom: 0; }
 @media (max-width: 1023px) {
-  .hero-lb-top, .hero-lb-bottom, .hud-frame { display: none; }
+  .hero-lb-top, .hero-lb-bottom, .hud-frame, .hero-tactical { display: none; }
 }
 
 /* ── HUD corner marks ─────────────────────────────────────────────── */
@@ -541,6 +541,7 @@ button, a {
 }
 @media (max-width: 1023px) {
   .hero-content-wrap { position: relative; align-items: flex-start; }
+  .hero-content-inner { padding-top: 80px !important; padding-bottom: 48px !important; }
 }
 
 /* ── Hero main grid: single col on mobile, two-col on desktop ───────── */

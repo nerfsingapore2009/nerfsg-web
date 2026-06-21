@@ -62,14 +62,16 @@ export default function Navbar() {
         <div className="flex-1" />
 
         {/* Get the app CTA */}
-        <a
-          href="https://nerfsg.app"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hidden lg:inline-flex btn-red text-sm"
-        >
-          Get the app
-        </a>
+        <div className="hidden lg:block">
+          <a
+            href="https://nerfsg.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-red text-sm"
+          >
+            Get the app
+          </a>
+        </div>
 
         {/* Mobile hamburger */}
         <button
