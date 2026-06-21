@@ -206,9 +206,9 @@ function TacticalStrip() {
   }, [])
   return (
     <div className="hero-tactical">
-      <span>SGT +8 · BISHAN PARK · OP ACTIVE</span>
+      <span>SGT +8</span>
       <span className="hero-tactical-right">
-        <span>PHOTO 📷 YALAMPHOTOS</span>
+        <span>VIDEO 🎥 AL SHOOTS STUFF</span>
         <span>{time}</span>
         <span>NERFSG · EST 2009</span>
       </span>

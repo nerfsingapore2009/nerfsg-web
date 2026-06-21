@@ -311,7 +311,7 @@ function GameDetailModal({ game, onClose }) {
             {game.maxSlots && <div className="text-xs font-semibold text-muted tracking-widest uppercase">{yesIds.size}/{game.maxSlots} slots</div>}
           </div>
 
-          {maybeIds.size > 0 && (
+          {!isPast && maybeIds.size > 0 && (
             <div>
               <div className="text-xs font-semibold text-muted tracking-widest uppercase mb-2">Maybe · {maybeIds.size}</div>
               <div className="flex flex-wrap gap-1.5">

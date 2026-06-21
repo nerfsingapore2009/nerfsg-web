@@ -632,10 +632,10 @@ function GameModesSection({ data }) {
 
 /* ── COMMUNITY / SOCIALS ──────────────────────────────────────────── */
 const SOCIALS = [
-  { name: 'Telegram',  handle: 't.me/nerfsg',                          members: '1.2k', href: 'https://t.me/+MbMLovtcLyVmYzhl' },
-  { name: 'Facebook',  handle: 'facebook.com/groups/nerfsingapore',    members: '4.8k', href: 'https://www.facebook.com/groups/nerfsingapore/' },
-  { name: 'TikTok',    handle: '@nerfsingapore',                       members: '920',  href: 'https://www.tiktok.com/@nerfsingapore' },
-  { name: 'YouTube',   handle: '@project_argus_films',                 members: '1.5k', href: 'https://www.youtube.com/@project_argus_films/videos' },
+  { name: 'Telegram',  handle: 't.me/nerfsg',                          members: '200+', href: 'https://t.me/+MbMLovtcLyVmYzhl' },
+  { name: 'Facebook',  handle: 'facebook.com/groups/nerfsingapore',    members: '5.8k', href: 'https://www.facebook.com/groups/nerfsingapore/' },
+  { name: 'TikTok',    handle: '@nerfsingapore',                       members: '200+', href: 'https://www.tiktok.com/@nerfsingapore' },
+  { name: 'YouTube',   handle: '@project_argus_films',                 members: '1.1k', href: 'https://www.youtube.com/@project_argus_films/videos' },
 ]
 
 function WatchAndConnect() {
