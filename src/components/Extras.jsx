@@ -131,9 +131,10 @@ export function YoYBlock({ all }) {
 /* ── Heatmap calendar ───────────────────────────────────────────────── */
 function buildHeatmapData(all, year) {
   const byDay = new Map();
+  const now = Date.now();
   for (const g of all) {
     const ts = g.scheduledFor || g.createdAt;
-    if (!ts) continue;
+    if (!ts || ts > now) continue;
     const d = new Date(ts);
     if (d.getFullYear() !== year) continue;
     const key = d.toISOString().slice(0, 10);
