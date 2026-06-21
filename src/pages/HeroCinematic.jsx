@@ -398,14 +398,6 @@ export function HeroCinematic({ data }) {
       <div className="hero-lb-top" />
       <div className="hero-lb-bottom" />
 
-      {/* ── Nav (inside top bar) — desktop only; mobile uses the main Navbar ── */}
-      <div className="hidden lg:flex absolute left-0 right-0 items-center px-10 gap-6" style={{ top: 0, height: lbH, zIndex: 30 }}>
-        <img src="/nerfsingapore.webp" alt="NERF Singapore" className="object-cover object-center" style={{ height: 26, width: 59 }} />
-        <div style={{ flex: 1 }} />
-        <a href="https://nerfsg.app" target="_blank" rel="noopener noreferrer" onClick={spawnParticles} className="btn-red hidden lg:inline-flex" style={{ fontSize: 13, position: 'relative', zIndex: 1 }}>
-          Get the app
-        </a>
-      </div>
 
       {/* ── HUD ── */}
       <div className="hud-frame" style={{ top: lbH, bottom: lbH }}>

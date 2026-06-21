@@ -2,11 +2,13 @@
 import { NavLink, useLocation } from 'react-router-dom'
 
 const NAV_LINKS = [
-  { to: '/events',     label: 'Events' },
-  { to: '/game-modes', label: 'Game Modes' },
-  { to: '/guides',     label: 'How to Play' },
-  { to: '/hvz',        label: 'HvZ' },
-  { to: '/faq',        label: 'FAQ' },
+  { to: '/events',       label: 'Events' },
+  { to: '/game-modes',   label: 'Game Modes' },
+  { to: '/guides',       label: 'How to Play' },
+  { to: '/hvz',          label: 'HvZ' },
+  { to: '/faq',          label: 'FAQ' },
+  { to: '/2025-review',  label: '2025 Review' },
+  { to: '/contact',      label: 'Contact' },
 ]
 
 export default function Navbar() {
