@@ -31,7 +31,7 @@ export default function Navbar() {
   }, [])
 
   const linkClass = ({ isActive }) =>
-    `px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red/40 ${
+    `px-2.5 py-1.5 text-sm font-medium whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red/40 ${
       isActive
         ? (transparent ? 'text-white font-semibold' : 'text-red font-semibold')
         : (transparent ? 'text-white/80 hover:text-white' : 'text-muted hover:text-ink')
@@ -44,7 +44,7 @@ export default function Navbar() {
         transparent ? 'bg-transparent' : 'bg-white/90 backdrop-blur-md border-b border-border'
       }`}
     >
-      <div className="max-w-6xl mx-auto px-5 lg:px-8 py-3 flex items-center gap-6">
+      <div className="max-w-6xl mx-auto px-5 lg:px-8 py-3 flex items-center gap-4">
 
         {/* Logo */}
         <NavLink to="/" aria-label="NERF Singapore — home" className="flex items-center shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red/40">
@@ -52,7 +52,7 @@ export default function Navbar() {
         </NavLink>
 
         {/* Desktop links */}
-        <div className="hidden lg:flex items-center gap-1 ml-2">
+        <div className="hidden lg:flex items-center gap-0.5 ml-1">
           {NAV_LINKS.map(({ to, label }) => (
             <NavLink key={to} to={to} className={linkClass}>
               {label}
