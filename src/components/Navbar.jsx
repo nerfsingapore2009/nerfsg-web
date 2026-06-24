@@ -1,10 +1,11 @@
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 
 const NAV_LINKS = [
   { to: '/events',       label: 'Events' },
   { to: '/gallery',      label: 'Gallery' },
   { to: '/leaderboard',  label: 'Leaderboard' },
+  { to: '/roadmap',      label: 'Roadmap' },
   { to: '/game-modes',   label: 'Game Modes' },
   { to: '/guides',       label: 'How to Play' },
   { to: '/hvz',          label: 'HvZ' },

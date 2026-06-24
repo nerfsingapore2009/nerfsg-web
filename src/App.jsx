@@ -12,6 +12,7 @@ import FAQ from './pages/FAQ'
 import Contact from './pages/Contact'
 import Review2025 from './pages/Review2025'
 import Leaderboard from './pages/Leaderboard'
+import Roadmap from './pages/Roadmap'
 import Gallery from './pages/Gallery'
 import NotFound from './pages/NotFound'
 
@@ -35,6 +36,7 @@ export default function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/2025-review" element={<Review2025 />} />
             <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/roadmap" element={<Roadmap />} />
             <Route path="/gallery" element={<Gallery />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
