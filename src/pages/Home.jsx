@@ -634,6 +634,7 @@ function GameModesSection({ data }) {
 const SOCIALS = [
   { name: 'Telegram',  handle: 't.me/nerfsg',                          members: '200+', href: 'https://t.me/+MbMLovtcLyVmYzhl' },
   { name: 'Facebook',  handle: 'facebook.com/groups/nerfsingapore',    members: '5.8k', href: 'https://www.facebook.com/groups/nerfsingapore/' },
+  { name: 'Instagram', handle: '@nerfsingapore',                      members: '300+',  href: 'https://www.instagram.com/nerfsingapore/' },
   { name: 'TikTok',    handle: '@nerfsingapore',                       members: '200+', href: 'https://www.tiktok.com/@nerfsingapore' },
   { name: 'YouTube',   handle: '@project_argus_films',                 members: '1.1k', href: 'https://www.youtube.com/@project_argus_films/videos' },
 ]
