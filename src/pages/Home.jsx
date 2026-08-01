@@ -1,265 +1,13 @@
 ﻿import { useMemo, useState, useEffect } from 'react'
-import { useAllGamedays, deriveStats, extractParticipants } from '../hooks/useGamedays'
-import { useCountUp, useCountdown } from '../components/Hud'
+import { useAllGamedays, deriveStats } from '../hooks/useGamedays'
+import { useCountUp } from '../components/Hud'
 import { useReveal } from '../hooks/useReveal'
-import { getFieldGallery, getHeroPhoto, getAppScreens } from '../lib/media'
-import AvatarChip from '../components/AvatarChip'
+import { getFieldGallery, getAppScreens } from '../lib/media'
 import { TrendsRow, YoYBlock, HeatmapCalendar } from '../components/Extras'
+import Photo from '../components/Photo'
 import PastGames from '../components/Archive'
+import InstagramFeed from '../components/InstagramFeed'
 import { HeroCinematic } from './HeroCinematic'
-
-/* ── helpers ──────────────────────────────────────────────────────── */
-function formatGameday(ev) {
-  const ts = ev.scheduledFor || ev.createdAt
-  const d  = new Date(ts)
-  return {
-    date: d.toLocaleDateString('en-SG', { weekday: 'short', day: 'numeric', month: 'short' }),
-    time: d.toLocaleTimeString('en-SG', { hour: '2-digit', minute: '2-digit', hour12: false }),
-    dt: d,
-  }
-}
-
-/* ── NEXT GAME CARD ───────────────────────────────────────────────── */
-function NextGameCard({ event, loading, error, queue = [] }) {
-  const targetMs = event?.scheduledFor || (Date.now() + 86400000)
-  const cd  = useCountdown(targetMs)
-  const fmt = event ? formatGameday(event) : null
-
-  return (
-    <div className="card overflow-hidden">
-      {/* Card header */}
-      <div className="flex items-center justify-between px-4 py-2.5 bg-surface border-b border-border">
-        <div className="flex items-center gap-2">
-          <span className={`w-2 h-2 rounded-full ${loading ? 'bg-border2' : 'bg-green-500 pulse-dot'}`}></span>
-          <span className="text-xs font-semibold tracking-widest uppercase text-muted">
-            {loading ? 'Loading…' : event ? 'Next game' : 'No upcoming games'}
-          </span>
-        </div>
-        <span className="text-xs text-muted font-mono">
-          {loading ? 'live' : event ? `#${(event.id || '').slice(0, 6).toUpperCase()}` : 'TBA'}
-        </span>
-      </div>
-
-      <div className="p-5">
-        {loading && (
-          <div className="animate-pulse">
-            <div className="h-7 bg-border rounded w-2/3 mb-2"></div>
-            <div className="h-4 bg-border rounded w-1/2 mb-5"></div>
-            <div className="grid grid-cols-4 gap-2 mb-5">
-              {[0, 1, 2, 3].map(i => <div key={i} className="h-16 bg-surface rounded"></div>)}
-            </div>
-            <div className="h-9 bg-surface rounded"></div>
-          </div>
-        )}
-
-        {!loading && !event && (
-          <div className="py-2">
-            <h3 className="font-display text-2xl text-ink tracking-tight">No upcoming games right now</h3>
-            <p className="text-muted text-sm mt-2">
-              Games are usually announced on Facebook first. Check the group for the next drop.
-            </p>
-            {error && <p className="text-xs text-red mt-3">Error: {error}</p>}
-            <a href="https://www.facebook.com/groups/nerfsingapore/" target="_blank" rel="noopener noreferrer"
-              className="btn-red mt-4">
-              Check Facebook →
-            </a>
-          </div>
-        )}
-
-        {!loading && event && (() => {
-          const participants = extractParticipants(event)
-          const yesCount = participants.length
-          const maxSlots = event.maxSlots || null
-          const isPaid   = event.sessionType === 'paid' || event.entryFee > 0
-          return (
-            <>
-              {event.groupPhoto && (
-                <div className="mb-4 -mt-1 overflow-hidden border border-border aspect-[16/8]">
-                  <img src={event.groupPhoto} alt={event.name || 'Game photo'} className="w-full h-full object-cover" loading="lazy" decoding="async" />
-                </div>
-              )}
-              <div className="flex items-start justify-between gap-3 mb-3">
-                <div className="min-w-0">
-                  <h3 className="font-display text-3xl text-ink tracking-tight truncate">{event.name || 'Untitled game'}</h3>
-                  <div className="text-muted text-sm mt-1">
-                    {fmt.date} · {fmt.time}{event.location ? ` · ${event.location}` : ''}
-                  </div>
-                  {event.hostName && (
-                    <div className="text-xs text-muted mt-1.5">
-                      Hosted by <span className="font-semibold text-ink">{event.hostName}</span>
-                    </div>
-                  )}
-                </div>
-                <div className="flex flex-col items-end gap-1 shrink-0">
-                  <span className="text-xs font-semibold text-green-700 border border-green-200 bg-green-50 px-2 py-1 rounded-full tabular">
-                    {maxSlots ? `${yesCount}/${maxSlots}` : `${yesCount} going`}
-                  </span>
-                  {isPaid && event.entryFee > 0 && (
-                    <span className="text-xs font-semibold text-red border border-red/30 bg-red/5 px-2 py-1 rounded-full">
-                      ${event.entryFee}
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              {/* Countdown */}
-              <div className="grid grid-cols-4 gap-2 mb-5">
-                {[{ v: cd.days, l: 'Days' }, { v: cd.hours, l: 'Hrs' }, { v: cd.mins, l: 'Min' }, { v: cd.secs, l: 'Sec' }].map((c, i) => (
-                  <div key={i} className="countdown-box">
-                    <span className="num">{String(c.v).padStart(2, '0')}</span>
-                    <span className="lbl">{c.l}</span>
-                  </div>
-                ))}
-              </div>
-
-              {(event.note || event.fieldNotes) && (
-                <>
-                  <div className="text-xs font-semibold text-muted mb-2">Notes</div>
-                  <div className="flex flex-wrap gap-1.5 mb-5">
-                    {(event.note || event.fieldNotes).split(/[\n,]+/).map(s => s.trim()).filter(Boolean).map((tag, i) => (
-                      <span key={i} className="text-xs bg-surface border border-border rounded-full px-2.5 py-1 text-muted">{tag}</span>
-                    ))}
-                  </div>
-                </>
-              )}
-
-              {participants.length > 0 && (
-                <div className="mb-5">
-                  <div className="text-xs font-semibold text-muted mb-2">Going</div>
-                  <div className="flex items-center gap-2">
-                    <div className="flex -space-x-2">
-                      {participants.slice(0, 6).map((p, i) => (
-                        <div key={p.id} className="relative" style={{ zIndex: 6 - i }}>
-                          <AvatarChip name={p.name} id={p.id} idx={i} src={p.avatarUrl} />
-                        </div>
-                      ))}
-                    </div>
-                    {participants.length > 6 && (
-                      <span className="text-sm text-muted ml-1">+{participants.length - 6} more</span>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              <a href="https://nerfsg.app" target="_blank" rel="noopener noreferrer"
-                className="btn-red w-full justify-center">
-                RSVP via app
-              </a>
-
-              {queue.length > 0 && (
-                <div className="mt-5 pt-4 border-t border-border">
-                  <div className="text-xs font-semibold text-muted mb-2">Upcoming</div>
-                  <ul className="flex flex-col gap-1.5">
-                    {queue.map(q => {
-                      const qf = formatGameday(q)
-                      return (
-                        <li key={q.id} className="flex items-center justify-between gap-2 text-sm">
-                          <span className="text-ink truncate font-medium">{q.name || 'Untitled'}</span>
-                          <span className="text-muted text-xs shrink-0">{qf.date} · {qf.time}</span>
-                        </li>
-                      )
-                    })}
-                  </ul>
-                </div>
-              )}
-            </>
-          )
-        })()}
-      </div>
-    </div>
-  )
-}
-
-/* ── HERO ─────────────────────────────────────────────────────────── */
-function Hero({ data }) {
-  const { loading, error, stats, all = [] } = data
-  const upcoming  = stats?.upcoming || []
-  const nextEvent = upcoming[0] || null
-  const queue     = upcoming.slice(1, 4)
-  const heroPhoto = useMemo(() => getHeroPhoto(all), [all])
-
-  const yearGames   = useCountUp(stats?.yearGames || 0, 1400)
-  const yearPlayers = useCountUp(stats?.yearOperators || 0, 1600)
-
-  const statStrip = [
-    { lbl: `Games in ${stats?.year || new Date().getFullYear()}`, val: yearGames.toLocaleString() },
-    { lbl: 'Players this year', val: yearPlayers.toLocaleString() },
-    { lbl: 'Games all-time',    val: '600+' },
-  ]
-
-  return (
-    <section className="hero-cinematic text-white">
-      {heroPhoto && (
-        <img src={heroPhoto} alt="" aria-hidden="true" className="hero-photo"
-          fetchPriority="high" decoding="async" />
-      )}
-      <div className="hero-scrim" />
-      <div className="grain" />
-
-      <div className="relative max-w-6xl mx-auto px-5 lg:px-8 min-h-[100dvh]
-                      flex flex-col justify-center pt-28 pb-20 lg:pt-32 lg:pb-24">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-
-          {/* Headline + CTAs + stats */}
-          <div className="reveal flex flex-col gap-8 lg:col-span-7">
-            <div>
-              <p className="section-label">Singapore's Nerf community · Est. 2009</p>
-              <h1 className="font-display font-black leading-[.88] tracking-tight mt-3 uppercase
-                             [text-shadow:0_2px_30px_rgba(0,0,0,.35)]">
-                <span className="block text-[clamp(48px,7vw,96px)]">Play.</span>
-                <span className="block text-[clamp(48px,7vw,96px)] text-red">Shoot.</span>
-                <span className="block text-[clamp(48px,7vw,96px)]">Have fun.</span>
-              </h1>
-              <p className="text-white/80 text-base lg:text-lg mt-5 max-w-lg">
-                Weekly foam dart games in Singapore, open to all skill levels.
-                Bring a blaster or borrow one from us, grab some darts, and come hang out.
-              </p>
-              <div className="flex flex-wrap gap-3 mt-8">
-                <a href="https://nerfsg.app" target="_blank" rel="noopener noreferrer" className="btn-red">
-                  Join the next game
-                </a>
-                <a href="https://www.facebook.com/groups/nerfsingapore/" target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-5 py-2.5 font-semibold text-sm
-                             text-white border border-white/30 hover:bg-white/10 transition-colors">
-                  Facebook group
-                </a>
-              </div>
-            </div>
-
-            {/* Stat strip */}
-            <div className="grid grid-cols-3 gap-3 sm:gap-6 border-t border-white/15 pt-6 max-w-md">
-              {statStrip.map(s => (
-                <div key={s.lbl}>
-                  <div className="font-display font-black text-3xl lg:text-4xl tabular leading-none">
-                    {loading ? '—' : s.val}
-                  </div>
-                  <div className="text-[11px] sm:text-xs text-white/60 mt-1.5 tracking-wide">{s.lbl}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Live next-game card, floated as glass over the photo */}
-          <div className="reveal reveal-d2 lg:col-span-5 w-full lg:justify-self-end max-w-md">
-            <NextGameCard event={nextEvent} loading={loading} error={error} queue={queue} />
-          </div>
-        </div>
-
-        {/* Scroll cue */}
-        <div className="hidden lg:flex absolute bottom-7 left-1/2 -translate-x-1/2 flex-col items-center gap-2
-                        text-white/50 reveal reveal-d3" aria-hidden="true">
-          <span className="text-[10px] font-semibold tracking-[.22em] uppercase">Scroll</span>
-          <svg width="16" height="22" viewBox="0 0 16 22" fill="none">
-            <rect x="1" y="1" width="14" height="20" rx="7" stroke="currentColor" strokeWidth="1.4" />
-            <circle cx="8" cy="7" r="1.6" fill="currentColor">
-              <animate attributeName="cy" values="7;13;7" dur="1.8s" repeatCount="indefinite" />
-            </circle>
-          </svg>
-        </div>
-      </div>
-    </section>
-  )
-}
 
 /* ── FIELD GALLERY ───────────────────────────────────────────────── */
 function FieldGallery({ data }) {
@@ -285,7 +33,8 @@ function FieldGallery({ data }) {
             <figure key={i}
               className="relative w-[280px] sm:w-[360px] aspect-[4/3] overflow-hidden
                          border border-white/10 shrink-0 shadow-lg">
-              <img src={p.src} alt={p.name || 'NerfSG game action'} loading="lazy" decoding="async"
+              <Photo photo={p} alt={p.name || 'NerfSG game action'}
+                sizes="(min-width: 640px) 360px, 280px"
                 className="w-full h-full object-cover"
                 style={{ objectPosition: `center ${p.focalY || '30%'}` }} />
               {p.credit && <figcaption className="credit-badge">📷 {p.credit}</figcaption>}
@@ -449,11 +198,41 @@ const ESSENTIALS = [
     note: 'Bring your own water!' },
 ]
 
+/* The questions newcomers actually hesitate on are social, not logistical —
+   answer those before the gear checklist, not after it. */
+const FIRST_TIMER = [
+  { q: 'Never played?',        a: 'Open to all skill levels. That is the format, not a slogan.' },
+  { q: 'Coming alone?',        a: 'So did most people here, once. You will be on a team by the first round.' },
+  { q: 'No blaster?',          a: 'Tell the host early and borrow one. Darts sorted too.' },
+  { q: 'What does it cost?',   a: 'Every game lists its entry. Free ones say free, paid ones show the price.' },
+]
+
 function WhatToBring() {
   return (
     <section className="border-b border-border bg-white">
       <div className="max-w-6xl mx-auto px-5 lg:px-8 py-16 lg:py-20" data-reveal>
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-8 gap-3">
+
+        {/* First-timer reassurance — typographic on purpose, so it reads as a
+            straight answer rather than a marketing panel. */}
+        <div className="mb-14 lg:mb-16">
+          <p className="section-label">Your first game</p>
+          <h2 className="font-display text-4xl lg:text-5xl text-ink uppercase tracking-tight mt-2">
+            Just turn up.
+          </h2>
+          <p className="text-muted mt-3 max-w-xl">
+            The hardest part is deciding to come. Everything else we sort out at the field.
+          </p>
+          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6 mt-8 max-w-4xl">
+            {FIRST_TIMER.map(item => (
+              <div key={item.q} className="border-l-2 border-red pl-4">
+                <dt className="font-display text-lg text-ink uppercase tracking-tight">{item.q}</dt>
+                <dd className="text-muted text-sm leading-relaxed mt-1">{item.a}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-8 gap-3 pt-12 border-t border-border">
           <div>
             <h2 className="font-display text-4xl lg:text-5xl text-ink uppercase tracking-tight">What to bring.</h2>
             <p className="text-muted mt-2 max-w-xl">Six things to sort before your first game. Hosts will chrono blasters at the door.</p>
@@ -585,10 +364,9 @@ function GameModesSection({ data }) {
                     {/* Top area */}
                     <div className="relative h-36 photo-placeholder rounded-none">
                       {photo && (
-                        <>
-                          <img src={photo.src} alt="" aria-hidden="true" className="mode-photo" loading="lazy" decoding="async"
-                           style={{ objectPosition: `center ${photo.focalY || '30%'}` }} />
-                        </>
+                        <Photo photo={photo} alt="" className="mode-photo"
+                          sizes="(min-width: 1024px) 360px, (min-width: 640px) 50vw, 100vw"
+                          style={{ objectPosition: `center ${photo.focalY || '30%'}` }} />
                       )}
                       <span className={`relative z-10 font-display font-black text-5xl select-none ${
                         photo ? 'text-white/90 [text-shadow:0_2px_12px_rgba(0,0,0,.55)]' : 'text-border2'
@@ -683,6 +461,8 @@ function WatchAndConnect() {
             ))}
           </div>
         </div>
+
+        <InstagramFeed />
       </div>
     </section>
   )
@@ -723,11 +503,13 @@ export default function Home() {
 
   return (
     <>
+      {/* Order matters: photos prove it's fun, WhatToBring proves it's achievable,
+          stats prove it's real — only then do we ask anyone to install the app. */}
       <HeroCinematic data={data} />
       <FieldGallery data={data} />
-      <AppShowcase />
       <WhatToBring />
       <CommunityStats data={data} />
+      <AppShowcase />
       <GameModesSection data={data} />
       <PastGames data={data} />
       <WatchAndConnect />

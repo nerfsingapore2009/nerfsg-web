@@ -5,9 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "node scripts/optimize-gallery.mjs && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "optimize:gallery": "node scripts/optimize-gallery.mjs",
+    "cut:hero": "powershell -ExecutionPolicy Bypass -File scripts/cut-hero-clips.ps1"
   },
   "dependencies": {
     "firebase": "^12.13.0",

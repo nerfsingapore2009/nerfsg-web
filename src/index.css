@@ -544,9 +544,16 @@ button, a {
   .hero-content-inner { padding-top: 80px !important; padding-bottom: 64px !important; }
 }
 
-/* ── Hero main grid: single col on mobile, two-col on desktop ───────── */
+/* ── Hero main grid ───────────────────────────────────────────────────
+   Mobile: one column following DOM order — headline → next-game card →
+   stat strip, so the game date lands inside the first viewport.
+   Desktop: headline and stats stack in column 1, card fills column 2. */
 .hero-main-grid { grid-template-columns: 1fr; }
-@media (min-width: 1024px) { .hero-main-grid { grid-template-columns: 1fr 318px; } }
+@media (min-width: 1024px) {
+  .hero-main-grid { grid-template-columns: 1fr 318px; }
+  .hero-col-card  { grid-column: 2; grid-row: 1 / span 2; align-self: center; }
+  .hero-col-stats { grid-column: 1; grid-row: 2; }
+}
 
 /* ── Tactical bottom strip ────────────────────────────────────────── */
 .hero-tactical {

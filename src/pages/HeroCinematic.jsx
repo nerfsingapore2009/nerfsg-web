@@ -12,6 +12,7 @@ import { useMemo, useState, useEffect, useRef } from 'react'
 import { extractParticipants } from '../hooks/useGamedays'
 import { useCountdown } from '../components/Hud'
 import AvatarChip from '../components/AvatarChip'
+import { downloadGamedayIcs } from '../lib/ics'
 
 /* ── helpers ─────────────────────────────────────────────────── */
 function formatGameday(ev) {
@@ -55,97 +56,74 @@ function spawnParticles(e) {
   setTimeout(() => ring.remove(), 600)
 }
 
-/* ── Video background with clip cycling ─────────────────────── */
-const VIDEO_A = '/video/nerf-action-hero.mp4'
-const VIDEO_B = '/video/nerf-hvz-hero.mp4'
-
-// Curated highlight clips from Hold the Hill video [startSec, durationSec]
-const VIDEO_B_CLIPS = [
-  [6.5,  16.2],  // "are you ready"
-  [38.5,  6.7],
-  [63.1,  5.9],
-  [85.2,  5.8],
+/* ── Video background ────────────────────────────────────────────────
+ * The four highlight moments used to live inside one 18 MB file, reached by
+ * seeking to [6.5, 38.5, 63.1, 85.2]s — every jump cost an HTTP range request
+ * and nothing painted until `canplay` fired. They are now pre-cut standalone
+ * files (see scripts/cut-hero-clips.ps1), played in sequence.
+ *
+ * The poster sits underneath the video as its own layer rather than as the
+ * <video poster> attribute, so it survives the fade between clips and gives an
+ * instant first paint instead of an empty rectangle.
+ */
+const HERO_CLIPS = [
+  '/video/hero/clip-1.mp4',
+  '/video/hero/clip-2.mp4',
+  '/video/hero/clip-3.mp4',
+  '/video/hero/clip-4.mp4',
 ]
+const HERO_POSTER = '/video/hero/poster.jpg'
 
-function VideoBg({ src, clips }) {
-  const ref     = useRef(null)
-  const [opacity, setOpacity] = useState(1)
-  const clipIdx = useRef(0)
-  const jumping = useRef(false)
-
+function usePrefersReducedMotion() {
+  const [reduced, setReduced] = useState(
+    () => typeof window !== 'undefined'
+      && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  )
   useEffect(() => {
-    const v = ref.current
-    if (!v) return
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const onChange = e => setReduced(e.matches)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
+  return reduced
+}
 
-    if (!clips || clips.length === 0) {
-      v.currentTime = 0
-      v.play().catch(() => {})
-      return
-    }
+function VideoBg({ clips = HERO_CLIPS, poster = HERO_POSTER }) {
+  const ref = useRef(null)
+  const [idx, setIdx]         = useState(0)
+  const [visible, setVisible] = useState(false)
+  const reduced = usePrefersReducedMotion()
 
-    clipIdx.current = 0
-    jumping.current = false
+  function handleEnded() {
+    setVisible(false)
+    setTimeout(() => setIdx(i => (i + 1) % clips.length), 380)
+  }
 
-    function goClip(idx) {
-      const [start] = clips[idx % clips.length]
-      jumping.current = true
-      v.currentTime = start
-    }
-
-    function onSeeked() {
-      if (jumping.current) {
-        jumping.current = false
-        v.play().catch(() => {})
-        setOpacity(1)
-      }
-    }
-
-    function onTimeUpdate() {
-      if (jumping.current) return
-      const [start, dur] = clips[clipIdx.current % clips.length]
-      if (v.currentTime >= start + dur) {
-        jumping.current = true
-        setOpacity(0)
-        clipIdx.current = (clipIdx.current + 1) % clips.length
-        v.pause()
-        setTimeout(() => goClip(clipIdx.current), 380)
-      }
-    }
-
-    v.addEventListener('timeupdate', onTimeUpdate)
-    v.addEventListener('seeked', onSeeked)
-
-    function onReady() { goClip(0) }
-    if (v.readyState >= 2) onReady()
-    else v.addEventListener('canplay', onReady, { once: true })
-
-    return () => {
-      v.removeEventListener('timeupdate', onTimeUpdate)
-      v.removeEventListener('seeked', onSeeked)
-      v.removeEventListener('canplay', onReady)
-      v.pause()
-    }
-  }, [src, clips])
+  function handleCanPlay() {
+    ref.current?.play().catch(() => {})
+    setVisible(true)
+  }
 
   return (
     <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none" aria-hidden="true">
-      <video
-        ref={ref}
-        key={src}
-        src={src}
-        muted
-        playsInline
-        preload="metadata"
-        loop={!clips || clips.length === 0}
-        style={{
-          position: 'absolute', top: 0, left: 0,
-          width: '100%', height: '100%',
-          objectFit: 'cover',
-          opacity: opacity * 0.68,
-          transition: 'opacity 0.35s ease',
-          pointerEvents: 'none',
-        }}
-      />
+      {/* Always-present poster layer — first paint, and cover for clip changes. */}
+      <img src={poster} alt="" className="hero-video" fetchPriority="high" decoding="async" />
+
+      {!reduced && (
+        <video
+          ref={ref}
+          key={clips[idx]}
+          src={clips[idx]}
+          muted
+          playsInline
+          autoPlay
+          preload={idx === 0 ? 'auto' : 'metadata'}
+          onCanPlay={handleCanPlay}
+          onEnded={handleEnded}
+          className="hero-video"
+          style={{ opacity: visible ? 0.68 : 0 }}
+        />
+      )}
     </div>
   )
 }
@@ -339,6 +317,15 @@ function DarkNextGameCard({ event, loading, error, queue = [] }) {
                 RSVP via app
               </a>
 
+              {/* Lower-commitment alternative for people not ready to install anything. */}
+              <button type="button" onClick={() => downloadGamedayIcs(event)}
+                className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+                style={{ width: '100%', marginTop: 8, padding: '9px 0', background: 'none', cursor: 'pointer',
+                  border: '1px solid rgba(255,255,255,.16)', color: 'rgba(255,255,255,.6)',
+                  fontSize: 13, fontWeight: 600 }}>
+                Add to calendar
+              </button>
+
               {queue.length > 0 && (
                 <div style={{ marginTop: 16, paddingTop: 14, borderTop: '1px solid rgba(255,255,255,.08)' }}>
                   <div style={{ fontSize: 11, fontWeight: 600, color: 'rgba(255,255,255,.3)', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '.08em' }}>Upcoming</div>
@@ -386,7 +373,7 @@ export function HeroCinematic({ data }) {
     <section className="hero-cinematic-section relative text-white overflow-hidden" style={{ background: '#06080f' }}>
 
       {/* ── Video background ── */}
-      <VideoBg src={VIDEO_B} clips={VIDEO_B_CLIPS} />
+      <VideoBg />
 
       {/* ── Scrim ── */}
       <div className="absolute inset-0" style={{ zIndex: 1, background: 'linear-gradient(180deg, rgba(6,8,15,.5) 0%, rgba(6,8,15,.1) 35%, rgba(6,8,15,.82) 100%), linear-gradient(90deg, rgba(6,8,15,.92) 0%, rgba(6,8,15,.55) 45%, rgba(6,8,15,.78) 100%)' }} />
@@ -465,21 +452,27 @@ export function HeroCinematic({ data }) {
               </a>
             </div>
 
-            {/* Odometer stat strip */}
-            <div className="flex gap-7 hero-fade-stats" style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid rgba(255,255,255,.1)' }}>
-              {statStrip.map(s => (
-                loading
-                  ? <div key={s.label} style={{ color: '#fff', minWidth: 60 }}>
-                      <div className="font-display font-black" style={{ fontSize: 32 }}>—</div>
-                      <div style={{ fontSize: 11, color: 'rgba(255,255,255,.38)', marginTop: 4 }}>{s.label}</div>
-                    </div>
-                  : <OdoStat key={s.label} value={s.val} label={s.label} delay={s.delay} />
-              ))}
-            </div>
           </div>
 
-          {/* ── Right: dark game card ── */}
-          <DarkNextGameCard event={nextEvent} loading={loading} error={error} queue={queue} />
+          {/* ── Right on desktop, second on mobile: dark game card ──
+               The next game date is the one fact both newcomers and regulars
+               came for, so on phones it sits directly under the CTAs rather
+               than below the stat strip. */}
+          <div className="hero-col-card">
+            <DarkNextGameCard event={nextEvent} loading={loading} error={error} queue={queue} />
+          </div>
+
+          {/* ── Odometer stat strip: own grid child so mobile can order it last ── */}
+          <div className="hero-col-stats flex gap-7 hero-fade-stats" style={{ paddingTop: 20, borderTop: '1px solid rgba(255,255,255,.1)' }}>
+            {statStrip.map(s => (
+              loading
+                ? <div key={s.label} style={{ color: '#fff', minWidth: 60 }}>
+                    <div className="font-display font-black" style={{ fontSize: 32 }}>—</div>
+                    <div style={{ fontSize: 11, color: 'rgba(255,255,255,.38)', marginTop: 4 }}>{s.label}</div>
+                  </div>
+                : <OdoStat key={s.label} value={s.val} label={s.label} delay={s.delay} />
+            ))}
+          </div>
         </div>
       </div>
 

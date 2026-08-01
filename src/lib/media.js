@@ -13,6 +13,8 @@
  *   e.g. by-yalamphotos-01.jpg  ->  credit "@yalamphotos"
  */
 
+import dimensions from './gallery-manifest.json'
+
 const DEV = import.meta.env.DEV
 
 /* Eagerly resolve bundled assets to their final URLs. Empty folders -> {} */
@@ -24,6 +26,37 @@ const appModules = import.meta.glob('../assets/app/*.{jpg,jpeg,png,webp,avif}', 
   eager: true,
   import: 'default',
 })
+
+/* Responsive variants + intrinsic dimensions, both produced by
+   `npm run optimize:gallery`. Missing derivatives are not an error — photos
+   simply fall back to the plain JPEG, so dropping a new file into
+   assets/gallery/ still works without running the script first. */
+const derivedModules = import.meta.glob('../assets/gallery/derived/*.{webp,avif}', {
+  eager: true,
+  import: 'default',
+})
+
+/* stem -> { avif: 'url 640w, url 1200w', webp: '...' } */
+const derivedByStem = (() => {
+  const out = {}
+  for (const [path, url] of Object.entries(derivedModules)) {
+    const m = path.match(/\/([^/]+)-(\d+)\.(webp|avif)$/)
+    if (!m) continue
+    const [, stem, width, format] = m
+    out[stem] ??= {}
+    out[stem][format] ??= []
+    out[stem][format].push({ url, width: Number(width) })
+  }
+  for (const stem of Object.keys(out)) {
+    for (const format of Object.keys(out[stem])) {
+      out[stem][format] = out[stem][format]
+        .sort((a, b) => a.width - b.width)
+        .map(v => `${v.url} ${v.width}w`)
+        .join(', ')
+    }
+  }
+  return out
+})()
 
 /**
  * Per-photo vertical focal point (CSS %).
@@ -69,12 +102,23 @@ function sortedEntries(modules) {
   return Object.entries(modules).sort(([a], [b]) => a.localeCompare(b))
 }
 
+function stemFromPath(path) {
+  return path.split('/').pop().replace(/\.[^.]+$/, '')
+}
+
 const bundledGallery = shuffle(
-  sortedEntries(galleryModules).map(([path, src]) => ({
-    src,
-    credit: creditFromName(path),
-    focalY: focalYFromPath(path),
-  }))
+  sortedEntries(galleryModules).map(([path, src]) => {
+    const stem = stemFromPath(path)
+    const dim  = dimensions[stem]
+    return {
+      src,
+      credit:  creditFromName(path),
+      focalY:  focalYFromPath(path),
+      sources: derivedByStem[stem] || null,
+      width:   dim?.w ?? null,
+      height:  dim?.h ?? null,
+    }
+  })
 )
 
 const bundledScreens = sortedEntries(appModules).map(([, src]) => src)
