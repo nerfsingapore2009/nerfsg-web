@@ -1,15 +1,16 @@
+import PageHeader from '../components/PageHeader'
 import { usePageTitle } from '../lib/usePageTitle'
 
 export default function RuleSet() {
   usePageTitle('Rule Set')
   return (
     <div className="min-h-screen page-enter">
-      <div className="bg-surface border-b border-border">
-        <div className="max-w-3xl mx-auto px-5 lg:px-8 py-10">
-          <h1 className="text-3xl md:text-4xl font-bold text-ink">Rule Set</h1>
-          <p className="text-muted mt-2">The official NerfSG master ruleset.</p>
-        </div>
-      </div>
+      <PageHeader
+        eyebrow="Play fair"
+        title="Rule set."
+        subtitle="The official NerfSG master ruleset."
+        width="max-w-3xl"
+      />
 
       <div className="max-w-3xl mx-auto px-5 lg:px-8 py-10">
         <div className="flex flex-col gap-5">

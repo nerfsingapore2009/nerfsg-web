@@ -1,15 +1,20 @@
-import { useMemo, useState, useEffect } from 'react'
+import { useMemo, useState, useEffect, useRef } from 'react'
 import { useAllGamedays, extractParticipants } from '../hooks/useGamedays'
+import PageHeader from '../components/PageHeader'
+import { usePageTitle } from '../lib/usePageTitle'
 
 function formatDate(ts) {
   return new Date(ts).toLocaleDateString('en-SG', { day: 'numeric', month: 'short', year: 'numeric' })
 }
 
 function LightboxModal({ game, onClose }) {
+  const closeRef = useRef(null)
+
   useEffect(() => {
     const onKey = e => { if (e.key === 'Escape') onClose() }
     window.addEventListener('keydown', onKey)
     document.body.style.overflow = 'hidden'
+    closeRef.current?.focus()
     return () => {
       window.removeEventListener('keydown', onKey)
       document.body.style.overflow = ''
@@ -20,7 +25,13 @@ function LightboxModal({ game, onClose }) {
   const ops = extractParticipants(game).length
 
   return (
-    <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 lg:p-10" onClick={onClose}>
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={game.name || 'Game photo'}
+      className="fixed inset-0 z-[300] flex items-center justify-center p-4 lg:p-10"
+      onClick={onClose}
+    >
       <div className="absolute inset-0 bg-ink/90 backdrop-blur-sm" />
       <div className="relative max-w-4xl w-full flex flex-col gap-3" onClick={e => e.stopPropagation()}>
         <img
@@ -39,7 +50,12 @@ function LightboxModal({ game, onClose }) {
               {` · ${ops} operators`}
             </div>
           </div>
-          <button onClick={onClose} className="text-white/50 hover:text-white text-2xl leading-none shrink-0 px-2">×</button>
+          <button
+            ref={closeRef}
+            onClick={onClose}
+            aria-label="Close photo"
+            className="text-white/50 hover:text-white text-2xl leading-none shrink-0 px-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red/60"
+          >×</button>
         </div>
       </div>
     </div>
@@ -47,8 +63,15 @@ function LightboxModal({ game, onClose }) {
 }
 
 export default function Gallery() {
+  usePageTitle('Gallery')
   const { loading, all } = useAllGamedays()
   const [selected, setSelected] = useState(null)
+  const triggerRef = useRef(null) // thumbnail that opened the lightbox — focus returns here on close
+
+  const closeLightbox = () => {
+    setSelected(null)
+    triggerRef.current?.focus()
+  }
 
   const photos = useMemo(() => {
     const now = Date.now()
@@ -61,14 +84,13 @@ export default function Gallery() {
   }, [all])
 
   return (
-    <div className="min-h-screen bg-white">
-      <section className="border-b border-border bg-surface">
-        <div className="max-w-6xl mx-auto px-5 lg:px-8 py-16 lg:py-20">
-          <p className="section-label">On the field</p>
-          <h1 className="font-display text-4xl lg:text-5xl text-ink mt-2 uppercase tracking-tight">Gallery.</h1>
-          <p className="text-muted mt-2 max-w-xl">Group photos from every game. {!loading && photos.length > 0 && `${photos.length} photos and counting.`}</p>
-        </div>
-      </section>
+    <div className="min-h-screen bg-white page-enter">
+      <PageHeader
+        eyebrow="On the field"
+        title="Gallery."
+        subtitle={`Group photos from every game. ${!loading && photos.length > 0 ? `${photos.length} photos and counting.` : ''}`}
+        width="max-w-6xl"
+      />
 
       <section className="max-w-6xl mx-auto px-5 lg:px-8 py-12 lg:py-16">
         {loading ? (
@@ -89,7 +111,7 @@ export default function Gallery() {
               return (
                 <button
                   key={g.id}
-                  onClick={() => setSelected(g)}
+                  onClick={e => { triggerRef.current = e.currentTarget; setSelected(g) }}
                   className="group relative aspect-[4/3] overflow-hidden bg-surface border border-border text-left cursor-pointer"
                 >
                   <img
@@ -115,7 +137,7 @@ export default function Gallery() {
         )}
       </section>
 
-      {selected && <LightboxModal game={selected} onClose={() => setSelected(null)} />}
+      {selected && <LightboxModal game={selected} onClose={closeLightbox} />}
     </div>
   )
 }

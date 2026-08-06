@@ -1,6 +1,8 @@
 import { useMemo } from 'react'
 import { useAllGamedays, extractParticipants, deriveStats } from '../hooks/useGamedays'
 import AvatarChip from '../components/AvatarChip'
+import PageHeader from '../components/PageHeader'
+import { usePageTitle } from '../lib/usePageTitle'
 
 function buildAttendeeBoard(all) {
   const now = Date.now()
@@ -22,6 +24,7 @@ function buildAttendeeBoard(all) {
 const MEDALS = ['🥇', '🥈', '🥉']
 
 export default function Leaderboard() {
+  usePageTitle('Leaderboard')
   const { loading, all } = useAllGamedays()
 
   const { attendees, hosts } = useMemo(() => {
@@ -34,14 +37,13 @@ export default function Leaderboard() {
   }, [all])
 
   return (
-    <div className="min-h-screen bg-white">
-      <section className="border-b border-border bg-surface">
-        <div className="max-w-6xl mx-auto px-5 lg:px-8 py-16 lg:py-20">
-          <p className="section-label">Community</p>
-          <h1 className="font-display text-4xl lg:text-5xl text-ink mt-2 uppercase tracking-tight">Leaderboard.</h1>
-          <p className="text-muted mt-2 max-w-xl">Top operators ranked by games attended. Updated live from every RSVP in the system.</p>
-        </div>
-      </section>
+    <div className="min-h-screen bg-white page-enter">
+      <PageHeader
+        eyebrow="Community"
+        title="Leaderboard."
+        subtitle="Top operators ranked by games attended. Updated live from every RSVP in the system."
+        width="max-w-6xl"
+      />
 
       <section className="max-w-6xl mx-auto px-5 lg:px-8 py-12 lg:py-16">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
