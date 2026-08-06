@@ -83,18 +83,20 @@ Uses Tailwind's default 4px base scale. Key rhythm landmarks:
 
 ### Buttons
 ```css
-.btn-red   /* primary: red bg, white text, 8px radius, 0.625rem×1.25rem padding */
+.btn-red   /* primary: red bg, white text, sharp corners (radius 0), 0.625rem×1.25rem padding */
 .btn-ghost /* secondary: transparent, ink text, 1.5px border-border */
 ```
 Both use `focus-visible` ring (red/40 for primary, ink/12 for ghost). Active: `scale(0.98)`.
 
 ### Cards
 ```css
-.card        /* white bg, 1px border-border, 12px radius, 0 1px 3px shadow */
+.card        /* white bg, 1px border-border, sharp corners (radius 0), 0 1px 3px shadow */
 .card-hover  /* adds lift: -2px translateY + wider shadow on hover */
 .glass-card  /* hero overlay only: rgba(255,255,255,0.92) + backdrop-blur(18px) */
 ```
-Cards max-radius: 12px. Never 24px+. Never nest cards.
+Surfaces are deliberately sharp: `border-radius: 0` on buttons, cards, chips, and
+containers. The only rounded shapes are pills (credit badge, status badges,
+countdown dots) and avatars. Never nest cards.
 
 ### Section label
 ```css
@@ -103,16 +105,24 @@ Cards max-radius: 12px. Never 24px+. Never nest cards.
 Used as the eyebrow for major homepage sections only. Inner pages use it in the `bg-surface` header strip. Not on every section — deliberate cadence.
 
 ### Page header strip
-Pattern used on all inner pages:
+Every inner page renders `src/components/PageHeader.jsx` — do not hand-roll the strip:
 ```jsx
-<div className="bg-surface border-b border-border">
-  <div className="max-w-4xl mx-auto px-5 lg:px-8 py-10">
-    <p className="section-label">Category</p>
-    <h1 className="text-3xl md:text-4xl font-bold text-ink mt-1">Page Title</h1>
-    <p className="text-muted mt-2">Subtitle.</p>
-  </div>
-</div>
+<PageHeader
+  eyebrow="Category"            /* red section-label */
+  title="Page title."           /* font-display 4xl/5xl uppercase */
+  subtitle="One-line subtitle." /* text-muted, max-w-xl */
+  width="max-w-6xl"             /* content width; defaults to max-w-4xl */
+/>
 ```
+Renders the `bg-surface border-b border-border` strip with `py-12 lg:py-16`.
+Extra header content (filters, meta) goes in as children.
+
+### Site footer
+`src/components/SiteFooter.jsx`, rendered once in `App.jsx` on every route.
+Light surface, three zones: brand blurb + Est. line, Explore nav column,
+Connect socials column (data from `src/lib/links.js`), then a © bar with the
+app link. Social URLs and the Telegram invite live in `src/lib/links.js` —
+the single source of truth shared with the homepage socials grid.
 
 ### Hero (cinematic)
 Full-bleed section with `min-height: 100dvh`. Layers (bottom to top):
