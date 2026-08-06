@@ -1,3 +1,4 @@
+import PageHeader from '../components/PageHeader'
 import { usePageTitle } from '../lib/usePageTitle'
 
 const GENERAL_RULES = [
@@ -57,12 +58,11 @@ export default function GameModes() {
   usePageTitle('Game Modes')
   return (
     <div className="min-h-screen page-enter">
-      <div className="bg-surface border-b border-border">
-        <div className="max-w-4xl mx-auto px-5 lg:px-8 py-10">
-          <h1 className="text-3xl md:text-4xl font-bold text-ink">Game Modes</h1>
-          <p className="text-muted mt-2">The formats we run at NerfSG events.</p>
-        </div>
-      </div>
+      <PageHeader
+        eyebrow="Formats"
+        title="Game modes."
+        subtitle="The formats we run at NerfSG events."
+      />
 
       <div className="max-w-4xl mx-auto px-5 lg:px-8 py-10">
         {/* General Rules Banner */}

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../firebase/config'
+import PageHeader from '../components/PageHeader'
+import { usePageTitle } from '../lib/usePageTitle'
 
 // Public roadmap = the READ side of the in-app voting board. Voting/proposing
 // stays in the app (real identity + attendance gating); this page is a curated,
@@ -66,6 +68,7 @@ function rank(r) {
 }
 
 export default function Roadmap() {
+  usePageTitle('Roadmap')
   // Cache hit → render instantly with ZERO Firestore reads.
   const [items, setItems] = useState(() => readCache())
 
@@ -89,15 +92,13 @@ export default function Roadmap() {
     (items || []).filter(r => r.status === key).sort((a, b) => rank(b) - rank(a)).slice(0, 8)
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Header strip */}
-      <section className="border-b border-border bg-surface">
-        <div className="max-w-6xl mx-auto px-5 lg:px-8 py-16 lg:py-20">
-          <p className="section-label">The Roadmap</p>
-          <h1 className="font-display text-4xl lg:text-5xl text-ink mt-2 uppercase tracking-tight">What we're building.</h1>
-          <p className="text-muted mt-2 max-w-xl">Shaped by players, not a boardroom. Here's what's in the works, what's next, and what just dropped. Want a say? The voting lives in the app.</p>
-        </div>
-      </section>
+    <div className="min-h-screen bg-white page-enter">
+      <PageHeader
+        eyebrow="The Roadmap"
+        title="What we're building."
+        subtitle="Shaped by players, not a boardroom. Here's what's in the works, what's next, and what just dropped. Want a say? The voting lives in the app."
+        width="max-w-6xl"
+      />
 
       {/* Columns */}
       <section className="max-w-6xl mx-auto px-5 lg:px-8 py-12 lg:py-16">

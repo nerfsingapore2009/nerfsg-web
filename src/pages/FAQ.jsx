@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import PageHeader from '../components/PageHeader'
 import { usePageTitle } from '../lib/usePageTitle'
 
 const FAQS = [
@@ -92,12 +93,12 @@ export default function FAQ() {
 
   return (
     <div className="min-h-screen page-enter">
-      <div className="bg-surface border-b border-border">
-        <div className="max-w-3xl mx-auto px-5 lg:px-8 py-10">
-          <h1 className="text-3xl md:text-4xl font-bold text-ink">FAQ</h1>
-          <p className="text-muted mt-2">Frequently asked questions about NerfSG events.</p>
-        </div>
-      </div>
+      <PageHeader
+        eyebrow="Questions"
+        title="FAQ."
+        subtitle="Frequently asked questions about NerfSG events."
+        width="max-w-3xl"
+      />
 
       <div className="max-w-3xl mx-auto px-5 lg:px-8 py-10">
         <div className="flex flex-col gap-2">

@@ -1,15 +1,16 @@
+import PageHeader from '../components/PageHeader'
 import { usePageTitle } from '../lib/usePageTitle'
 
 export default function HvZ() {
   usePageTitle('Humans vs Zombies')
   return (
     <div className="min-h-screen page-enter">
-      <div className="bg-surface border-b border-border">
-        <div className="max-w-3xl mx-auto px-5 lg:px-8 py-10">
-          <h1 className="text-3xl md:text-4xl font-bold text-ink">Humans vs Zombies</h1>
-          <p className="text-muted mt-2">The ultimate survival game mode.</p>
-        </div>
-      </div>
+      <PageHeader
+        eyebrow="Game mode"
+        title="Humans vs Zombies."
+        subtitle="The ultimate survival game mode."
+        width="max-w-3xl"
+      />
 
       <div className="max-w-3xl mx-auto px-5 lg:px-8 py-10">
         <div className="flex flex-col gap-5">
