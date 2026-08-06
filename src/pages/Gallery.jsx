@@ -1,6 +1,7 @@
 import { useMemo, useState, useEffect, useRef } from 'react'
 import { useAllGamedays, extractParticipants } from '../hooks/useGamedays'
 import PageHeader from '../components/PageHeader'
+import { getPagePhoto } from '../lib/media'
 import { usePageTitle } from '../lib/usePageTitle'
 
 function formatDate(ts) {
@@ -89,6 +90,7 @@ export default function Gallery() {
         eyebrow="On the field"
         title="Gallery."
         subtitle={`Group photos from every game. ${!loading && photos.length > 0 ? `${photos.length} photos and counting.` : ''}`}
+        photo={getPagePhoto('gallery')}
         width="max-w-6xl"
       />
 

@@ -1,5 +1,6 @@
 import PageHeader from '../components/PageHeader'
 import { TelegramIcon, FacebookIcon, DiscordIcon } from '../components/icons'
+import { getPagePhoto } from '../lib/media'
 import { usePageTitle } from '../lib/usePageTitle'
 
 export default function Contact() {
@@ -10,6 +11,7 @@ export default function Contact() {
         eyebrow="Get in touch"
         title="Contact us."
         subtitle="Questions, feedback, or want to get involved? We read every message. Most questions are answered faster on Telegram or Facebook."
+        photo={getPagePhoto('contact')}
         width="max-w-3xl"
       />
 

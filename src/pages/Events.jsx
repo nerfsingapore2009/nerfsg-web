@@ -4,6 +4,7 @@ import { db } from '../firebase/config'
 import EventCard from '../components/EventCard'
 import PageHeader from '../components/PageHeader'
 import { TelegramIcon } from '../components/icons'
+import { getPagePhoto } from '../lib/media'
 import { usePageTitle } from '../lib/usePageTitle'
 
 export default function Events() {
@@ -43,6 +44,7 @@ export default function Events() {
         eyebrow="Schedule"
         title="Upcoming games."
         subtitle="Weekends at parks across Singapore. Open to all skill levels. Sign up on the NerfSG app to RSVP."
+        photo={getPagePhoto('events')}
         width="max-w-6xl"
       />
 

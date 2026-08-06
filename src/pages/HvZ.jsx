@@ -1,33 +1,52 @@
 import PageHeader from '../components/PageHeader'
+import Photo from '../components/Photo'
+import { getPagePhoto } from '../lib/media'
+import { useParallax } from '../hooks/useParallax'
 import { usePageTitle } from '../lib/usePageTitle'
 
 export default function HvZ() {
   usePageTitle('Humans vs Zombies')
+  const portrait = getPagePhoto('hvzPortrait')
+  const parallaxRef = useParallax(0.07)
   return (
     <div className="min-h-screen page-enter">
       <PageHeader
         eyebrow="Game mode"
         title="Humans vs Zombies."
         subtitle="The ultimate survival game mode."
+        photo={getPagePhoto('hvz')}
         width="max-w-3xl"
       />
 
       <div className="max-w-3xl mx-auto px-5 lg:px-8 py-10">
         <div className="flex flex-col gap-5">
           {/* What is HvZ */}
-          <div className="card p-6">
-            <h2 className="text-ink font-bold text-xl mb-3">What is Humans vs Zombies?</h2>
-            <p className="text-muted leading-relaxed">
-              Humans vs Zombies (HvZ) is a large-scale game mode where the players are split into two teams —
-              <span className="text-ink font-medium"> Humans</span> and{' '}
-              <span className="text-red font-medium">Zombies</span>. Humans are armed with blasters
-              and try to survive. Zombies spread by tagging humans — once tagged, a human becomes a zombie
-              and turns against their former teammates.
-            </p>
-            <p className="text-muted leading-relaxed mt-3">
-              The game ends when all humans have been converted, or when the humans survive until time runs out.
-              It's chaotic, intense, and one of the most popular formats in the NerfSG community.
-            </p>
+          <div className="card p-6 sm:flex sm:gap-6">
+            <div className="sm:flex-1">
+              <h2 className="text-ink font-bold text-xl mb-3">What is Humans vs Zombies?</h2>
+              <p className="text-muted leading-relaxed">
+                Humans vs Zombies (HvZ) is a large-scale game mode where the players are split into two teams —
+                <span className="text-ink font-medium"> Humans</span> and{' '}
+                <span className="text-red font-medium">Zombies</span>. Humans are armed with blasters
+                and try to survive. Zombies spread by tagging humans — once tagged, a human becomes a zombie
+                and turns against their former teammates.
+              </p>
+              <p className="text-muted leading-relaxed mt-3">
+                The game ends when all humans have been converted, or when the humans survive until time runs out.
+                It's chaotic, intense, and one of the most popular formats in the NerfSG community.
+              </p>
+            </div>
+            {portrait && (
+              <figure className="relative overflow-hidden border border-border mt-5 sm:mt-0 aspect-[16/10] sm:aspect-[2/3] sm:w-52 shrink-0">
+                <div ref={parallaxRef} className="absolute -inset-y-[8%] inset-x-0 will-change-transform">
+                  <Photo photo={portrait} alt="A human dodges a zombie's tag mid-game"
+                    sizes="(min-width: 640px) 208px, 100vw"
+                    className="w-full h-full object-cover"
+                    style={{ objectPosition: `center ${portrait.focalY || '30%'}` }} />
+                </div>
+                {portrait.credit && <figcaption className="credit-badge">📷 {portrait.credit}</figcaption>}
+              </figure>
+            )}
           </div>
 
           {/* How it works */}

@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { useAllGamedays, extractParticipants, deriveStats } from '../hooks/useGamedays'
 import AvatarChip from '../components/AvatarChip'
 import PageHeader from '../components/PageHeader'
+import { getPagePhoto } from '../lib/media'
 import { usePageTitle } from '../lib/usePageTitle'
 
 function buildAttendeeBoard(all) {
@@ -42,6 +43,7 @@ export default function Leaderboard() {
         eyebrow="Community"
         title="Leaderboard."
         subtitle="Top operators ranked by games attended. Updated live from every RSVP in the system."
+        photo={getPagePhoto('leaderboard')}
         width="max-w-6xl"
       />
 

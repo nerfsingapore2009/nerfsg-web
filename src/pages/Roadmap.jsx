@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../firebase/config'
 import PageHeader from '../components/PageHeader'
+import { getPagePhoto } from '../lib/media'
 import { usePageTitle } from '../lib/usePageTitle'
 
 // Public roadmap = the READ side of the in-app voting board. Voting/proposing
@@ -97,6 +98,7 @@ export default function Roadmap() {
         eyebrow="The Roadmap"
         title="What we're building."
         subtitle="Shaped by players, not a boardroom. Here's what's in the works, what's next, and what just dropped. Want a say? The voting lives in the app."
+        photo={getPagePhoto('roadmap')}
         width="max-w-6xl"
       />
 

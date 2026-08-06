@@ -1,4 +1,6 @@
 import PageHeader from '../components/PageHeader'
+import PhotoStrip from '../components/PhotoStrip'
+import { getPagePhoto } from '../lib/media'
 import { usePageTitle } from '../lib/usePageTitle'
 import { useReveal } from '../hooks/useReveal'
 
@@ -135,10 +137,13 @@ export default function Guides() {
         eyebrow="Resources"
         title="Guides."
         subtitle="Resources for new and experienced Nerfers alike."
+        photo={getPagePhoto('guides')}
       />
 
       <div className="max-w-4xl mx-auto px-5 lg:px-8 py-10 flex flex-col gap-12">
         <SectionGroup sections={BEGINNER_SECTIONS} />
+
+        <PhotoStrip exclude={getPagePhoto('guides')} />
 
         <div className="border-t border-border pt-10" data-reveal>
           <h2 className="text-lg font-bold text-ink mb-6">Modding &amp; Builds</h2>

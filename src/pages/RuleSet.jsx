@@ -1,4 +1,5 @@
 import PageHeader from '../components/PageHeader'
+import { getPagePhoto } from '../lib/media'
 import { usePageTitle } from '../lib/usePageTitle'
 
 export default function RuleSet() {
@@ -9,6 +10,7 @@ export default function RuleSet() {
         eyebrow="Play fair"
         title="Rule set."
         subtitle="The official NerfSG master ruleset."
+        photo={getPagePhoto('ruleset')}
         width="max-w-3xl"
       />
 
