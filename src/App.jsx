@@ -19,11 +19,18 @@ import NotFound from './pages/NotFound'
 
 /* SPA route changes keep the previous scroll position by default — jump to
    top on every navigation. Instant, not smooth: html has scroll-behavior:
-   smooth globally, and an animated scroll on page change is disorienting. */
+   smooth globally, and an animated scroll on page change is disorienting.
+   scroll-behavior is forced to auto for the jump so any in-flight smooth
+   scroll (e.g. an anchor link mid-animation) is cancelled rather than
+   resumed on the new page. */
 function ScrollToTop() {
   const { pathname } = useLocation()
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+    const root = document.documentElement
+    const prev = root.style.scrollBehavior
+    root.style.scrollBehavior = 'auto'
+    window.scrollTo(0, 0)
+    root.style.scrollBehavior = prev
   }, [pathname])
   return null
 }
