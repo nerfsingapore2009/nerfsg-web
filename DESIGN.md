@@ -117,6 +117,27 @@ Every inner page renders `src/components/PageHeader.jsx` — do not hand-roll th
 Renders the `bg-surface border-b border-border` strip with `py-12 lg:py-16`.
 Extra header content (filters, meta) goes in as children.
 
+Pass `photo={getPagePhoto('faq')}` (from `src/lib/media.js`) for the cinematic
+variant: `bg-ink2`, full-bleed field photo at 60% opacity under a bottom-heavy
+scrim, white type, photographer credit badge, taller padding (`py-16 lg:py-24`),
+and a subtle scroll parallax drift. Every inner page uses this variant; the
+photo per page is pinned in `PAGE_PHOTOS` (media.js) — curated action shots
+only, landscape for headers, portrait for side columns.
+
+### Photo parallax
+`useParallax(factor)` (`src/hooks/useParallax.js`) — shared rAF + scroll
+listener, IntersectionObserver-gated, drift clamped to 7% of the frame height.
+The ref goes on a wrapper rendered with `-inset-y-[8%]` overhang inside an
+`overflow-hidden` frame so edges never show. Factors: 0.06 headers, 0.07
+portrait columns, 0.05–0.08 alternating in PhotoStrip. No-ops entirely under
+`prefers-reduced-motion`.
+
+### PhotoStrip
+`src/components/PhotoStrip.jsx` — band of three landscape field photos
+(2-up on the smallest screens) with credit badges and alternating parallax
+depth. Breaks up long text pages (Guides, FAQ). `exclude` prop prevents
+repeating the page's header photo.
+
 ### Site footer
 `src/components/SiteFooter.jsx`, rendered once in `App.jsx` on every route.
 Light surface, three zones: brand blurb + Est. line, Explore nav column,

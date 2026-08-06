@@ -106,20 +106,54 @@ function stemFromPath(path) {
   return path.split('/').pop().replace(/\.[^.]+$/, '')
 }
 
-const bundledGallery = shuffle(
+/* Stable stem -> photo object lookup, built BEFORE the shuffle so pages can
+   pin a specific photo (headers need a stable visual identity per page). */
+const photosByStem = Object.fromEntries(
   sortedEntries(galleryModules).map(([path, src]) => {
     const stem = stemFromPath(path)
     const dim  = dimensions[stem]
-    return {
+    return [stem, {
       src,
       credit:  creditFromName(path),
       focalY:  focalYFromPath(path),
       sources: derivedByStem[stem] || null,
       width:   dim?.w ?? null,
       height:  dim?.h ?? null,
-    }
+    }]
   })
 )
+
+const bundledGallery = shuffle(Object.values(photosByStem))
+
+/**
+ * Curated header/inline photo per page — hand-picked action shots so every
+ * page opens on the game itself (not every gallery file qualifies; some are
+ * social close-ups). Landscape stems for wide headers, portrait for columns.
+ */
+export const PAGE_PHOTOS = {
+  events:      'by-yalamphotos-007', // two players aiming, NerfSG jerseys
+  gallery:     'by-yalamphotos-001', // signature slide-out-of-cover grin
+  leaderboard: 'by-yalamphotos-085', // sprinting between barrels
+  roadmap:     'by-yalamphotos-100', // aiming down sights, looking ahead
+  gameModes:   'by-yalamphotos-026', // firing over a barricade
+  guides:      'by-yalamphotos-004', // lever-action in the rain
+  faq:         'by-yalamphotos-120', // peeking around cover at the camera
+  hvz:         'by-yalamphotos-053', // masked player stalking behind cover
+  hvzPortrait: 'by-yalamphotos-024', // bare-handed tag dodge — very HvZ
+  ruleset:     'by-yalamphotos-070', // kneeling, kitted, chrono-serious
+  contact:     'by-yalamphotos-017', // smiling in the rain, mid-field
+  firstTimer:  'by-yalamphotos-006', // grinning peek around the barricade
+}
+
+/** Photo object for a bundled gallery stem, or null. */
+export function getPhotoByStem(stem) {
+  return photosByStem[stem] || null
+}
+
+/** Curated photo for a PAGE_PHOTOS key, or null (caller falls back to flat UI). */
+export function getPagePhoto(key) {
+  return getPhotoByStem(PAGE_PHOTOS[key])
+}
 
 const bundledScreens = sortedEntries(appModules).map(([, src]) => src)
 

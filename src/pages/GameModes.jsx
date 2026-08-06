@@ -1,4 +1,7 @@
+import { useMemo } from 'react'
 import PageHeader from '../components/PageHeader'
+import Photo from '../components/Photo'
+import { getFieldGallery, getPagePhoto } from '../lib/media'
 import { usePageTitle } from '../lib/usePageTitle'
 
 const GENERAL_RULES = [
@@ -56,12 +59,20 @@ function StatPill({ label, value }) {
 
 export default function GameModes() {
   usePageTitle('Game Modes')
+  const headerPhoto = getPagePhoto('gameModes')
+  const modePhotos = useMemo(
+    () => getFieldGallery([], 24)
+      .filter(p => p.src !== headerPhoto?.src && p.width > p.height)
+      .slice(0, GAME_MODES.length),
+    [headerPhoto],
+  )
   return (
     <div className="min-h-screen page-enter">
       <PageHeader
         eyebrow="Formats"
         title="Game modes."
         subtitle="The formats we run at NerfSG events."
+        photo={headerPhoto}
       />
 
       <div className="max-w-4xl mx-auto px-5 lg:px-8 py-10">
@@ -83,26 +94,46 @@ export default function GameModes() {
           </ul>
         </div>
 
-        {/* Game Mode Cards */}
+        {/* Game Mode Cards — each opens on a real field photo, echoing the
+            homepage flip cards (mode-photo + scrim classes). */}
         <div className="flex flex-col gap-4">
-          {GAME_MODES.map((mode) => (
-            <div
-              key={mode.title}
-              className="card card-hover p-5"
-            >
-              <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
-                <div>
-                  <h3 className="text-ink font-bold text-lg">{mode.title}</h3>
-                  <p className="text-red text-sm mt-0.5 font-medium">{mode.win}</p>
-                </div>
-                <div className="flex gap-2 flex-wrap">
-                  <StatPill label="Time" value={mode.time} />
-                  <StatPill label="Lives" value={mode.lives} />
+          {GAME_MODES.map((mode, i) => {
+            const photo = modePhotos.length ? modePhotos[i % modePhotos.length] : null
+            return (
+              <div
+                key={mode.title}
+                className="card card-hover overflow-hidden"
+              >
+                {photo && (
+                  <div className="relative h-32 photo-placeholder">
+                    <Photo photo={photo} alt="" className="mode-photo"
+                      sizes="(min-width: 896px) 832px, 100vw"
+                      style={{ objectPosition: `center ${photo.focalY || '30%'}` }} />
+                    <div className="mode-photo-scrim" />
+                    <h3 className="absolute bottom-3 left-5 z-10 font-display text-2xl text-white uppercase tracking-tight [text-shadow:0_2px_10px_rgba(0,0,0,.5)]">
+                      {mode.title}
+                    </h3>
+                    {/* Top-right: the mode title sits bottom-left, and on narrow
+                        cards a bottom-anchored badge collides with it. */}
+                    {photo.credit && <span className="credit-badge !bottom-auto top-2 !left-auto right-2">📷 {photo.credit}</span>}
+                  </div>
+                )}
+                <div className="p-5">
+                  <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
+                    <div>
+                      {!photo && <h3 className="text-ink font-bold text-lg">{mode.title}</h3>}
+                      <p className="text-red text-sm mt-0.5 font-medium">{mode.win}</p>
+                    </div>
+                    <div className="flex gap-2 flex-wrap">
+                      <StatPill label="Time" value={mode.time} />
+                      <StatPill label="Lives" value={mode.lives} />
+                    </div>
+                  </div>
+                  <p className="text-muted text-sm leading-relaxed">{mode.description}</p>
                 </div>
               </div>
-              <p className="text-muted text-sm leading-relaxed">{mode.description}</p>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
     </div>

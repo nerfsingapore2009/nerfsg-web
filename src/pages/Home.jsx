@@ -4,7 +4,8 @@ import { useAllGamedays, deriveStats } from '../hooks/useGamedays'
 import { SOCIALS, TELEGRAM_URL } from '../lib/links'
 import { useCountUp } from '../components/Hud'
 import { useReveal } from '../hooks/useReveal'
-import { getFieldGallery, getAppScreens } from '../lib/media'
+import { getFieldGallery, getAppScreens, getPagePhoto } from '../lib/media'
+import { useParallax } from '../hooks/useParallax'
 import { TrendsRow, YoYBlock, HeatmapCalendar } from '../components/Extras'
 import Photo from '../components/Photo'
 import PastGames from '../components/Archive'
@@ -210,28 +211,43 @@ const FIRST_TIMER = [
 ]
 
 function WhatToBring() {
+  const portrait = getPagePhoto('firstTimer')
+  const parallaxRef = useParallax(0.07)
   return (
     <section className="border-b border-border bg-white">
       <div className="max-w-6xl mx-auto px-5 lg:px-8 py-16 lg:py-20" data-reveal>
 
-        {/* First-timer reassurance — typographic on purpose, so it reads as a
-            straight answer rather than a marketing panel. */}
-        <div className="mb-14 lg:mb-16">
-          <p className="section-label">Your first game</p>
-          <h2 className="font-display text-4xl lg:text-5xl text-ink uppercase tracking-tight mt-2">
-            Just turn up.
-          </h2>
-          <p className="text-muted mt-3 max-w-xl">
-            The hardest part is deciding to come. Everything else we sort out at the field.
-          </p>
-          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6 mt-8 max-w-4xl">
-            {FIRST_TIMER.map(item => (
-              <div key={item.q} className="border-l-2 border-red pl-4">
-                <dt className="font-display text-lg text-ink uppercase tracking-tight">{item.q}</dt>
-                <dd className="text-muted text-sm leading-relaxed mt-1">{item.a}</dd>
+        {/* First-timer reassurance: the photo answers "does this look fun?",
+            the copy answers "can I show up?". */}
+        <div className="mb-14 lg:mb-16 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:items-center">
+          <div className="lg:col-span-7">
+            <p className="section-label">Your first game</p>
+            <h2 className="font-display text-4xl lg:text-5xl text-ink uppercase tracking-tight mt-2">
+              Just turn up.
+            </h2>
+            <p className="text-muted mt-3 max-w-xl">
+              The hardest part is deciding to come. Everything else we sort out at the field.
+            </p>
+            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6 mt-8">
+              {FIRST_TIMER.map(item => (
+                <div key={item.q} className="border-l-2 border-red pl-4">
+                  <dt className="font-display text-lg text-ink uppercase tracking-tight">{item.q}</dt>
+                  <dd className="text-muted text-sm leading-relaxed mt-1">{item.a}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+          {portrait && (
+            <figure className="relative overflow-hidden border border-border aspect-[4/3] lg:aspect-[3/4] lg:col-span-5">
+              <div ref={parallaxRef} className="absolute -inset-y-[8%] inset-x-0 will-change-transform">
+                <Photo photo={portrait} alt="A first-time player grins while peeking around a barricade"
+                  sizes="(min-width: 1024px) 420px, 100vw"
+                  className="w-full h-full object-cover"
+                  style={{ objectPosition: `center ${portrait.focalY || '30%'}` }} />
               </div>
-            ))}
-          </dl>
+              {portrait.credit && <figcaption className="credit-badge">📷 {portrait.credit}</figcaption>}
+            </figure>
+          )}
         </div>
 
         <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-8 gap-3 pt-12 border-t border-border">

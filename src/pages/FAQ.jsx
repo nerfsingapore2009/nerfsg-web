@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import PageHeader from '../components/PageHeader'
+import PhotoStrip from '../components/PhotoStrip'
+import { getPagePhoto } from '../lib/media'
 import { usePageTitle } from '../lib/usePageTitle'
+import { useReveal } from '../hooks/useReveal'
 
 const FAQS = [
   {
@@ -87,6 +90,7 @@ function FAQItem({ item, isOpen, onToggle }) {
 
 export default function FAQ() {
   usePageTitle('FAQ')
+  useReveal()
   const [openIndex, setOpenIndex] = useState(null)
 
   const toggle = (i) => setOpenIndex(openIndex === i ? null : i)
@@ -97,6 +101,7 @@ export default function FAQ() {
         eyebrow="Questions"
         title="FAQ."
         subtitle="Frequently asked questions about NerfSG events."
+        photo={getPagePhoto('faq')}
         width="max-w-3xl"
       />
 
@@ -111,6 +116,8 @@ export default function FAQ() {
             />
           ))}
         </div>
+
+        <PhotoStrip exclude={getPagePhoto('faq')} className="mt-12" />
       </div>
     </div>
   )
