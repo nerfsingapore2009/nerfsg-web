@@ -1,5 +1,7 @@
 ﻿import { useMemo, useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { useAllGamedays, deriveStats } from '../hooks/useGamedays'
+import { SOCIALS, TELEGRAM_URL } from '../lib/links'
 import { useCountUp } from '../components/Hud'
 import { useReveal } from '../hooks/useReveal'
 import { getFieldGallery, getAppScreens } from '../lib/media'
@@ -409,14 +411,6 @@ function GameModesSection({ data }) {
 
 
 /* ── COMMUNITY / SOCIALS ──────────────────────────────────────────── */
-const SOCIALS = [
-  { name: 'Telegram',  handle: 't.me/nerfsg',                          members: '200+', href: 'https://t.me/+MbMLovtcLyVmYzhl' },
-  { name: 'Facebook',  handle: 'facebook.com/groups/nerfsingapore',    members: '5.8k', href: 'https://www.facebook.com/groups/nerfsingapore/' },
-  { name: 'Instagram', handle: '@nerfsingapore',                      members: '300+',  href: 'https://www.instagram.com/nerfsingapore/' },
-  { name: 'TikTok',    handle: '@nerfsingapore',                       members: '200+', href: 'https://www.tiktok.com/@nerfsingapore' },
-  { name: 'YouTube',   handle: '@project_argus_films',                 members: '1.1k', href: 'https://www.youtube.com/@project_argus_films/videos' },
-]
-
 function WatchAndConnect() {
   return (
     <section className="border-b border-border bg-white">
@@ -468,20 +462,33 @@ function WatchAndConnect() {
   )
 }
 
-/* ── FOOTER ───────────────────────────────────────────────────────── */
-function SiteFooter() {
+/* ── FINAL CTA ────────────────────────────────────────────────────────
+   The page's whole job is converting curiosity into attendance — close
+   with the ask instead of trailing off after the socials grid. */
+function FinalCta() {
   return (
-    <footer className="border-t border-border bg-surface">
-      <div className="max-w-6xl mx-auto px-5 lg:px-8 py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <img src="/nerfsingapore.webp" alt="NERF Singapore" className="h-12 w-[108px] object-cover object-center" width="240" height="160" />
-          <span className="text-xs text-muted">Est. 2009 · Singapore</span>
-        </div>
-        <p className="text-xs text-muted">
-          © {new Date().getFullYear()} NerfSG · See you on the field.
+    <section className="bg-ink2 text-white">
+      <div className="max-w-6xl mx-auto px-5 lg:px-8 py-16 lg:py-20 text-center" data-reveal>
+        <p className="section-label justify-center">Your move</p>
+        <h2 className="font-display text-4xl lg:text-6xl uppercase tracking-tight mt-2">
+          See you on the field.
+        </h2>
+        <p className="text-white/60 mt-3 max-w-md mx-auto">
+          Find the next game, turn up, and we'll sort out the rest.
         </p>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center mt-8">
+          <Link to="/events" className="btn-red justify-center">Find the next game</Link>
+          <a
+            href={TELEGRAM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-ghost justify-center !text-white !border-white/25 hover:!bg-white/10"
+          >
+            Join the Telegram
+          </a>
+        </div>
       </div>
-    </footer>
+    </section>
   )
 }
 
@@ -513,7 +520,7 @@ export default function Home() {
       <GameModesSection data={data} />
       <PastGames data={data} />
       <WatchAndConnect />
-      <SiteFooter />
+      <FinalCta />
     </>
   )
 }
