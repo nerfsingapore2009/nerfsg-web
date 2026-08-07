@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import SiteFooter from './components/SiteFooter'
 import { signInAnon } from './firebase/config'
@@ -50,6 +50,10 @@ export default function App() {
             <Route path="/events" element={<Events />} />
             <Route path="/hvz" element={<HvZ />} />
             <Route path="/ruleset" element={<RuleSet />} />
+            {/* Every other multi-word route is hyphenated (/game-modes,
+                /2025-review), so /rule-set is the URL people actually type
+                and share. Keep it working instead of 404ing. */}
+            <Route path="/rule-set" element={<Navigate to="/ruleset" replace />} />
             <Route path="/game-modes" element={<GameModes />} />
             <Route path="/guides" element={<Guides />} />
             <Route path="/faq" element={<FAQ />} />
