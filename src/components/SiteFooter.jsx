@@ -6,6 +6,7 @@ const FOOTER_LINKS = [
   { to: '/gallery',    label: 'Gallery' },
   { to: '/game-modes', label: 'Game Modes' },
   { to: '/guides',     label: 'How to Play' },
+  { to: '/ruleset',    label: 'Rule Set' },
   { to: '/faq',        label: 'FAQ' },
   { to: '/contact',    label: 'Contact' },
 ]
