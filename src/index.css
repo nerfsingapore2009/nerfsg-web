@@ -539,6 +539,40 @@ button, a {
   position: absolute; inset: 0; z-index: 5;
   display: flex; align-items: center;
 }
+
+/* Short desktop windows (browser chrome + bookmarks bar eat the viewport):
+   the hero content is taller than 100dvh, and plain `align-items: center`
+   spills that overflow BOTH ways — pushing the eyebrow and headline up
+   underneath the fixed, transparent navbar. Reserve the navbar height and
+   switch to `safe center`, which keeps normal centring but falls back to
+   top-alignment once the content no longer fits. The plain `center` above
+   stays as the fallback for browsers without `safe`.
+
+   Once it is top-aligned only the TOP gutter and row-gap can pull content
+   back up, so both are tightened here — otherwise the stat strip runs into
+   the 44px letterbox bar. !important throughout: these compete with Tailwind
+   utilities on the same element (lg:gap-12) and with the inline padding React
+   sets on the inner grid. The wrap's 84px already clears the navbar, so the
+   inner top gutter — sized for the letterbox — can mostly go. */
+@media (min-width: 1024px) and (max-height: 880px) {
+  .hero-content-wrap {
+    padding-top: 84px;          /* fixed navbar height */
+    align-items: safe center;
+  }
+  .hero-content-inner {
+    padding-top: 20px !important;
+    padding-bottom: 56px !important;
+    row-gap: 1.5rem !important;
+  }
+}
+
+/* Very short windows: the cinematic dressing costs ~90px of height the window
+   cannot spare, so drop it exactly as the sub-1024px layout already does. */
+@media (min-width: 1024px) and (max-height: 760px) {
+  .hero-fade-scroll { display: none !important; }
+  .hero-lb-top, .hero-lb-bottom, .hero-tactical { display: none !important; }
+}
+
 @media (max-width: 1023px) {
   .hero-content-wrap { display: block; position: relative; inset: auto; }
   .hero-content-inner { padding-top: 80px !important; padding-bottom: 64px !important; }

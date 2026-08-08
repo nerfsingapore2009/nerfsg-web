@@ -68,7 +68,7 @@ export default function Navbar() {
             href="https://nerfsg.app"
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-red text-sm"
+            className="btn-red text-sm whitespace-nowrap"
           >
             Get the app
           </a>
