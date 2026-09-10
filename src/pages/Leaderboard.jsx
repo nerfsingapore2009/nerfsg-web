@@ -3,7 +3,6 @@ import { useAllGamedays, extractParticipants, deriveStats } from '../hooks/useGa
 import AvatarChip from '../components/AvatarChip'
 import PageHeader from '../components/PageHeader'
 import { getPagePhoto } from '../lib/media'
-import { usePageTitle } from '../lib/usePageTitle'
 
 function buildAttendeeBoard(all) {
   const now = Date.now()
@@ -25,7 +24,6 @@ function buildAttendeeBoard(all) {
 const MEDALS = ['🥇', '🥈', '🥉']
 
 export default function Leaderboard() {
-  usePageTitle('Leaderboard')
   const { loading, all } = useAllGamedays()
 
   const { attendees, hosts } = useMemo(() => {

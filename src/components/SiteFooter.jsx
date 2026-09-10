@@ -11,6 +11,13 @@ const FOOTER_LINKS = [
   { to: '/contact',    label: 'Contact' },
 ]
 
+/* Kept out of the Explore column: legal pages belong in the bottom bar next to
+   the copyright, where people look for them, not mixed in with the content. */
+const LEGAL_LINKS = [
+  { to: '/privacy', label: 'Privacy' },
+  { to: '/terms',   label: 'Terms' },
+]
+
 const footerLinkClass =
   'text-sm text-muted hover:text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red/40'
 
@@ -56,8 +63,19 @@ export default function SiteFooter() {
       </div>
 
       <div className="border-t border-border">
-        <div className="max-w-6xl mx-auto px-5 lg:px-8 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-          <p className="text-xs text-muted">© {new Date().getFullYear()} NerfSG · See you on the field.</p>
+        <div className="max-w-6xl mx-auto px-5 lg:px-8 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <p className="text-xs text-muted">© {new Date().getFullYear()} NerfSG · See you on the field.</p>
+            <span className="text-xs text-border2" aria-hidden="true">·</span>
+            {LEGAL_LINKS.map(({ to, label }, i) => (
+              <span key={to} className="flex items-center gap-3">
+                {i > 0 && <span className="text-xs text-border2" aria-hidden="true">·</span>}
+                <Link to={to} className="text-xs text-muted hover:text-ink transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red/40">
+                  {label}
+                </Link>
+              </span>
+            ))}
+          </div>
           <a href="https://nerfsg.app" target="_blank" rel="noopener noreferrer" className="text-xs font-semibold text-red hover:text-red2 transition-colors">
             Get the NerfSG Hub app →
           </a>

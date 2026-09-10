@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import PageHeader from '../components/PageHeader'
 import PhotoStrip from '../components/PhotoStrip'
 import { getPagePhoto } from '../lib/media'
-import { usePageTitle } from '../lib/usePageTitle'
 import { useReveal } from '../hooks/useReveal'
 
 const FAQS = [
@@ -89,7 +88,6 @@ function FAQItem({ item, isOpen, onToggle }) {
 }
 
 export default function FAQ() {
-  usePageTitle('FAQ')
   useReveal()
   const [openIndex, setOpenIndex] = useState(null)
 

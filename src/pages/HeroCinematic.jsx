@@ -8,9 +8,9 @@
  *   3. Copy video files to public/video/ and append hero.css.additions to index.css
  */
 
-import { useMemo, useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { extractParticipants } from '../hooks/useGamedays'
-import { useCountdown } from '../components/Hud'
+import { useCountdown } from '../hooks/useCounters'
 import AvatarChip from '../components/AvatarChip'
 import { downloadGamedayIcs } from '../lib/ics'
 
@@ -74,25 +74,43 @@ const HERO_CLIPS = [
 ]
 const HERO_POSTER = '/video/hero/poster.jpg'
 
-function usePrefersReducedMotion() {
-  const [reduced, setReduced] = useState(
-    () => typeof window !== 'undefined'
-      && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+function useMediaQuery(query) {
+  const [matches, setMatches] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia(query).matches
   )
+  // Subscribe only. The initialiser above already has the current value, and
+  // re-reading it here would be a synchronous setState in an effect — a
+  // guaranteed second render pass for a value that has not changed. Callers
+  // pass string literals, so `query` never varies for a given hook instance.
   useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const onChange = e => setReduced(e.matches)
+    const mq = window.matchMedia(query)
+    const onChange = e => setMatches(e.matches)
     mq.addEventListener('change', onChange)
     return () => mq.removeEventListener('change', onChange)
-  }, [])
-  return reduced
+  }, [query])
+  return matches
+}
+
+/* Whether to spend 2.3 MB on the opening hero clip.
+ *
+ * Three reasons not to, and they are all the visitor's call rather than ours:
+ * reduced motion, an explicit Save-Data header, and a phone-width screen. That
+ * last one is the expensive case — the clips were cut for a wide hero, a phone
+ * crops most of the frame away, and Singapore mobile data is not free. The
+ * poster still paints, so the section looks the same on arrival either way. */
+function useHeroVideoEnabled() {
+  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
+  const narrow  = useMediaQuery('(max-width: 767px)')
+  const saveData =
+    typeof navigator !== 'undefined' && navigator.connection?.saveData === true
+  return !reduced && !narrow && !saveData
 }
 
 function VideoBg({ clips = HERO_CLIPS, poster = HERO_POSTER }) {
   const ref = useRef(null)
   const [idx, setIdx]         = useState(0)
   const [visible, setVisible] = useState(false)
-  const reduced = usePrefersReducedMotion()
+  const videoEnabled = useHeroVideoEnabled()
 
   function handleEnded() {
     setVisible(false)
@@ -109,7 +127,7 @@ function VideoBg({ clips = HERO_CLIPS, poster = HERO_POSTER }) {
       {/* Always-present poster layer — first paint, and cover for clip changes. */}
       <img src={poster} alt="" className="hero-video" fetchPriority="high" decoding="async" />
 
-      {!reduced && (
+      {videoEnabled && (
         <video
           ref={ref}
           key={clips[idx]}
@@ -207,7 +225,11 @@ function DarkCbox({ value, label }) {
 
 /* ── Dark next-game card ─────────────────────────────────────── */
 function DarkNextGameCard({ event, loading, error, queue = [] }) {
-  const targetMs = event?.scheduledFor || (Date.now() + 86400000)
+  /* Placeholder target for the loading state, fixed at mount. Recomputing it
+     every render would restart the countdown on every tick — the clock would sit
+     at 24:00:00 forever instead of counting down. */
+  const [fallbackTarget] = useState(() => Date.now() + 86400000)
+  const targetMs = event?.scheduledFor || fallbackTarget
   const cd       = useCountdown(targetMs)
   const fmt      = event ? formatGameday(event) : null
 
@@ -352,7 +374,7 @@ function DarkNextGameCard({ event, loading, error, queue = [] }) {
 
 /* ── Cinematic Hero ──────────────────────────────────────────── */
 export function HeroCinematic({ data }) {
-  const { loading, error, stats, all = [] } = data
+  const { loading, error, stats } = data
   const upcoming  = stats?.upcoming || []
   const nextEvent = upcoming[0] || null
   const queue     = upcoming.slice(1, 4)

@@ -1,22 +1,31 @@
 import { useEffect, useState, useCallback } from 'react'
 import { collection, query, where, orderBy, getDocs } from 'firebase/firestore'
-import { db } from '../firebase/config'
+import { db, firebaseReady } from '../firebase/config'
 import EventCard from '../components/EventCard'
 import PageHeader from '../components/PageHeader'
 import { TelegramIcon } from '../components/icons'
 import { getPagePhoto } from '../lib/media'
-import { usePageTitle } from '../lib/usePageTitle'
 
 export default function Events() {
   const [events, setEvents] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  usePageTitle('Events')
 
-  const fetchEvents = useCallback(async () => {
-    setLoading(true)
-    setError(null)
+  /* `reset` is false on the mount fetch and true on the retry button.
+     On mount the component already renders in its loading state, so setting it
+     again synchronously would only buy a wasted render pass; on retry the
+     spinner genuinely has to come back. */
+  const fetchEvents = useCallback(async (reset = true) => {
+    if (reset) {
+      setLoading(true)
+      setError(null)
+    }
+    if (!firebaseReady) {
+      setError('Could not load events.')
+      setLoading(false)
+      return
+    }
     try {
       const now = Date.now()
       const q = query(
@@ -29,14 +38,19 @@ export default function Events() {
         .map(doc => ({ id: doc.id, ...doc.data() }))
         .filter(e => e.status !== 'ended')
       setEvents(upcoming)
-    } catch (err) {
+    } catch {
       setError('Could not load events.')
     } finally {
       setLoading(false)
     }
   }, [])
 
-  useEffect(() => { fetchEvents() }, [fetchEvents])
+  /* Fetching on mount is exactly the "subscribe to an external system" case the
+     rule exists to allow; it flags this only because setState is reachable
+     from the call at all, after the await. There is no non-effect way to kick
+     off a one-shot query on mount. */
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { fetchEvents(false) }, [fetchEvents])
 
   return (
     <div className="min-h-screen page-enter">
@@ -56,7 +70,7 @@ export default function Events() {
         ) : error ? (
           <div className="text-center py-24">
             <p className="text-muted">{error}</p>
-            <button onClick={fetchEvents} className="btn-ghost mt-5">
+            <button onClick={() => fetchEvents(true)} className="btn-ghost mt-5">
               Try again
             </button>
           </div>

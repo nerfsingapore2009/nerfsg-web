@@ -2,7 +2,6 @@ import { useMemo, useState, useEffect, useRef } from 'react'
 import { useAllGamedays, extractParticipants } from '../hooks/useGamedays'
 import PageHeader from '../components/PageHeader'
 import { getPagePhoto } from '../lib/media'
-import { usePageTitle } from '../lib/usePageTitle'
 
 function formatDate(ts) {
   return new Date(ts).toLocaleDateString('en-SG', { day: 'numeric', month: 'short', year: 'numeric' })
@@ -64,7 +63,6 @@ function LightboxModal({ game, onClose }) {
 }
 
 export default function Gallery() {
-  usePageTitle('Gallery')
   const { loading, all } = useAllGamedays()
   const [selected, setSelected] = useState(null)
   const triggerRef = useRef(null) // thumbnail that opened the lightbox — focus returns here on close
@@ -74,15 +72,19 @@ export default function Gallery() {
     triggerRef.current?.focus()
   }
 
+  /* "Games that have already happened" is measured from page load, not from
+     each render — otherwise the memo's result depends on when React last ran
+     it, and a game starting mid-visit would pop into the grid unannounced. */
+  const [loadedAt] = useState(() => Date.now())
+
   const photos = useMemo(() => {
-    const now = Date.now()
     return all
       .filter(g => {
         const ts = g.scheduledFor || g.createdAt
-        return g.groupPhoto && ts && ts <= now
+        return g.groupPhoto && ts && ts <= loadedAt
       })
       .sort((a, b) => (b.scheduledFor || b.createdAt) - (a.scheduledFor || a.createdAt))
-  }, [all])
+  }, [all, loadedAt])
 
   return (
     <div className="min-h-screen bg-white page-enter">

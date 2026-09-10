@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom'
 import { useAllGamedays, deriveStats } from '../hooks/useGamedays'
 import { SOCIALS, TELEGRAM_URL } from '../lib/links'
-import { useCountUp } from '../components/Hud'
+import { useCountUp } from '../hooks/useCounters'
 import { useReveal } from '../hooks/useReveal'
 import { getFieldGallery, getAppScreens, getPagePhoto } from '../lib/media'
 import { useParallax } from '../hooks/useParallax'
@@ -512,13 +512,16 @@ function FinalCta() {
 export default function Home() {
   const { loading, all, error } = useAllGamedays()
 
-  const [tickMin, setTickMin] = useState(0)
+  /* Ticks once a minute so a game that starts while the tab is open moves from
+     "upcoming" to "past" on its own, instead of the page insisting the next
+     game is still ahead until someone reloads. */
+  const [now, setNow] = useState(() => Date.now())
   useEffect(() => {
-    const i = setInterval(() => setTickMin(x => x + 1), 60000)
+    const i = setInterval(() => setNow(Date.now()), 60000)
     return () => clearInterval(i)
   }, [])
 
-  const stats = useMemo(() => deriveStats(all), [all, tickMin])
+  const stats = useMemo(() => deriveStats(all, new Date(now).getFullYear(), now), [all, now])
   const data  = { loading, error, stats, all }
 
   // Re-scan for scroll-reveal targets once async game data has resolved.

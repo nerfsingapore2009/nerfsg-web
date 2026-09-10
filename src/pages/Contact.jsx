@@ -1,10 +1,8 @@
 import PageHeader from '../components/PageHeader'
 import { TelegramIcon, FacebookIcon, DiscordIcon } from '../components/icons'
 import { getPagePhoto } from '../lib/media'
-import { usePageTitle } from '../lib/usePageTitle'
 
 export default function Contact() {
-  usePageTitle('Contact')
   return (
     <div className="min-h-screen page-enter">
       <PageHeader

@@ -72,7 +72,10 @@ function playHit(volume = 0.18) {
     o2.type = 'sine'; o2.frequency.setValueAtTime(140, t); o2.frequency.exponentialRampToValueAtTime(60, t+.12);
     g2.gain.setValueAtTime(volume*.8, t); g2.gain.exponentialRampToValueAtTime(0.001, t+.14);
     o2.connect(g2).connect(audioCtx.destination); o2.start(t); o2.stop(t+.15);
-  } catch (e) {}
+  } catch {
+    // No Web Audio (older Safari, autoplay policy) — the hit marker is
+    // decorative, so a silent one is the correct fallback.
+  }
 }
 
 export function HitMarkerLayer({ sfx = false }) {
@@ -144,36 +147,6 @@ export function Brk({ children, color }) {
       <span>{children}</span>
     </span>
   );
-}
-
-/* ── Count-up hook ──────────────────────────────────────────────────── */
-export function useCountUp(target, dur = 1200) {
-  const [v, setV] = useState(0);
-  useEffect(() => {
-    let raf;
-    const t0 = performance.now();
-    function step(t) {
-      const k     = Math.min(1, (t - t0) / dur);
-      const eased = 1 - Math.pow(1 - k, 3);
-      setV(Math.round(target * eased));
-      if (k < 1) raf = requestAnimationFrame(step);
-    }
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
-  }, [target, dur]);
-  return v;
-}
-
-/* ── Countdown hook (to absolute timestamp) ─────────────────────────── */
-export function useCountdown(targetMs) {
-  const [now, setNow] = useState(Date.now());
-  useEffect(() => {
-    const i = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(i);
-  }, []);
-  const diff = Math.max(0, targetMs - now);
-  const s    = Math.floor(diff / 1000);
-  return { days: Math.floor(s / 86400), hours: Math.floor((s % 86400) / 3600), mins: Math.floor((s % 3600) / 60), secs: s % 60, raw: s };
 }
 
 /* ── Toast stack ────────────────────────────────────────────────────── */

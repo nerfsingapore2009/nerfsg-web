@@ -2,7 +2,6 @@ import { useMemo } from 'react'
 import PageHeader from '../components/PageHeader'
 import Photo from '../components/Photo'
 import { getFieldGallery, getPagePhoto } from '../lib/media'
-import { usePageTitle } from '../lib/usePageTitle'
 
 const GENERAL_RULES = [
   'Blaster hits do not count. Getting shot anywhere else on the body or gear counts (depends on host)',
@@ -58,7 +57,6 @@ function StatPill({ label, value }) {
 }
 
 export default function GameModes() {
-  usePageTitle('Game Modes')
   const headerPhoto = getPagePhoto('gameModes')
   const modePhotos = useMemo(
     () => getFieldGallery([], 24)

@@ -1,6 +1,5 @@
 import PageHeader from '../components/PageHeader'
 import { getPagePhoto } from '../lib/media'
-import { usePageTitle } from '../lib/usePageTitle'
 
 /* The ruleset is maintained as a living Google Doc, so the page embeds it
    rather than copying its text — the doc stays the single source of truth.
@@ -20,7 +19,6 @@ function DocIcon() {
 }
 
 export default function RuleSet() {
-  usePageTitle('Rule Set')
   return (
     <div className="min-h-screen page-enter">
       <PageHeader

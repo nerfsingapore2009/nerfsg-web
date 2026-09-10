@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { usePageTitle } from '../lib/usePageTitle'
 
 const MapPin = ({ size = 24, className }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -148,29 +147,49 @@ function StatCard({ label, value, sub, Icon }) {
   )
 }
 
-export default function Review2025() {
-  usePageTitle('2025 Year in Review')
-  const [activeTab, setActiveTab] = useState('overview')
+/* Declared at module scope, not inside Review2025.
+ *
+ * Defined in the render body it was a brand new component type on every
+ * render, so React unmounted and remounted all four buttons each time the tab
+ * changed — throwing away their DOM, restarting the transition, and dropping
+ * keyboard focus off the button the user had just activated.
+ *
+ * The tab strip is a real tablist, so it is marked up as one: roving
+ * aria-selected, and each panel's controls wired by id. */
+const TABS = [
+  { id: 'overview',  label: 'Stats' },
+  { id: 'locations', label: 'Zones' },
+  { id: 'events',    label: 'Ops' },
+  { id: 'invaders',  label: 'Invaders' },
+]
 
-  function TabButton({ id, label, Icon }) {
-    const isActive = activeTab === id
-    return (
-      <button
-        onClick={() => setActiveTab(id)}
-        className={`flex items-center gap-2 px-5 py-3 font-black uppercase tracking-widest transition-all duration-200 relative overflow-hidden text-sm ${
-          isActive ? 'text-white' : 'text-gray-500 hover:text-red-400'
-        }`}
-      >
-        {isActive && (
-          <div className="absolute inset-0 bg-red-600 -skew-x-12 z-0" />
-        )}
-        <span className="relative z-10 flex items-center gap-2">
-          <Icon size={16} />
-          {label}
-        </span>
-      </button>
-    )
-  }
+function TabButton({ id, label, Icon, active, onSelect }) {
+  return (
+    <button
+      role="tab"
+      id={`tab-${id}`}
+      aria-selected={active}
+      aria-controls={`panel-${id}`}
+      onClick={() => onSelect(id)}
+      className={`flex items-center gap-2 px-5 py-3 font-black uppercase tracking-widest transition-all duration-200 relative overflow-hidden text-sm ${
+        active ? 'text-white' : 'text-gray-400 hover:text-red-400'
+      }`}
+    >
+      {active && (
+        <div className="absolute inset-0 bg-red-600 -skew-x-12 z-0" />
+      )}
+      <span className="relative z-10 flex items-center gap-2">
+        <Icon size={16} />
+        {label}
+      </span>
+    </button>
+  )
+}
+
+const TAB_ICONS = { overview: Activity, locations: MapPin, events: Trophy, invaders: Zap }
+
+export default function Review2025() {
+  const [activeTab, setActiveTab] = useState('overview')
 
   return (
     <div className="bg-[#050505] text-white min-h-screen -mt-px pb-16">
@@ -195,11 +214,17 @@ export default function Review2025() {
       {/* Tab Bar */}
       <div className="sticky top-16 z-40 border-b border-white/5 bg-black/90 backdrop-blur-md">
         <div className="max-w-5xl mx-auto px-4 overflow-x-auto">
-          <div className="flex space-x-1 py-2 min-w-max">
-            <TabButton id="overview" label="Stats" Icon={Activity} />
-            <TabButton id="locations" label="Zones" Icon={MapPin} />
-            <TabButton id="events" label="Ops" Icon={Trophy} />
-            <TabButton id="invaders" label="Invaders" Icon={Zap} />
+          <div role="tablist" aria-label="2025 review sections" className="flex space-x-1 py-2 min-w-max">
+            {TABS.map(({ id, label }) => (
+              <TabButton
+                key={id}
+                id={id}
+                label={label}
+                Icon={TAB_ICONS[id]}
+                active={activeTab === id}
+                onSelect={setActiveTab}
+              />
+            ))}
           </div>
         </div>
       </div>
@@ -208,7 +233,7 @@ export default function Review2025() {
 
         {/* STATS TAB */}
         {activeTab === 'overview' && (
-          <div className="space-y-12">
+          <div role="tabpanel" id="panel-overview" aria-labelledby="tab-overview" className="space-y-12">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <StatCard label="Total Ops" value={TOTAL_GAMES} sub="Games Played" Icon={Zap} />
               <StatCard label="Battle Zones" value={LOCATIONS.length} sub="Unique Locations" Icon={MapPin} />
@@ -249,7 +274,7 @@ export default function Review2025() {
 
         {/* ZONES TAB */}
         {activeTab === 'locations' && (
-          <div className="space-y-8">
+          <div role="tabpanel" id="panel-locations" aria-labelledby="tab-locations" className="space-y-8">
             <div className="bg-red-900/15 border border-red-900/30 p-8">
               <h3 className="text-red-500 font-bold uppercase tracking-[0.2em] text-xs mb-3">Dominant Terrain</h3>
               <p className="text-xl md:text-2xl text-white font-light leading-relaxed">
@@ -290,7 +315,7 @@ export default function Review2025() {
 
         {/* OPS TAB */}
         {activeTab === 'events' && (
-          <div className="space-y-12">
+          <div role="tabpanel" id="panel-events" aria-labelledby="tab-events" className="space-y-12">
             {MAJOR_OPS.map((op) => (
               <div key={op.id} className="relative group overflow-hidden rounded-2xl border border-white/10 hover:border-red-500/30 transition-all duration-500">
                 <img src={op.image} alt={op.title} className="absolute inset-0 w-full h-full object-cover opacity-40 transition-transform duration-1000 group-hover:scale-110 group-hover:opacity-50" />
@@ -330,7 +355,7 @@ export default function Review2025() {
 
         {/* INVADERS TAB */}
         {activeTab === 'invaders' && (
-          <div className="space-y-8">
+          <div role="tabpanel" id="panel-invaders" aria-labelledby="tab-invaders" className="space-y-8">
             <div className="relative overflow-hidden bg-red-700 rounded-2xl border border-red-500/50 group">
               <img
                 src={FOAM_INVADERS.image}
@@ -393,7 +418,7 @@ export default function Review2025() {
       <div className="max-w-5xl mx-auto px-6 mb-16">
         <div className="flex items-center justify-center gap-4 mb-8">
           <div className="h-px bg-gray-800 w-20" />
-          <h3 className="text-gray-500 text-xs font-bold uppercase tracking-[0.3em]">Join the Squad</h3>
+          <h3 className="text-gray-400 text-xs font-bold uppercase tracking-[0.3em]">Join the Squad</h3>
           <div className="h-px bg-gray-800 w-20" />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -417,13 +442,13 @@ export default function Review2025() {
 
       {/* Photographer Credits */}
       <div className="max-w-5xl mx-auto px-6 py-10 border-t border-white/5">
-        <h3 className="text-center text-gray-600 text-[10px] font-bold uppercase tracking-[0.2em] mb-8">
+        <h3 className="text-center text-gray-400 text-[10px] font-bold uppercase tracking-[0.2em] mb-8">
           Media Coverage Provided By
         </h3>
         <div className="flex flex-wrap justify-center gap-x-12 gap-y-6">
           {PHOTOGRAPHERS.map((p, i) => (
             <a key={i} href={p.link} target="_blank" rel="noopener noreferrer"
-              className="flex items-center gap-3 text-gray-500 hover:text-white transition-colors group">
+              className="flex items-center gap-3 text-gray-400 hover:text-white transition-colors group">
               <span className="group-hover:text-red-500 transition-colors">
                 {p.type === 'ig' ? <Instagram size={18} /> : <Facebook size={18} />}
               </span>
