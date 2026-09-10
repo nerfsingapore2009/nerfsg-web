@@ -2,10 +2,24 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/webp" href="/nerfsingapore.webp" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- SVG first: it is 512 bytes and stays sharp at every size. The webp is
+         the wide wordmark, kept only as the fallback for browsers with no SVG
+         icon support — it is 37 KB and the wrong aspect ratio for a tab. -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/webp" href="/nerfsingapore.webp" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#e03131" />
+
     <title>NerfSG | Singapore Nerf Community</title>
     <meta name="description" content="Weekly foam dart games in Singapore, open to all skill levels. Bring a blaster or borrow one from us — find the next game and just turn up." />
+
+    <!-- Homepage values. lib/usePageMeta.js rewrites the canonical, the
+         description and og:url per route once React mounts — without that, this
+         single canonical tells crawlers that all fourteen routes are the
+         homepage. -->
     <link rel="canonical" href="https://nerfsg.com/" />
 
     <!-- Most visitors arrive from a link pasted into Telegram or Instagram, so

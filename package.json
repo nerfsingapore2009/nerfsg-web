@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/optimize-gallery.mjs && vite build",
+    "build": "node scripts/optimize-gallery.mjs && node scripts/generate-sitemap.mjs && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "optimize:gallery": "node scripts/optimize-gallery.mjs",

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { collection, onSnapshot, query, limit } from 'firebase/firestore';
-import { db } from '../firebase/config';
+import { db, firebaseReady } from '../firebase/config';
 
 /* ── tiny pub/sub for activity toasts ─────────────────────────────── */
 const _toastListeners = new Set();
@@ -54,12 +54,15 @@ function diffGamedays(prev, next) {
   return events;
 }
 
-export function deriveStats(all, year = new Date().getFullYear()) {
+/* `now` is a parameter rather than a Date.now() read inside, so callers that
+   need the upcoming/past split to re-bucket over time (Home ticks it once a
+   minute) can say so in their dependency list instead of passing a dummy
+   dependency that lint correctly calls unnecessary. */
+export function deriveStats(all, year = new Date().getFullYear(), now = Date.now()) {
   const yearStart = new Date(year, 0, 1).getTime();
   const yearEnd   = new Date(year + 1, 0, 1).getTime();
   const isInYear  = e => { const t = e.scheduledFor || e.createdAt; return t != null && t >= yearStart && t < yearEnd; };
   const inYear    = all.filter(isInYear);
-  const now       = Date.now();
   const past      = all.filter(e => e.status === 'ended' || (e.scheduledFor && e.scheduledFor < now));
   const upcoming  = all.filter(e => e.status !== 'ended' && e.scheduledFor && e.scheduledFor >= now);
 
@@ -89,10 +92,18 @@ export function deriveStats(all, year = new Date().getFullYear()) {
 /* ── main hook ─────────────────────────────────────────────────────── */
 
 export function useAllGamedays() {
-  const [state, setState] = useState({ loading: true, all: [], error: null });
+  /* firebaseReady is settled before any render (see firebase/config.js), so a
+     failed init starts in the error state rather than flashing a spinner and
+     correcting itself. Pages then show their existing "could not load" panel
+     instead of the effect throwing and taking the tree down. */
+  const [state, setState] = useState(() => firebaseReady
+    ? { loading: true, all: [], error: null }
+    : { loading: false, all: [], error: 'Live game data is unavailable.' });
   const prevRef = useRef(null);
 
   useEffect(() => {
+    if (!firebaseReady) return;
+
     const q = query(collection(db, 'gamedays'), limit(500));
     const unsub = onSnapshot(
       q,

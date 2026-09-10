@@ -1,7 +1,6 @@
 import PageHeader from '../components/PageHeader'
 import PhotoStrip from '../components/PhotoStrip'
 import { getPagePhoto } from '../lib/media'
-import { usePageTitle } from '../lib/usePageTitle'
 import { useReveal } from '../hooks/useReveal'
 
 const SECTIONS = [
@@ -129,7 +128,6 @@ function SectionGroup({ sections, baseDelay = 0 }) {
 }
 
 export default function Guides() {
-  usePageTitle('Guides')
   useReveal()
   return (
     <div className="min-h-screen page-enter">

@@ -11,9 +11,15 @@ function formatTime(ms) {
   return new Date(ms).toLocaleTimeString('en-SG', { hour: '2-digit', minute: '2-digit', hour12: false });
 }
 
+/* Shared empty array. `stats?.past || []` allocated a fresh literal on every
+   render while stats was still loading, which changed the identity of the
+   dependency behind all three useMemos below and made them recompute every
+   time. */
+const NO_GAMES = [];
+
 export default function PastGames({ data }) {
   const { loading, stats } = data;
-  const past = stats?.past || [];
+  const past = stats?.past || NO_GAMES;
 
   const [search, setSearch] = useState('');
   const [monthFilter, setMonthFilter] = useState('all');
@@ -261,7 +267,10 @@ function GameDetailModal({ game, onClose }) {
   };
 
   const ts = game.scheduledFor || game.createdAt;
-  const isPast = !ts || ts < Date.now() || game.status === 'ended';
+  // Read once at mount — this only gates a badge, and it must not flicker as
+  // the dialog re-renders.
+  const [openedAt] = useState(() => Date.now());
+  const isPast = !ts || ts < openedAt || game.status === 'ended';
 
   return (
     <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 lg:p-8" onClick={onClose}>

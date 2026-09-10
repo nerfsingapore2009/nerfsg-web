@@ -2,10 +2,8 @@ import PageHeader from '../components/PageHeader'
 import Photo from '../components/Photo'
 import { getPagePhoto } from '../lib/media'
 import { useParallax } from '../hooks/useParallax'
-import { usePageTitle } from '../lib/usePageTitle'
 
 export default function HvZ() {
-  usePageTitle('Humans vs Zombies')
   const portrait = getPagePhoto('hvzPortrait')
   const parallaxRef = useParallax(0.07)
   return (

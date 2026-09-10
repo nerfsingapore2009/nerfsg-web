@@ -3,7 +3,6 @@ import { doc, getDoc } from 'firebase/firestore'
 import { db } from '../firebase/config'
 import PageHeader from '../components/PageHeader'
 import { getPagePhoto } from '../lib/media'
-import { usePageTitle } from '../lib/usePageTitle'
 
 // Public roadmap = the READ side of the in-app voting board. Voting/proposing
 // stays in the app (real identity + attendance gating); this page is a curated,
@@ -69,7 +68,6 @@ function rank(r) {
 }
 
 export default function Roadmap() {
-  usePageTitle('Roadmap')
   // Cache hit → render instantly with ZERO Firestore reads.
   const [items, setItems] = useState(() => readCache())
 

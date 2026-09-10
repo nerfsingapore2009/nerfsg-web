@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 export default function EventCard({ event }) {
   const date = new Date(event.scheduledFor)
 
@@ -13,7 +15,11 @@ export default function EventCard({ event }) {
     minute: '2-digit',
   })
 
-  const daysUntil = Math.ceil((event.scheduledFor - Date.now()) / (1000 * 60 * 60 * 24))
+  /* Pinned at mount rather than read on every render: "3 days away" must not
+     flip because a parent re-rendered, and a card that mounted before midnight
+     showing yesterday's count until navigation is the lesser surprise. */
+  const [mountedAt] = useState(() => Date.now())
+  const daysUntil = Math.ceil((event.scheduledFor - mountedAt) / (1000 * 60 * 60 * 24))
   const countdown =
     daysUntil <= 0 ? 'Today' :
     daysUntil === 1 ? 'Tomorrow' :

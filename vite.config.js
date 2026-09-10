@@ -16,4 +16,29 @@ const root = realpathSync(import.meta.dirname)
 export default defineConfig({
   root,
   plugins: [react()],
+  build: {
+    rollupOptions: {
+      output: {
+        /* Vendor code splits away from app code so the two cache separately.
+           Firebase is by far the largest dependency here and it changes on its
+           own release cadence, not ours — without this split, every copy edit
+           we ship re-downloads the whole SDK for every returning visitor.
+           React is separated for the same reason. */
+        manualChunks(id) {
+          if (!id.includes('node_modules')) return
+
+          /* Analytics is deliberately NOT folded into the firebase chunk.
+             firebase/config.js imports it dynamically so that visitors who
+             decline (or ignore) the cookie banner never download it — naming a
+             chunk here would pull it back into the eager bundle and undo that,
+             leaving the code shipped to everyone and only its execution gated. */
+          if (id.includes('/@firebase/analytics') || id.includes('/firebase/analytics')) return
+
+          if (id.includes('/firebase/') || id.includes('/@firebase/')) return 'firebase'
+          if (id.includes('/react-router')) return 'router'
+          if (id.includes('/react-dom/') || id.includes('/react/')) return 'react'
+        },
+      },
+    },
+  },
 })
