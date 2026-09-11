@@ -180,7 +180,7 @@ function OdoStat({ value, label, delay = 0 }) {
         ))}
         {suffix && <span style={{ fontSize: 26 }}>{suffix}</span>}
       </div>
-      <div className="text-[11px] mt-1" aria-hidden="true" style={{ color: 'rgba(255,255,255,.38)' }}>{label}</div>
+      <div className="text-[11px] mt-1" aria-hidden="true" style={{ color: 'rgba(255,255,255,.62)' }}>{label}</div>
     </div>
   )
 }
@@ -218,7 +218,7 @@ function DarkCbox({ value, label }) {
   return (
     <div style={{ background: 'rgba(255,255,255,.07)', border: '1px solid rgba(255,255,255,.1)', padding: '8px 0', textAlign: 'center', flex: 1 }}>
       <span className="block font-display font-black tabular-nums" style={{ fontSize: '1.55rem', color: '#fff', lineHeight: 1 }}>{v}</span>
-      <span className="block font-semibold uppercase tracking-widest" style={{ fontSize: '0.6875rem', color: 'rgba(255,255,255,.35)', marginTop: 2 }}>{label}</span>
+      <span className="block font-semibold uppercase tracking-widest" style={{ fontSize: '0.6875rem', color: 'rgba(255,255,255,.62)', marginTop: 2 }}>{label}</span>
     </div>
   )
 }
@@ -239,11 +239,11 @@ function DarkNextGameCard({ event, loading, error, queue = [] }) {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 16px', borderBottom: '1px solid rgba(255,255,255,.06)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <span className="pulse-dot" style={{ width: 7, height: 7, borderRadius: 999, background: '#16a34a', display: 'block' }} />
-          <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,.4)' }}>
+          <span style={{ fontSize: 11, fontWeight: 600, letterSpacing: '.08em', textTransform: 'uppercase', color: 'rgba(255,255,255,.62)' }}>
             {loading ? 'Loading…' : event ? 'Next game' : 'No upcoming games'}
           </span>
         </div>
-        <span className="font-mono" style={{ fontSize: 11, color: 'rgba(255,255,255,.22)', letterSpacing: '.1em' }}>
+        <span className="font-mono" style={{ fontSize: 11, color: 'rgba(255,255,255,.62)', letterSpacing: '.1em' }}>
           {event ? `#${(event.id || '').slice(0, 6).toUpperCase()}` : 'TBA'}
         </span>
       </div>
@@ -262,8 +262,8 @@ function DarkNextGameCard({ event, loading, error, queue = [] }) {
 
         {!loading && !event && (
           <div style={{ paddingTop: 4 }}>
-            <h3 className="font-display font-black uppercase tracking-tight" style={{ fontSize: 24, color: '#fff', lineHeight: 1, margin: 0 }}>No upcoming games</h3>
-            <p style={{ color: 'rgba(255,255,255,.45)', fontSize: 14, marginTop: 8 }}>Check the Facebook group for the next drop.</p>
+            <h2 className="font-display font-black uppercase tracking-tight" style={{ fontSize: 24, color: '#fff', lineHeight: 1, margin: 0 }}>No upcoming games</h2>
+            <p style={{ color: 'rgba(255,255,255,.62)', fontSize: 14, marginTop: 8 }}>Check the Facebook group for the next drop.</p>
             {error && <p style={{ color: '#fca5a5', fontSize: 12, marginTop: 10 }}>Error: {error}</p>}
             <a href="https://www.facebook.com/groups/nerfsingapore/" target="_blank" rel="noopener noreferrer"
               className="btn-red" style={{ marginTop: 14, display: 'inline-flex' }}>Check Facebook →</a>
@@ -287,14 +287,17 @@ function DarkNextGameCard({ event, loading, error, queue = [] }) {
               )}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8, marginBottom: 14 }}>
                 <div>
-                  <h3 className="font-display font-black uppercase tracking-tight" style={{ fontSize: 26, color: '#fff', lineHeight: 1, margin: 0 }}>
+                  {/* h2, not h3: this card is the first heading in the document
+                      after the hero h1, so an h3 here left the outline skipping
+                      a level before any h2 existed. */}
+                  <h2 className="font-display font-black uppercase tracking-tight" style={{ fontSize: 26, color: '#fff', lineHeight: 1, margin: 0 }}>
                     {event.name || 'Untitled game'}
-                  </h3>
-                  <div style={{ fontSize: 13, color: 'rgba(255,255,255,.4)', marginTop: 6 }}>
+                  </h2>
+                  <div style={{ fontSize: 13, color: 'rgba(255,255,255,.62)', marginTop: 6 }}>
                     {fmt.date} · {fmt.time}
                   </div>
-                  {event.location && <div style={{ fontSize: 12, color: 'rgba(255,255,255,.3)', marginTop: 2 }}>{event.location}</div>}
-                  {event.hostName && <div style={{ fontSize: 12, color: 'rgba(255,255,255,.3)', marginTop: 4 }}>Hosted by <b style={{ color: 'rgba(255,255,255,.6)' }}>{event.hostName}</b></div>}
+                  {event.location && <div style={{ fontSize: 12, color: 'rgba(255,255,255,.62)', marginTop: 2 }}>{event.location}</div>}
+                  {event.hostName && <div style={{ fontSize: 12, color: 'rgba(255,255,255,.62)', marginTop: 4 }}>Hosted by <b style={{ color: 'rgba(255,255,255,.62)' }}>{event.hostName}</b></div>}
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 5, flexShrink: 0 }}>
                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 600, padding: '3px 9px', borderRadius: 999, color: '#86efac', border: '1px solid rgba(134,239,172,.25)', background: 'rgba(22,163,74,.12)' }}>
@@ -326,7 +329,7 @@ function DarkNextGameCard({ event, loading, error, queue = [] }) {
                     ))}
                   </div>
                   {participants.length > 6 && (
-                    <span style={{ marginLeft: 10, fontSize: 13, color: 'rgba(255,255,255,.35)' }}>+{participants.length - 6} more</span>
+                    <span style={{ marginLeft: 10, fontSize: 13, color: 'rgba(255,255,255,.62)' }}>+{participants.length - 6} more</span>
                   )}
                 </div>
               )}
@@ -343,21 +346,21 @@ function DarkNextGameCard({ event, loading, error, queue = [] }) {
               <button type="button" onClick={() => downloadGamedayIcs(event)}
                 className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
                 style={{ width: '100%', marginTop: 8, padding: '9px 0', background: 'none', cursor: 'pointer',
-                  border: '1px solid rgba(255,255,255,.16)', color: 'rgba(255,255,255,.6)',
+                  border: '1px solid rgba(255,255,255,.16)', color: 'rgba(255,255,255,.62)',
                   fontSize: 13, fontWeight: 600 }}>
                 Add to calendar
               </button>
 
               {queue.length > 0 && (
                 <div style={{ marginTop: 16, paddingTop: 14, borderTop: '1px solid rgba(255,255,255,.08)' }}>
-                  <div style={{ fontSize: 11, fontWeight: 600, color: 'rgba(255,255,255,.3)', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '.08em' }}>Upcoming</div>
+                  <div style={{ fontSize: 11, fontWeight: 600, color: 'rgba(255,255,255,.62)', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '.08em' }}>Upcoming</div>
                   <ul style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                     {queue.map(q => {
                       const qf = formatGameday(q)
                       return (
                         <li key={q.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, fontSize: 13 }}>
                           <span style={{ color: 'rgba(255,255,255,.7)', fontWeight: 500 }}>{q.name || 'Untitled'}</span>
-                          <span style={{ color: 'rgba(255,255,255,.3)', fontSize: 12, flexShrink: 0 }}>{qf.date} · {qf.time}</span>
+                          <span style={{ color: 'rgba(255,255,255,.62)', fontSize: 12, flexShrink: 0 }}>{qf.date} · {qf.time}</span>
                         </li>
                       )
                     })}
@@ -424,9 +427,9 @@ export function HeroCinematic({ data }) {
 
       {/* ── Scroll nudge ── */}
       <div className="absolute left-1/2 hidden lg:flex flex-col items-center gap-1.5 pointer-events-none hero-fade-scroll" style={{ bottom: lbH + 18, transform: 'translateX(-50%)', zIndex: 9 }} aria-hidden="true">
-        <span className="font-semibold tracking-widest uppercase" style={{ fontSize: 10, color: 'rgba(255,255,255,.2)' }}>Scroll</span>
+        <span className="font-semibold tracking-widest uppercase" style={{ fontSize: 10, color: 'rgba(255,255,255,.62)' }}>Scroll</span>
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ animation: 'nudge 1.8s ease-in-out 2.2s infinite' }}>
-          <path d="M7 2v10M3.5 8.5L7 12l3.5-3.5" stroke="rgba(255,255,255,.3)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M7 2v10M3.5 8.5L7 12l3.5-3.5" stroke="rgba(255,255,255,.62)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       </div>
 
@@ -438,7 +441,7 @@ export function HeroCinematic({ data }) {
           {/* ── Left: headline ── */}
           <div style={{ minWidth: 0 }}>
             {/* Eyebrow */}
-            <div className="flex items-center gap-2 font-bold uppercase tracking-widest hero-fade-eyebrow" style={{ fontSize: 11, color: 'rgba(255,255,255,.5)', marginBottom: 16 }}>
+            <div className="flex items-center gap-2 font-bold uppercase tracking-widest hero-fade-eyebrow" style={{ fontSize: 11, color: 'rgba(255,255,255,.62)', marginBottom: 16 }}>
               <div style={{ width: 18, height: 2, background: 'var(--red, #e03131)', flexShrink: 0 }} />
               Singapore's Nerf community · Est. 2009
             </div>
@@ -454,7 +457,7 @@ export function HeroCinematic({ data }) {
             </h1>
 
             {/* Sub-copy */}
-            <p className="hero-fade-copy" style={{ color: 'rgba(255,255,255,.58)', fontSize: 16, lineHeight: 1.55, marginTop: 18, maxWidth: '24rem' }}>
+            <p className="hero-fade-copy" style={{ color: 'rgba(255,255,255,.62)', fontSize: 16, lineHeight: 1.55, marginTop: 18, maxWidth: '24rem' }}>
               Weekly foam dart games in Singapore, open to all skill levels.
               Bring a blaster or borrow one from us.
             </p>
@@ -490,7 +493,7 @@ export function HeroCinematic({ data }) {
               loading
                 ? <div key={s.label} style={{ color: '#fff', minWidth: 60 }}>
                     <div className="font-display font-black" style={{ fontSize: 32 }}>—</div>
-                    <div style={{ fontSize: 11, color: 'rgba(255,255,255,.38)', marginTop: 4 }}>{s.label}</div>
+                    <div style={{ fontSize: 11, color: 'rgba(255,255,255,.62)', marginTop: 4 }}>{s.label}</div>
                   </div>
                 : <OdoStat key={s.label} value={s.val} label={s.label} delay={s.delay} />
             ))}

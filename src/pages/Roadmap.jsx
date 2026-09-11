@@ -57,10 +57,10 @@ function writeCache(items) {
 
 function Badge({ status }) {
   if (status === 'in_progress')
-    return <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-red/10 text-red border border-red/20">Building</span>
+    return <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-red/10 text-red2 border border-red/20">Building</span>
   if (status === 'planned')
     return <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-surface text-muted border border-border">Planned</span>
-  return <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#16a34a]/10 text-[#16a34a] border border-[#16a34a]/20">Shipped</span>
+  return <span className="shrink-0 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#16a34a]/10 text-[#166534] border border-[#16a34a]/20">Shipped</span>
 }
 
 function rank(r) {

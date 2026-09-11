@@ -76,7 +76,7 @@ export default function SiteFooter() {
               </span>
             ))}
           </div>
-          <a href="https://nerfsg.app" target="_blank" rel="noopener noreferrer" className="text-xs font-semibold text-red hover:text-red2 transition-colors">
+          <a href="https://nerfsg.app" target="_blank" rel="noopener noreferrer" className="text-xs font-semibold text-red2 hover:text-red transition-colors">
             Get the NerfSG Hub app →
           </a>
         </div>

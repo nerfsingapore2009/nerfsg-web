@@ -50,7 +50,9 @@ const GAME_MODES = [
 function StatPill({ label, value }) {
   return (
     <div className="flex flex-col items-center bg-surface border border-border px-3 py-2 min-w-[80px]">
-      <span className="text-red font-semibold text-sm">{value}</span>
+      {/* red2, not red: 14px is small text, and #e03131 only reaches 4.31:1
+          against the --surface this pill sits on. */}
+      <span className="text-red2 font-semibold text-sm">{value}</span>
       <span className="text-muted text-xs mt-0.5">{label}</span>
     </div>
   )

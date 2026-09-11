@@ -51,7 +51,7 @@ export default function PageHeader({ eyebrow, title, subtitle, photo, width = 'm
       {photo.credit && <span className="credit-badge !left-auto right-2">📷 {photo.credit}</span>}
 
       <div className={`relative ${width} mx-auto px-5 lg:px-8 py-16 lg:py-24`}>
-        {eyebrow && <p className="section-label">{eyebrow}</p>}
+        {eyebrow && <p className="section-label section-label--on-dark">{eyebrow}</p>}
         <h1 className="font-display text-4xl lg:text-5xl text-white mt-2 uppercase tracking-tight">{title}</h1>
         {subtitle && <p className="text-white/70 mt-2 max-w-xl">{subtitle}</p>}
         {children}

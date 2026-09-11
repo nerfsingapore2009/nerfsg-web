@@ -8,7 +8,13 @@
     --red2:   #c92a2a;
     --ink:    #0f172a;
     --ink2:   #0a0f1d;
-    --muted:  #64748b;
+    /* Nudged down from #64748b, which was calibrated against pure white and
+       landed on 4.76:1 — no headroom. Every tinted surface it also sits on
+       (--surface, card tints, the 50-level pastels) pushed it to 4.55 and
+       below, so secondary copy was failing AA on exactly the pages that use
+       tinted cards. #5b6879 holds 5.67:1 on white and 5.18:1 on the darkest
+       tint in use, and is a half-step darker to the eye. */
+    --muted:  #5b6879;
     --border: #e2e8f0;
     color-scheme: light;
   }
@@ -122,9 +128,26 @@ button, a {
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--red);
+  /* --red2, not --red. At 11px this is small text, so it needs 4.5:1, and
+     #e03131 manages only 4.31:1 against the --surface these labels sit on in
+     the flat page header. #c92a2a gets 5.22:1 and reads as the same red.
+     The ::before rule below keeps the full-strength brand red for the dash,
+     which is decorative and has no contrast minimum. */
+  color: var(--red2);
   margin-bottom: 0.5rem;
 }
+/* Photo page headers put this label over a dark, scrimmed photograph, where a
+   darker red is the wrong direction — #c92a2a drops to about 3:1 there, and
+   even the brand #e03131 only reaches ~3.6:1. A light red holds 6.6:1 against
+   the lightest part of a scrimmed photo while still reading as the brand
+   colour rather than as plain white. */
+.section-label--on-dark {
+  color: #ffa8a8;
+}
+.section-label--on-dark::before {
+  background: #ffa8a8;
+}
+
 .section-label::before {
   content: "";
   display: block;
@@ -377,10 +400,15 @@ button, a {
 .carousel-slide { flex: 0 0 100%; height: 100%; }
 .carousel-slide img { width: 100%; height: 100%; object-fit: cover; }
 .carousel-dots { position: absolute; bottom: 0.4rem; left: 50%; transform: translateX(-50%); display: flex; gap: 0.15rem; z-index: 3; }
+/* 24px, not 22: WCAG 2.2 AA (2.5.8 Target Size, Minimum) sets 24×24 CSS px as
+   the floor for a pointer target, and these dots have no larger inline
+   alternative to fall back on. The visible pill is drawn by ::before and is
+   unchanged — only the hit area grows. */
 .carousel-dot {
   display: flex; align-items: center; justify-content: center;
-  width: 22px; height: 22px; padding: 0; border: none; background: none; cursor: pointer;
+  width: 24px; height: 24px; padding: 0; border: none; background: none; cursor: pointer;
 }
+.carousel-dot:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; border-radius: 4px; }
 .carousel-dot::before {
   content: ''; display: block; width: 18px; height: 6px; border-radius: 999px;
   background: rgba(15,23,42,0.28); transition: transform 0.3s ease, background 0.3s ease;
@@ -600,7 +628,10 @@ button, a {
   align-items: flex-end;
   pointer-events: none;
   font-family: var(--font-mono, 'JetBrains Mono', monospace);
-  font-size: 10px; color: rgba(255,255,255,.2);
+  /* .62, not .2. This strip is atmospheric, but it carries the video credit
+     and a live clock — that is information, not ornament, so it has to clear
+     4.5:1. At .2 it sat near 1.8:1 over the hero. */
+  font-size: 10px; color: rgba(255,255,255,.62);
   letter-spacing: .14em; text-transform: uppercase;
 }
 .hero-tactical-right {

@@ -53,8 +53,8 @@ export default function HvZ() {
             <div className="flex flex-col gap-4">
               {[
                 { role: 'Humans', colour: 'text-blue-600 bg-blue-50 border-blue-100', desc: 'Use blasters to stun zombies. A stunned zombie is out for a short period before returning.' },
-                { role: 'Zombies', colour: 'text-red bg-red/[.04] border-red/15', desc: 'Tag humans with your hand to convert them. No blasters — just teamwork and persistence.' },
-                { role: 'Conversion', colour: 'text-orange-600 bg-orange-50 border-orange-100', desc: 'A tagged human immediately becomes a zombie and must switch to the zombie team.' },
+                { role: 'Zombies', colour: 'text-red2 bg-red/[.04] border-red/15', desc: 'Tag humans with your hand to convert them. No blasters — just teamwork and persistence.' },
+                { role: 'Conversion', colour: 'text-orange-700 bg-orange-50 border-orange-100', desc: 'A tagged human immediately becomes a zombie and must switch to the zombie team.' },
               ].map(({ role, colour, desc }) => (
                 <div key={role} className={`flex items-start gap-4 p-4 border ${colour}`}>
                   <span className="font-bold shrink-0 w-24 text-sm mt-0.5">{role}</span>

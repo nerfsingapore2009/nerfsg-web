@@ -23,7 +23,7 @@ function FieldGallery({ data }) {
   return (
     <section className="bg-ink2 text-white overflow-hidden border-b border-white/10">
       <div className="max-w-6xl mx-auto px-5 lg:px-8 pt-16 lg:pt-20 pb-8" data-reveal>
-        <p className="section-label">On the field</p>
+        <p className="section-label section-label--on-dark">On the field</p>
         <h2 className="font-display text-4xl lg:text-5xl uppercase tracking-tight mt-2">Foam, in motion.</h2>
         <p className="text-white/60 mt-2 max-w-xl">
           Real shots from recent games, captured by the community.
@@ -265,7 +265,7 @@ function WhatToBring() {
                 <div className="flex items-center justify-between">
                   <span className="font-display font-black text-4xl text-red/20 leading-none">{e.code}</span>
                   <span className={`text-xs font-semibold tracking-wide px-2 py-1 rounded-full border ${
-                    isRequired ? 'text-red border-red/30 bg-red/5' : 'text-muted border-border bg-surface'
+                    isRequired ? 'text-red2 border-red/30 bg-red/5' : 'text-muted border-border bg-surface'
                   }`}>{e.req}</span>
                 </div>
                 <h3 className="font-display text-xl text-ink uppercase tracking-tight">{e.name}</h3>
@@ -485,7 +485,7 @@ function FinalCta() {
   return (
     <section className="bg-ink2 text-white">
       <div className="max-w-6xl mx-auto px-5 lg:px-8 py-16 lg:py-20 text-center" data-reveal>
-        <p className="section-label justify-center">Your move</p>
+        <p className="section-label section-label--on-dark justify-center">Your move</p>
         <h2 className="font-display text-4xl lg:text-6xl uppercase tracking-tight mt-2">
           See you on the field.
         </h2>

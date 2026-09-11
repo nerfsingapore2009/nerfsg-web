@@ -15,7 +15,9 @@ export default {
         // Text
         ink:     '#0f172a',
         ink2:    '#0a0f1d',
-        muted:   '#64748b',
+        // Keep in step with --muted in index.css; see the note there for why
+        // this is not #64748b any more.
+        muted:   '#5b6879',
         // Borders
         border:  '#e2e8f0',
         border2: '#cbd5e1',

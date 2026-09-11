@@ -432,8 +432,11 @@ export default function Review2025() {
             <Facebook size={32} />
             <span className="font-bold uppercase tracking-wider text-sm">Facebook Group</span>
           </a>
+          {/* Text lightened from Discord's own #5865F2, which reaches only
+              4.29:1 on this near-black tile. #7983f5 is the same hue at 6:1;
+              the tile fill and border keep the exact brand blurple. */}
           <a href="https://discord.gg/FmrBkf4" target="_blank" rel="noopener noreferrer"
-            className="bg-[#5865F2]/5 hover:bg-[#5865F2]/20 border border-[#5865F2]/30 p-6 rounded-xl flex flex-col items-center justify-center gap-4 text-[#5865F2] transition-all hover:-translate-y-1">
+            className="bg-[#5865F2]/5 hover:bg-[#5865F2]/20 border border-[#5865F2]/30 p-6 rounded-xl flex flex-col items-center justify-center gap-4 text-[#7983f5] transition-all hover:-translate-y-1">
             <Discord size={32} />
             <span className="font-bold uppercase tracking-wider text-sm">Discord Server</span>
           </a>
