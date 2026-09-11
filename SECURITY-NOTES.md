@@ -1,58 +1,122 @@
 # Security notes
 
-## 1. Firestore write rules are open to every visitor — needs a decision
+## 1. Firestore write rules — FIXED, but needs one check before you trust it
 
-**Status: not fixed. A proposed replacement is in `firestore.rules.proposed`.**
+**Status: fixed in `firestore.rules`. Not deployed by this repo — rules deploy
+separately, see below.**
 
-`firestore.rules` currently says:
+### What was wrong
 
 ```
 allow write: if request.auth != null;
 ```
 
-`src/App.jsx` calls `signInAnon()` on mount, so every visitor to nerfsg.com
-gets a real anonymous Firebase session. An anonymous session satisfies
-`request.auth != null`. The rule therefore permits **any visitor** to create,
+`src/App.jsx` calls `signInAnon()` on mount, so every visitor to nerfsg.com got
+a real anonymous Firebase session, and an anonymous session satisfies
+`request.auth != null`. That rule therefore let **any visitor** create,
 overwrite or delete any document in `gamedays` and `events`.
 
-This does not require a bug in the site. The Firebase web config is public by
-design (it is in the JS bundle, and that is fine on its own), so anyone can
-point the Firebase SDK at the project, sign in anonymously, and write.
+No bug in the site was needed. The Firebase web config is public by design (it
+ships in the JS bundle, which is fine on its own), so anyone could point the
+SDK at the project, sign in anonymously, and write. Realistic worst case:
+someone deletes the schedule, or edits a game's location the night before a
+session and players drive to the wrong park.
 
-Worst realistic case: someone deletes the game schedule, or edits a game's
-location the night before a session and players turn up at the wrong park.
+### What it is now
 
-### Why it is not fixed in this branch
+Writes require a signed-in user whose **verified** email is on the admin list:
 
-The fix is to gate writes on "is an organiser", and only you know how
-organisers are identified in this project. `firestore.rules.proposed` offers
-three ways to write `isOrganiser()`:
+```
+function adminEmails() { return ['simjiajun@gmail.com']; }
 
-| Option | Mechanism | Pick it if |
-| --- | --- | --- |
-| A | Custom auth claim `organiser: true` | You can run a one-off Admin SDK script. Cheapest at evaluation time. |
-| B | An `/organisers/{uid}` allowlist collection | You would rather add organisers from the Firebase console. Costs one read per write check. |
-| C | Hardcoded UIDs in the rules | Two or three organisers who never change. |
+function isAdmin() {
+  return request.auth != null
+    && request.auth.token.email_verified == true
+    && request.auth.token.email in adminEmails();
+}
+```
 
-Guessing wrong locks whoever posts the game days out of posting them, which is
-why this one waits for you.
+Reads stay public — the website is read-only and needs them.
 
-**To apply, once you have picked:** edit `firestore.rules.proposed`, delete the
-two options you did not choose, then:
+`email_verified` is doing real work. Firebase's Email/Password provider will
+create an account for any address without proving the inbox belongs to you, so
+matching on the address alone would let someone register the admin's email and
+inherit write access. Requiring the verified claim means they would need the
+inbox itself. Google sign-in always sets it true.
+
+To add an organiser later, add their address to `adminEmails()` and redeploy.
+
+### Verified, not assumed
+
+`npm run test:rules` runs the rules against the Firestore emulator. 19 cases,
+all passing, including the ones that matter:
+
+- an anonymous visitor cannot create, edit or delete a gameday or event
+- the admin address with `email_verified: false` is rejected
+- a look-alike address (`simjiajun@gmail.com.evil.com`) is rejected
+- a different signed-in user is rejected
+- signed-out and anonymous visitors can still read everything the site shows
+- the admin can create, edit and delete
+
+It needs Java and pulls `firebase-tools` through `npx` on first run.
+
+### Before you deploy — the one thing to check
+
+**Does the NerfSG Hub app write to Firestore from the client?** That app is a
+separate codebase and is not in this repo, so this could not be checked here.
+
+- If the Hub **backend** writes via the Firebase Admin SDK — nothing to do.
+  The Admin SDK bypasses security rules entirely.
+- If the Hub **app** writes from the client while signed in with Google as
+  `simjiajun@gmail.com` — nothing to do, it matches `isAdmin()`.
+- If the Hub app writes from the client while signed in **anonymously**, or as
+  any other user (players RSVPing, hosts posting their own games) — **this rule
+  will break those writes.** RSVPs and payment submissions are the likely
+  casualties, since they are player actions on a gameday document.
+
+That last case is the one to rule out. If players do write their own RSVPs, the
+rule needs to allow a narrow player write (own RSVP field only) alongside the
+admin write, rather than admin-only.
+
+The website itself cannot be affected — it never writes. Confirmed by grep:
+no `setDoc`, `addDoc`, `updateDoc`, `deleteDoc`, `writeBatch` or
+`runTransaction` anywhere in `src/`.
+
+### Deploying
 
 ```bash
-mv firestore.rules.proposed firestore.rules
+npm run test:rules          # confirm green first
 firebase deploy --only firestore:rules
 ```
 
-Verify afterwards by opening the deployed site in a private window and trying a
-write from the browser console — it should be rejected.
+Then check in a private window that the site still loads games, and post a test
+game from the Hub app to confirm the admin path still works.
 
-### Check whether it has already been abused
+**Rollback**, if Hub writes break:
 
-Firebase Console → Firestore → Usage will show write counts. A spike that does
-not line up with game days being posted is worth a look. There is no per-write
-audit log on the Spark plan, so if the data looks intact, it probably is.
+```bash
+git show HEAD~1:firestore.rules > firestore.rules
+firebase deploy --only firestore:rules
+```
+
+That restores the old permissive rule, so treat it as a short-lived measure and
+re-fix rather than a resting state.
+
+### Check whether it was abused while open
+
+Firebase Console → Firestore → Usage shows write counts. A spike that does not
+line up with games being posted is worth a look. There is no per-write audit
+log on the Spark plan, so if the data looks intact, it probably is.
+
+### A note on the admin email being in a public repo
+
+`nerfsingapore2009/nerfsg-web` is public, so `simjiajun@gmail.com` is now
+visible in `firestore.rules`. It was already visible in the commit history
+(it is the commit author address), so this is not a new exposure, and knowing
+the address grants nothing without the Google account behind it. If you would
+rather it not be there, the alternative is an `/admins/{uid}` allowlist
+collection checked with `exists()` — it keeps the address out of the repo at
+the cost of one document read per write.
 
 ## 2. Public reads expose attendee names and payment submissions
 
@@ -70,20 +134,18 @@ All of that is readable in bulk by anyone, not just through the website UI.
 homepage.
 
 The fix is to move `paymentSubmissions` into a subcollection readable only by
-organisers, which means changing where the Hub app writes it. That is app work,
+the admin, which means changing where the Hub app writes it. That is app work,
 not website work, so it is flagged here rather than attempted.
 
-Under the PDPA this is the item most worth acting on: names and payment
+Under the PDPA this is the item most worth acting on next: names and payment
 records are personal data, and "public by default" is hard to justify for the
 payment map specifically.
 
 ## 3. Things that are fine, so nobody re-raises them
 
 - **The Firebase config in the bundle is not a leak.** `apiKey` for Firebase
-  Web is an identifier, not a secret. Security comes from the rules — which is
-  exactly why item 1 matters.
+  Web is an identifier, not a secret. Security comes from the rules.
 - **`.env` is correctly gitignored**, and `.env.example` holds only empty keys.
-  (It is missing `VITE_FIREBASE_MEASUREMENT_ID`, which the README does list —
-  worth adding for consistency, but not a security issue.)
-- **HTTPS is enforced by Vercel automatically.** `vercel.json` now also sends
-  HSTS, `nosniff`, a referrer policy and `X-Frame-Options`.
+- **HTTPS is enforced by Vercel automatically.** `vercel.json` also sends
+  HSTS, `nosniff`, a referrer policy, `X-Frame-Options` and a permissions
+  policy.

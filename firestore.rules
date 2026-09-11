@@ -1,13 +1,59 @@
 rules_version = '2';
+
+/*
+ * NerfSG Firestore security rules.
+ *
+ * Reads are public: the website is read-only and shows the game schedule,
+ * gallery and leaderboard to anyone, signed in or not.
+ *
+ * Writes are the admin's alone. The previous rule was:
+ *
+ *     allow write: if request.auth != null;
+ *
+ * which looks restrictive but was not. The website calls signInAnonymously()
+ * on every page load, so every visitor held a non-null request.auth and could
+ * therefore create, overwrite or delete any game. No bug was needed — the
+ * public Firebase config plus the SDK was enough.
+ *
+ * See SECURITY-NOTES.md for the rollout and rollback notes.
+ */
+
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    /* Add a second organiser by adding their address here and redeploying.
+       Anonymous sessions have no email claim at all, so they can never match. */
+    function adminEmails() {
+      return ['simjiajun@gmail.com'];
+    }
+
+    /* email_verified is not optional.
+       Firebase's Email/Password provider will happily create an account for
+       any address without proving ownership of the inbox. Matching on the
+       address alone would therefore let someone register the admin's email
+       and inherit write access; requiring the verified claim means they would
+       need the inbox itself. Google sign-in always sets this to true. */
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email in adminEmails();
+    }
+
     match /gamedays/{docId} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow create, update, delete: if isAdmin();
     }
+
     match /events/{docId} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow create, update, delete: if isAdmin();
+    }
+
+    /* Deny anything not matched above. Collections added later are closed by
+       default anyway, but stating it keeps that true if a broader rule is ever
+       pasted in above this one. */
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }
